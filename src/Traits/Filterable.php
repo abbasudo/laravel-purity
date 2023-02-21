@@ -7,7 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait Filterable
 {
-    // apply filters to the query builder instance
+    /**
+     * Apply filters to the query builder instance
+     *
+     * @param  Builder  $query
+     *
+     * @return Builder
+     */
     public function scopeFilter(Builder $query): Builder
     {
         // Retrieve the filters from the request
