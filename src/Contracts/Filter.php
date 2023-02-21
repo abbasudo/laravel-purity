@@ -2,9 +2,10 @@
 
 namespace Abbasudo\LaravelPurity\Contracts;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
 interface Filter
 {
-    public function apply(Builder $query, string $column, array $filters);
+    public static function apply(Builder $query, string $column, array $filters): Closure;
 }
