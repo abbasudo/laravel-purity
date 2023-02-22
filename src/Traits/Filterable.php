@@ -3,6 +3,7 @@
 namespace Abbasudo\LaravelPurity\Traits;
 
 use Abbasudo\LaravelPurity\Filters\Resolve;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -19,6 +20,7 @@ trait Filterable
      * @param  array|string|null  $availableFilters
      *
      * @return Builder
+     * @throws Exception
      */
     public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
     {
@@ -33,7 +35,7 @@ trait Filterable
 
         // Apply each filter to the query builder instance
         foreach ($filters as $field => $value) {
-            (new Resolve($this->getFilters()))->applyFilter($query, $field, $value);
+            (new Resolve($this->getFilters()))->apply($query, $field, $value);
         }
 
         return $query;

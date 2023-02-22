@@ -4,6 +4,7 @@ namespace Abbasudo\LaravelPurity\Filters;
 
 
 use Abbasudo\LaravelPurity\Contracts\Filter as FilterContract;
+use Abbasudo\LaravelPurity\Exceptions\NoOperatorMatch;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,18 +38,57 @@ class Resolve
     /**
      * @param  Builder  $query
      * @param  string  $field
-     * @param  array  $filters
+     * @param  array  $values
      *
      * @return void
      * @throws Exception
      */
-    private function applyRelationFilter(Builder $query, string $field, array $filters): void
+    public function apply(Builder $query, string $field, array $values)
     {
-        foreach ($filters as $subField => $subFilter) {
-            $this->fields[] = $field;
-            $this->applyFilter($query, $subField, $subFilter);
+        if ( ! $this->safe(fn() => $this->validate($values))) {
+            return;
+        };
+
+        $this->filter($query, $field, $values);
+    }
+
+    /**
+     * run functions with or without exception
+     *
+     * @param  Closure  $closure
+     *
+     * @return bool
+     * @throws Exception
+     */
+    private function safe(Closure $closure): bool
+    {
+        try {
+            $closure();
+
+            return true;
+        } catch (Exception $exception) {
+            if (config('purity.silent')) {
+                return false;
+            } else {
+                throw $exception;
+            }
         }
-        array_pop($this->fields);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function validate($values)
+    {
+        if (empty($values)) {
+            throw NoOperatorMatch::create(array_keys($this->filterStrategies));
+        }
+
+        if (in_array(key($values), array_keys($this->filterStrategies))) {
+            return;
+        } else {
+            $this->validate(array_values($values)[0]);
+        }
     }
 
     /**
@@ -61,7 +101,7 @@ class Resolve
      * @return void
      * @throws Exception
      */
-    public function applyFilter(Builder $query, string $field, array|string|null $filters): void
+    public function filter(Builder $query, string $field, array|string|null $filters): void
     {
         // Ensure that the filter is an array
         if ( ! is_array($filters)) {
@@ -75,27 +115,6 @@ class Resolve
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
             $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
-        }
-    }
-
-    /**
-     * run functions with or without exception
-     *
-     * @param  Closure  $param
-     *
-     * @return void
-     * @throws Exception
-     */
-    private function safe(Closure $param): void
-    {
-        try {
-            $param();
-        } catch (Exception $exception) {
-            if (config('purity.silent')) {
-                return;
-            } else {
-                throw $exception;
-            }
         }
     }
 
@@ -153,10 +172,27 @@ class Resolve
      */
     private function relation(Builder $query, Closure $callback)
     {
-        // remove last field till its empty
+        // remove last field until its empty
         $field = array_shift($this->fields);
         $query->whereHas($field, function ($subQuery) use ($callback) {
             $this->applyRelations($subQuery, $callback);
         });
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  string  $field
+     * @param  array  $filters
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function applyRelationFilter(Builder $query, string $field, array $filters): void
+    {
+        foreach ($filters as $subField => $subFilter) {
+            $this->fields[] = $field;
+            $this->filter($query, $subField, $subFilter);
+        }
+        array_pop($this->fields);
     }
 }
