@@ -19,8 +19,14 @@
       "Abbasudo\\LaravelPurity\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Abbasudo\\LaravelPurity\\Tests\\": "tests"
+    }
+  },
   "require-dev": {
-    "orchestra/testbench": "8.*"
+    "orchestra/testbench": "8.*",
+    "phpunit/phpunit": "^10.0"
   },
   "extra": {
     "laravel": {
