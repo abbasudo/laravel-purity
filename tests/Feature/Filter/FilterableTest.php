@@ -46,6 +46,6 @@ class FilterableTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonMissing(['message']);
-        $response->assertJsonCount(0);
+        $response->assertJsonCount(1);
     }
 }

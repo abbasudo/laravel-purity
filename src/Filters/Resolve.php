@@ -4,12 +4,16 @@ namespace Abbasudo\LaravelPurity\Filters;
 
 
 use Abbasudo\LaravelPurity\Contracts\Filter as FilterContract;
-use Abbasudo\LaravelPurity\Filters\Strategies\EqualFilter;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
 class Resolve
 {
+    /**
+     * List of relations and the column
+     *
+     * @var array
+     */
     private array $fields = [];
 
     /**
@@ -17,9 +21,12 @@ class Resolve
      *
      * @var array|FilterContract[]
      */
-    private array $filterStrategies = [
-        '$eq' => EqualFilter::class,
-    ];
+    private array $filterStrategies;
+
+    public function __construct(array $filters)
+    {
+        $this->filterStrategies = $filters;
+    }
 
     /**
      * Apply a single filter to the query builder instance
