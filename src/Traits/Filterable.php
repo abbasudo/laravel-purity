@@ -5,6 +5,11 @@ namespace Abbasudo\LaravelPurity\Traits;
 use Abbasudo\LaravelPurity\Filters\Resolve;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * List of available filters, can be set on the model otherwise it will be read from config
+ *
+ * @property array $availableFilters
+ */
 trait Filterable
 {
     /**
@@ -32,7 +37,7 @@ trait Filterable
      */
     private function getAvailableFilters(): array
     {
-        return $this->availableFilters;
+        return $this->availableFilters ?? config('purity.available_filters');
     }
 
     /**
