@@ -14,21 +14,38 @@ class FilterableTest extends TestCase
         parent::setUp();
 
         Route::get('/posts', function () {
-            Post::filter()->get();
+            return Post::filter()->get();
         });
 
         Post::create([
-            'title' => 'hi',
+            'title' => 'laravel purity is good',
         ]);
     }
 
-    /**
-     * A basic test example.
-     */
-    public function test_a_basic_request(): void
+    public function it_can_process_a_basic_request_without_any_filter(): void
     {
-        $response = $this->get('/posts');
+        $response = $this->getJson('/posts');
 
-        $response->assertStatus(200);
+        $response->assertOk();
+        $response->assertJsonMissing(['message']);
+        $response->assertJsonCount(1);
+    }
+
+    public function it_can_process_a_request_without_any_matches(): void
+    {
+        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+
+        $response->assertOk();
+        $response->assertJsonMissing(['message']);
+        $response->assertJsonCount(0);
+    }
+
+    public function it_can_filter_with_a_basic_eq_operator(): void
+    {
+        $response = $this->getJson('/posts?filters[title][$eq]=laravel purity is good');
+
+        $response->assertOk();
+        $response->assertJsonMissing(['message']);
+        $response->assertJsonCount(0);
     }
 }
