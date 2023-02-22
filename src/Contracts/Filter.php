@@ -15,4 +15,9 @@ interface Filter
      * @return Closure
      */
     public static function apply(Builder $query, string $column, array $filters): Closure;
+
+    /**
+     * @return string
+     */
+    public static function operator(): string;
 }

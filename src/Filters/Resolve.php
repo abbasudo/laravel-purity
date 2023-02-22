@@ -23,9 +23,14 @@ class Resolve
      */
     private array $filterStrategies;
 
+    /**
+     * @param  array|FilterContract[]  $filters
+     */
     public function __construct(array $filters)
     {
-        $this->filterStrategies = $filters;
+        foreach ($filters as $filter) {
+            $this->filterStrategies[$filter::operator()] = $filter;
+        }
     }
 
     /**

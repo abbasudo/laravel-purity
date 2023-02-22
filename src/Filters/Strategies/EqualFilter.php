@@ -23,4 +23,12 @@ class EqualFilter implements Filter
             }
         };
     }
+
+    /**
+     * @return string
+     */
+    public static function operator(): string
+    {
+        return '$eq';
+    }
 }
