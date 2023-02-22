@@ -16,14 +16,16 @@ trait Filterable
      * Apply filters to the query builder instance
      *
      * @param  Builder  $query
-     * @param  array|null  $availableFilters
+     * @param  array|string|null  $availableFilters
      *
      * @return Builder
      */
-    public function scopeFilter(Builder $query, array $availableFilters = null): Builder
+    public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
     {
+        // if not passed it will get the available filters from config
         if (isset($availableFilters)) {
-            $this->setFilters($availableFilters);
+            // set all function input except first one (witch is the query)
+            $this->setFilters(array_slice(func_get_args(), 1));
         }
 
         // Retrieve the filters from the request
