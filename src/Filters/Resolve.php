@@ -34,6 +34,22 @@ class Resolve
     }
 
     /**
+     * @param  Builder  $query
+     * @param  string  $field
+     * @param  array  $filter
+     *
+     * @return void
+     */
+    private function applyRelationFilter(Builder $query, string $field, array $filter): void
+    {
+        foreach ($filter as $subField => $subFilter) {
+            $this->fields[] = $field;
+            $this->applyFilter($query, $subField, $subFilter);
+        }
+        array_pop($this->fields);
+    }
+
+    /**
      * Apply a single filter to the query builder instance
      *
      * @param  Builder  $query
@@ -52,18 +68,24 @@ class Resolve
         // Resolve the filter using the appropriate strategy
         if (isset($this->filterStrategies[$field])) {
             //call apply method of the appropriate filter class
-            $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filter);
-
-            $this->filterRelations($query, $callback);
+            $this->applyFilterStrategy($query, $field, $filter);
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-
-            foreach ($filter as $subField => $subFilter) {
-                $this->fields[] = $field;
-                $this->applyFilter($query, $subField, $subFilter);
-            }
-            $this->fields = [];
+            $this->applyRelationFilter($query, $field, $filter);
         }
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  string  $field
+     * @param  array  $filter
+     *
+     * @return void
+     */
+    private function applyFilterStrategy(Builder $query, string $field, array $filter): void
+    {
+        $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filter);
+        $this->filterRelations($query, $callback);
     }
 
     /**
@@ -76,28 +98,27 @@ class Resolve
     {
         array_pop($this->fields);
 
-        $this->applyRelations($query, $this->fields, $callback);
+        $this->applyRelations($query, $callback);
     }
 
     /**
      * Resolve nested relations if any
      *
      * @param  Builder  $query
-     * @param  array  $fields
      * @param  Closure  $callback
      *
      * @return void
      */
-    private function applyRelations(Builder $query, array $fields, Closure $callback): void
+    private function applyRelations(Builder $query, Closure $callback): void
     {
-        if (empty($fields)) {
+        if (empty($this->fields)) {
             // If there are no more filterable fields to resolve, apply the closure to the query builder instance
             $callback($query);
         } else {
             // If there are still filterable fields to resolve, apply the closure to a sub-query
-            $field = array_shift($fields);
-            $query->whereHas($field, function ($subQuery) use ($fields, $callback) {
-                $this->applyRelations($subQuery, $fields, $callback);
+            $field = array_shift($this->fields);
+            $query->whereHas($field, function ($subQuery) use ($callback) {
+                $this->applyRelations($subQuery, $callback);
             });
         }
     }
