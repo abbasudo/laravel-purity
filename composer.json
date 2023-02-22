@@ -16,12 +16,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Abbasudo\\LaravelPurity\\": "src"
+      "Abbasudo\\Purity\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Abbasudo\\LaravelPurity\\Tests\\": "tests"
+      "Abbasudo\\Purity\\Tests\\": "tests"
     }
   },
   "require-dev": {
@@ -31,7 +31,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Abbasudo\\LaravelPurity\\LaravelPurityServiceProvider"
+        "Abbasudo\\Purity\\PurityServiceProvider"
       ]
     }
   }

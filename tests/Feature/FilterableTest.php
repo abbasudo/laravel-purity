@@ -1,9 +1,8 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Tests\Feature\Filter;
 
-use Abbasudo\LaravelPurity\Tests\Models\Post;
-use Abbasudo\LaravelPurity\Tests\TestCase;
+use Abbasudo\Purity\Tests\Models\Post;
+use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
 class FilterableTest extends TestCase

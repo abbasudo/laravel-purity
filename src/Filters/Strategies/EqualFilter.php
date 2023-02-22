@@ -1,8 +1,8 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Filters\Strategies;
+namespace Abbasudo\Purity\Filters\Strategies;
 
-use Abbasudo\LaravelPurity\Contracts\Filter;
+use Abbasudo\Purity\Contracts\Filter;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 

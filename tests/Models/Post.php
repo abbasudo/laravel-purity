@@ -1,8 +1,8 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Tests\Models;
+namespace Abbasudo\Purity\Tests\Models;
 
-use Abbasudo\LaravelPurity\Traits\Filterable;
+use Abbasudo\Purity\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

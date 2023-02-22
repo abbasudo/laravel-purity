@@ -1,10 +1,10 @@
 <?php
 
-namespace Abbasudo\LaravelPurity;
+namespace Abbasudo\Purity;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelPurityServiceProvider extends ServiceProvider
+class PurityServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.

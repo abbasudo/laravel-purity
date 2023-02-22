@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Traits;
+namespace Abbasudo\Purity\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;

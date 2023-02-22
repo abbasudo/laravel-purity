@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Contracts;
+namespace Abbasudo\Purity\Contracts;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;

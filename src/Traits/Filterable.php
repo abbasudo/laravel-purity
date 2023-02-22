@@ -1,8 +1,8 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Traits;
+namespace Abbasudo\Purity\Traits;
 
-use Abbasudo\LaravelPurity\Filters\Resolve;
+use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 

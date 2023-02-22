@@ -1,13 +1,15 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Filters;
+namespace Abbasudo\Purity\Filters;
 
 
-use Abbasudo\LaravelPurity\Contracts\Filter as FilterContract;
-use Abbasudo\LaravelPurity\Exceptions\NoOperatorMatch;
+use Abbasudo\Purity\Contracts\Filter as FilterContract;
+use Abbasudo\Purity\Exceptions\NoOperatorMatch;
+use Abbasudo\Purity\Filters\Strategies\EqualFilter;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class Resolve
 {

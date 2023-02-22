@@ -1,6 +1,6 @@
 <?php
 
-use Abbasudo\LaravelPurity\Filters\Strategies\EqualFilter;
+use Abbasudo\Purity\Filters\Strategies\EqualFilter;
 
 return [
     'available_filters' => [

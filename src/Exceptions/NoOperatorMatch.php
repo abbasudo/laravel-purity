@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\LaravelPurity\Exceptions;
+namespace Abbasudo\Purity\Exceptions;
 
 use InvalidArgumentException;
 
