@@ -30,7 +30,7 @@ class Resolve
      *
      * @return void
      */
-    public function applyFilter(Builder $query, string $field, array|string $filter)
+    public function applyFilter(Builder $query, string $field, array|string $filter): void
     {
         // Ensure that the filter is an array
         if ( ! is_array($filter)) {
@@ -60,7 +60,7 @@ class Resolve
      *
      * @return void
      */
-    private function filterRelations(Builder $query, Closure $callback)
+    private function filterRelations(Builder $query, Closure $callback): void
     {
         array_pop($this->fields);
 
@@ -76,7 +76,7 @@ class Resolve
      *
      * @return void
      */
-    private function applyRelations(Builder $query, array $fields, Closure $callback)
+    private function applyRelations(Builder $query, array $fields, Closure $callback): void
     {
         if (empty($fields)) {
             // If there are no more filterable fields to resolve, apply the closure to the query builder instance
