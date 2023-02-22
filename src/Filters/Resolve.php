@@ -29,20 +29,20 @@ class Resolve
     public function __construct(array $filters)
     {
         foreach ($filters as $filter) {
-            $this->filterStrategies[$filter::operator()] = $filter;
+            $this->filterStrategies[$filter::operator()] = $filters;
         }
     }
 
     /**
      * @param  Builder  $query
      * @param  string  $field
-     * @param  array  $filter
+     * @param  array  $filters
      *
      * @return void
      */
-    private function applyRelationFilter(Builder $query, string $field, array $filter): void
+    private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
-        foreach ($filter as $subField => $subFilter) {
+        foreach ($filters as $subField => $subFilter) {
             $this->fields[] = $field;
             $this->applyFilter($query, $subField, $subFilter);
         }
@@ -54,37 +54,37 @@ class Resolve
      *
      * @param  Builder  $query
      * @param  string  $field
-     * @param  array|string  $filter
+     * @param  array|string  $filters
      *
      * @return void
      */
-    public function applyFilter(Builder $query, string $field, array|string $filter): void
+    public function applyFilter(Builder $query, string $field, array|string $filters): void
     {
         // Ensure that the filter is an array
-        if ( ! is_array($filter)) {
-            $filter = [$filter];
+        if ( ! is_array($filters)) {
+            $filters = [$filters];
         }
 
         // Resolve the filter using the appropriate strategy
         if (isset($this->filterStrategies[$field])) {
             //call apply method of the appropriate filter class
-            $this->applyFilterStrategy($query, $field, $filter);
+            $this->applyFilterStrategy($query, $field, $filters);
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->applyRelationFilter($query, $field, $filter);
+            $this->applyRelationFilter($query, $field, $filters);
         }
     }
 
     /**
      * @param  Builder  $query
      * @param  string  $field
-     * @param  array  $filter
+     * @param  array  $filters
      *
      * @return void
      */
-    private function applyFilterStrategy(Builder $query, string $field, array $filter): void
+    private function applyFilterStrategy(Builder $query, string $field, array $filters): void
     {
-        $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filter);
+        $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filters);
         $this->filterRelations($query, $callback);
     }
 
