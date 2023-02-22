@@ -5,6 +5,7 @@ namespace Abbasudo\LaravelPurity\Filters;
 
 use Abbasudo\LaravelPurity\Contracts\Filter as FilterContract;
 use Closure;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 class Resolve
@@ -29,7 +30,7 @@ class Resolve
     public function __construct(array $filters)
     {
         foreach ($filters as $filter) {
-            $this->filterStrategies[$filter::operator()] = $filters;
+            $this->filterStrategies[$filter::operator()] = $filter;
         }
     }
 
@@ -39,6 +40,7 @@ class Resolve
      * @param  array  $filters
      *
      * @return void
+     * @throws Exception
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
@@ -54,11 +56,12 @@ class Resolve
      *
      * @param  Builder  $query
      * @param  string  $field
-     * @param  array|string  $filters
+     * @param  array|string|null  $filters
      *
      * @return void
+     * @throws Exception
      */
-    public function applyFilter(Builder $query, string $field, array|string $filters): void
+    public function applyFilter(Builder $query, string $field, array|string|null $filters): void
     {
         // Ensure that the filter is an array
         if ( ! is_array($filters)) {
@@ -68,10 +71,31 @@ class Resolve
         // Resolve the filter using the appropriate strategy
         if (isset($this->filterStrategies[$field])) {
             //call apply method of the appropriate filter class
-            $this->applyFilterStrategy($query, $field, $filters);
+            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->applyRelationFilter($query, $field, $filters);
+            $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
+        }
+    }
+
+    /**
+     * run functions with or without exception
+     *
+     * @param  Closure  $param
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function safe(Closure $param): void
+    {
+        try {
+            $param();
+        } catch (Exception $exception) {
+            if (config('purity.silent')) {
+                return;
+            } else {
+                throw $exception;
+            }
         }
     }
 
@@ -85,6 +109,7 @@ class Resolve
     private function applyFilterStrategy(Builder $query, string $field, array $filters): void
     {
         $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filters);
+
         $this->filterRelations($query, $callback);
     }
 
@@ -116,10 +141,22 @@ class Resolve
             $callback($query);
         } else {
             // If there are still filterable fields to resolve, apply the closure to a sub-query
-            $field = array_shift($this->fields);
-            $query->whereHas($field, function ($subQuery) use ($callback) {
-                $this->applyRelations($subQuery, $callback);
-            });
+            $this->relation($query, $callback);
         }
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  Closure  $callback
+     *
+     * @return void
+     */
+    private function relation(Builder $query, Closure $callback)
+    {
+        // remove last field till its empty
+        $field = array_shift($this->fields);
+        $query->whereHas($field, function ($subQuery) use ($callback) {
+            $this->applyRelations($subQuery, $callback);
+        });
     }
 }
