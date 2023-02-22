@@ -58,6 +58,6 @@ trait Filterable
      */
     private function getFilters(): array
     {
-        return $this->filters ?? config('purity.available_filters');
+        return $this->filters ?? config('purity.filters');
     }
 }

@@ -76,9 +76,11 @@ class Resolve
     }
 
     /**
-     * @throws \Exception
+     * @param  array|string  $values
+     *
+     * @return void
      */
-    private function validate($values)
+    private function validate(array|string $values)
     {
         if (empty($values)) {
             throw NoOperatorMatch::create(array_keys($this->filterStrategies));
@@ -101,7 +103,7 @@ class Resolve
      * @return void
      * @throws Exception
      */
-    public function filter(Builder $query, string $field, array|string|null $filters): void
+    private function filter(Builder $query, string $field, array|string|null $filters): void
     {
         // Ensure that the filter is an array
         if ( ! is_array($filters)) {
