@@ -5,13 +5,16 @@
 
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
-features :
+Features :
  - verios filter methods
  - filter by relation coulmns
  - custom filters
  - multi-column sort
 
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
+
+> **Note**
+> if you are front-end developer and what to make use of this package head to [queries](#queries-and-javascript-examples) section
 
 the way that this package handles filters is inspired by strapi [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
@@ -57,7 +60,8 @@ The following operators are available:
 
 #### Simple filtering
 
-! qs can be used to build the query URL
+> **Note**
+>   in javascript [qs](https://www.npmjs.com/package/qs) can be used to build the query URL.
 
 Find users having 'John' as first name
 
@@ -95,6 +99,7 @@ await request(`/api/restaurants?${query}`);
   ```
 #### Complex filtering
 Complex filtering is combining multiple filters using advanced methods such as combining $and & $or. This allows for more flexibility to request exactly the data needed.
+
 Find books with 2 possible dates and a specific author.
 
 `GET /api/books?filters[$or][0][date][$eq]=2020-01-01&filters[$or][1][date][$eq]=2020-01-02&filters[author][name][$eq]=Kai%20doe`
@@ -128,6 +133,7 @@ await request(`/api/books?${query}`);
 ```
 #### Deep filtering
 Deep filtering is filtering on a relation's fields.
+
 Find restaurants owned by a chef who belongs to a 5-star restaurant
 
 `GET /api/restaurants?filters[chef][restaurants][stars][$eq]=5`
