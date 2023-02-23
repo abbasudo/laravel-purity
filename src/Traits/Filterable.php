@@ -27,7 +27,9 @@ trait Filterable
         // if not passed it will get the available filters from config
         if (isset($availableFilters)) {
             // set all function input except first one (witch is the query)
-            $this->setFilters(array_slice(func_get_args(), 1));
+            $this->setFilters(
+                is_array($availableFilters) ? $availableFilters : array_slice(func_get_args(), 1)
+            );
         }
 
         // Retrieve the filters from the request
