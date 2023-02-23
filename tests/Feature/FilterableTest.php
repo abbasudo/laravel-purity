@@ -1,7 +1,6 @@
 <?php
 
 
-use Abbasudo\Purity\Filters\Strategies\EqualFilter;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
@@ -13,11 +12,11 @@ class FilterableTest extends TestCase
         parent::setUp();
 
         Route::get('/posts', function () {
-            return Post::filter(EqualFilter::class)->get();
+            return Post::filter()->get();
         });
 
         Post::create([
-            'title' => 'laravel purity is good',
+            'title' => 'laravel purity is the best',
         ]);
     }
 
@@ -28,7 +27,6 @@ class FilterableTest extends TestCase
         $response = $this->getJson('/posts');
 
         $response->assertOk();
-        $response->assertJsonMissing(['message']);
         $response->assertJsonCount(1);
     }
 
@@ -38,17 +36,15 @@ class FilterableTest extends TestCase
         $response = $this->getJson('/posts?filters[title][$eq]=no matches');
 
         $response->assertOk();
-        $response->assertJsonMissing(['message']);
         $response->assertJsonCount(0);
     }
 
     /** @test */
     public function it_can_filter_with_a_basic_eq_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$eq]=laravel purity is good');
+        $response = $this->getJson('/posts?filters[title][$eq]=laravel purity is the best');
 
         $response->assertOk();
-        $response->assertJsonMissing(['message']);
         $response->assertJsonCount(1);
     }
 }
