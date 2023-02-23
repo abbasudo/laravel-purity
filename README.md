@@ -3,7 +3,6 @@
   <h2 align="center">Elegant way to filter and sort</h2>
 </p>
 
-<!-- ABOUT -->
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
 features :
@@ -78,6 +77,7 @@ const query = qs.stringify({
 await request(`/api/users?${query}`);
   ```
 Find multiple restaurants with ids 3, 6, 8
+
 `GET /api/restaurants?filters[id][$in][0]=3&filters[id][$in][1]=6&filters[id][$in][2]=8`
   ```js
   const qs = require('qs');
@@ -96,6 +96,7 @@ await request(`/api/restaurants?${query}`);
 #### Complex filtering
 Complex filtering is combining multiple filters using advanced methods such as combining $and & $or. This allows for more flexibility to request exactly the data needed.
 Find books with 2 possible dates and a specific author.
+
 `GET /api/books?filters[$or][0][date][$eq]=2020-01-01&filters[$or][1][date][$eq]=2020-01-02&filters[author][name][$eq]=Kai%20doe`
 ```js
 const qs = require('qs');
@@ -128,6 +129,7 @@ await request(`/api/books?${query}`);
 #### Deep filtering
 Deep filtering is filtering on a relation's fields.
 Find restaurants owned by a chef who belongs to a 5-star restaurant
+
 `GET /api/restaurants?filters[chef][restaurants][stars][$eq]=5`
 ```js
 const qs = require('qs');
