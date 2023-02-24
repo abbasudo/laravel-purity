@@ -118,6 +118,24 @@ private array $filters = [
   InFilter::class,
 ],
 ```
+### Custom Filters
+Create custom filter class by this command:
+```sh
+php artisan make:filter EqualFilter
+```
+this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can chage scan folder location in purity config file.
+```php
+// configs/purity.php
+
+'custom_filters_location' => app_path('Filters'),
+```
+### Silent Exceptions
+By default the package silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+```php
+// configs/purity.php
+
+'silent' => false,
+```
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses this package. 
 ### Avalable Filters
