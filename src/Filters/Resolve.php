@@ -3,6 +3,7 @@
 namespace Abbasudo\Purity\Filters;
 
 
+use Abbasudo\Purity\Contracts\Filter;
 use Abbasudo\Purity\Contracts\Filter as FilterContract;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
 use Closure;
@@ -21,18 +22,16 @@ class Resolve
     /**
      * List of available filters
      *
-     * @var array|FilterContract[]
+     * @var filterList
      */
-    private array $filterStrategies;
+    private FilterList $filterList;
 
     /**
-     * @param  array|FilterContract[]  $filters
+     * @param  array|FilterContract[]|string[]  $filters
      */
     public function __construct(array $filters)
     {
-        foreach ($filters as $filter) {
-            $this->filterStrategies[$filter::operator()] = $filter;
-        }
+        $this->filterList = (new FilterList())->only($filters);
     }
 
     /**
@@ -83,10 +82,10 @@ class Resolve
     private function validate(array|string $values)
     {
         if (empty($values)) {
-            throw NoOperatorMatch::create(array_keys($this->filterStrategies));
+            throw NoOperatorMatch::create($this->filterList->keys());
         }
 
-        if (in_array(key($values), array_keys($this->filterStrategies))) {
+        if (in_array(key($values), $this->filterList->keys())) {
             return;
         } else {
             $this->validate(array_values($values)[0]);
@@ -111,7 +110,7 @@ class Resolve
         }
 
         // Resolve the filter using the appropriate strategy
-        if (isset($this->filterStrategies[$field])) {
+        if ($this->filterList->get($field) !== null) {
             //call apply method of the appropriate filter class
             $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
         } else {
@@ -122,14 +121,14 @@ class Resolve
 
     /**
      * @param  Builder  $query
-     * @param  string  $field
+     * @param  string  $operator
      * @param  array  $filters
      *
      * @return void
      */
-    private function applyFilterStrategy(Builder $query, string $field, array $filters): void
+    private function applyFilterStrategy(Builder $query, string $operator, array $filters): void
     {
-        $callback = $this->filterStrategies[$field]::apply($query, end($this->fields), $filters);
+        $callback = $this->filterList->get($operator)::apply($query, end($this->fields), $filters);
 
         $this->filterRelations($query, $callback);
     }
