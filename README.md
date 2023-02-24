@@ -14,54 +14,109 @@ Features :
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
 
 > **Note**
-> if you are front-end developer and what to make use of this package head to [queries](#queries-and-javascript-examples) section
+> if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
 
 the way that this package handles filters is inspired by strapi [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
 ## Installation
-install the package via composer by this command:
+Install the package via composer by this command:
    ```sh
    composer require abbasudo/laravel-purity 
    ```
+Get configs (`configs/purity.php`) file to customize package's behavior by this command:
+   ```sh
+   php artisan vendor:publish --tag=purity 
+   ```
 ## Basic Usage
 ### Filters
+Add `Filterable` trait to your model to get filters functionalities.
+```php
+use Abbasudo\Purity\Traits\Filterable;
+
+class Post extends Model
+{
+    use Filterable;
+    
+    //
+}
+```
+now add `filter()` to your model query in the controller.
+```php
+use App\Models\Post;
+
+class PostController extends Controller
+{
+    public function index()
+    {
+        return Post::filter()->get();
+    }
+}
+```
+By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [allowed filters](#allowed-filters) section.
+
 ### Sort
+Add `Sortable` trait to your model to get sorts functionalities.
+```php
+use Abbasudo\Purity\Traits\Sortable;
+
+class Post extends Model
+{
+    use Sortable;
+    
+    //
+}
+```
+now add `filter()` to your model query in the controller.
+```php
+use App\Models\Post;
+
+class PostController extends Controller
+{
+    public function index()
+    {
+        return Post::sort()->get();
+    }
+}
+```
+## Advanced Usage
+### Allowed Filters
 ## Queries and javascript examples
-### Filters
+This section is a guide for front-end developers who want to use an API that uses this package. 
+### Avalable Filters
 Queries can accept a filters parameter with the following syntax:
 
 `GET /api/posts?filters[field][operator]=value`
 
-The following operators are available:
-| Operator      | Description                                      |
-| ------------- | ------------------------------------------------ |
-| `$eq`         | Equal                                            |
-| `$eqi`        | Equal (case-insensitive)                         |
-| `$ne`         | Not equal                                        |
-| `$lt`         | Less than                                        |
-| `$lte`        | Less than or equal to                            |
-| `$gt`         | Greater than                                     |
-| `$gte`        | Greater than or equal to                         |
-| `$in`         | Included in an array                             |
-| `$notIn`      | Not included in an array                         |
-| `$contains`   | Contains                                         |
-| `$notContains`| Does not contain                                 |
-| `$containsi`  | Contains (case-insensitive)                      |
-| `$notContainsi`| Does not contain (case-insensitive)             |
-| `$null`       | Is null                                          |
-| `$notNull`    | Is not null                                      |
-| `$between`    | Is between                                       |
-| `$startsWith` | Starts with                                      |
-| `$startsWithi`| Starts with (case-insensitive)                   |
-| `$endsWith`   | Ends with                                        |
-| `$endsWithi`  | Ends with (case-insensitive)                     |
-| `$or`         | Joins the filters in an "or" expression          |
-| `$and`        | Joins the filters in an "and" expression         |
+**By Default** the following operators are available:
+| Operator       | Description                                      |
+| -------------- | ------------------------------------------------ |
+| `$eq`          | Equal                                            |
+| `$eqi`         | Equal (case-insensitive)                         |
+| `$ne`          | Not equal                                        |
+| `$lt`          | Less than                                        |
+| `$lte`         | Less than or equal to                            |
+| `$gt`          | Greater than                                     |
+| `$gte`         | Greater than or equal to                         |
+| `$in`          | Included in an array                             |
+| `$notIn`       | Not included in an array                         |
+| `$contains`    | Contains                                         |
+| `$notContains` | Does not contain                                 |
+| `$containsi`   | Contains (case-insensitive)                      |
+| `$notContainsi`| Does not contain (case-insensitive)              |
+| `$null`        | Is null                                          |
+| `$notNull`     | Is not null                                      |
+| `$between`     | Is between                                       |
+| `$startsWith`  | Starts with                                      |
+| `$startsWithi` | Starts with (case-insensitive)                   |
+| `$endsWith`    | Ends with                                        |
+| `$endsWithi`   | Ends with (case-insensitive)                     |
+| `$or`          | Joins the filters in an "or" expression          |
+| `$and`         | Joins the filters in an "and" expression         |
 
-#### Simple filtering
+#### Simple Filtering
 
-> **Note**
->   in javascript [qs](https://www.npmjs.com/package/qs) can be used to build the query URL.
+> **Tip**
+>   in javascript use [qs](https://www.npmjs.com/package/qs) directly to generate complex queries instead of creating them manually. Examples in this documentation showcase how you can use `qs`.
 
 Find users having 'John' as first name
 
@@ -97,7 +152,7 @@ const query = qs.stringify({
 
 await request(`/api/restaurants?${query}`);
   ```
-#### Complex filtering
+#### Complex Filtering
 Complex filtering is combining multiple filters using advanced methods such as combining $and & $or. This allows for more flexibility to request exactly the data needed.
 
 Find books with 2 possible dates and a specific author.
@@ -131,7 +186,7 @@ const query = qs.stringify({
 
 await request(`/api/books?${query}`);
 ```
-#### Deep filtering
+#### Deep Filtering
 Deep filtering is filtering on a relation's fields.
 
 Find restaurants owned by a chef who belongs to a 5-star restaurant
@@ -155,6 +210,16 @@ const query = qs.stringify({
 
 await request(`/api/restaurants?${query}`);
 ```
+### Apply Sort
+Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntaxes:
+
+`GET /api/:pluralApiId?sort=value` to sort on 1 field
+`GET /api/:pluralApiId?sort[0]=value1&sort[1]=value2` to sort on multiple fields (e.g. on 2 fields)
+
+The sorting order can be defined with:
+- `:asc` for ascending order (default order, can be omitted)
+- `:desc` for descending order.
+- 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
