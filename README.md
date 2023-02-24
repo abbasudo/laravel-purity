@@ -11,10 +11,10 @@
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
 Features :
- - verios filter methods
- - filter by relation coulmns
- - custom filters
- - multi-column sort
+ - Verios filter methods
+ - Filter by relation coulmns
+ - Custom filters
+ - Multi-column sort
 
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
 
@@ -55,7 +55,6 @@ class PostController extends Controller
 }
 ```
 By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [allowed filters](#allowed-filters) section.
-
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
 ```php
@@ -85,11 +84,40 @@ Now sort can be applied as instructed in [sort usage](#usage-examples).
 ### Allowed Filters
 The system validates allowed filters in the following order of priority:
 - Filters passed as an array to the `filter()` function.
+```php
+Post::filter('$eq', '$in')->get();
+// or
+Post::filter(EqualFilter::class, InFilter::class)->get();
+```
+> 
 - Filters declared in the `$filters` variable in the model.
+> **Note**
+> applied only if no parameters passed to `filter()` function.
+```php
+// App\Models\Post
+
+private array $filters = [
+  '$eq',
+  '$in',
+];
+    
+// or
+    
+private array $filters = [
+  EqualFilter::class,
+  InFilter::class,
+];
+```
 - Filters specified in the `filters` configuration in the `configs/purity.php` file.
-
-
-
+> **Note**
+> applied only if above parameters are not set.
+```php
+// configs/purity.php
+'filters' => [
+  EqualFilter::class,
+  InFilter::class,
+],
+```
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses this package. 
 ### Avalable Filters
