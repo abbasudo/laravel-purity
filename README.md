@@ -78,8 +78,16 @@ class PostController extends Controller
     }
 }
 ```
+Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
 ### Allowed Filters
+The system validates allowed filters in the following order of priority:
+- Filters passed as an array to the `filter()` function.
+- Filters declared in the `$filters` variable in the model.
+- Filters specified in the `filters` configuration in the `configs/purity.php` file.
+
+
+
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses this package. 
 ### Avalable Filters
@@ -214,12 +222,47 @@ await request(`/api/restaurants?${query}`);
 Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntaxes:
 
 `GET /api/:pluralApiId?sort=value` to sort on 1 field
+
 `GET /api/:pluralApiId?sort[0]=value1&sort[1]=value2` to sort on multiple fields (e.g. on 2 fields)
 
 The sorting order can be defined with:
 - `:asc` for ascending order (default order, can be omitted)
 - `:desc` for descending order.
-- 
+
+#### Usage Examples
+
+Sort using 2 fields
+
+`GET /api/articles?sort[0]=title&sort[1]=slug`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  sort: ['title', 'slug'],
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/articles?${query}`);
+```
+
+
+
+Sort using 2 fields and set the order
+
+`GET /api/articles?sort[0]=title%3Aasc&sort[1]=slug%3Adesc`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  sort: ['title:asc', 'slug:desc'],
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/articles?${query}`);
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
