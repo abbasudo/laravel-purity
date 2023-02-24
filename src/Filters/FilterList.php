@@ -2,6 +2,10 @@
 
 namespace Abbasudo\Purity\Filters;
 
+use Abbasudo\Purity\Contracts\Filter;
+use ReflectionClass;
+use ReflectionException;
+
 class FilterList
 {
     public array $filters = [];
@@ -54,5 +58,33 @@ class FilterList
         }
 
         return $classes;
+    }
+
+    public function only(array $filters): FilterList
+    {
+        foreach ($filters as $key => $filter) {
+            try {
+                $ReflectedClass = new ReflectionClass($filter);
+                if ($ReflectedClass->isSubclassOf(Filter::class)) {
+                    $filters[$key] = $filter::operator();
+                }
+            } catch (ReflectionException) {
+                continue;
+            }
+        }
+
+        $this->filters = collect($this->filters)->only($filters)->all();
+
+        return $this;
+    }
+
+    public function keys(): array
+    {
+        return array_keys($this->filters);
+    }
+
+    public function get(string $operator)
+    {
+        return $this->filters[$operator] ?? null;
     }
 }
