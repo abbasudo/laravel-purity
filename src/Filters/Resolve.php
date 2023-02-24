@@ -79,9 +79,9 @@ class Resolve
      *
      * @return void
      */
-    private function validate(array|string $values)
+    private function validate(array|string $values = [])
     {
-        if (empty($values)) {
+        if (empty($values) or is_string($values)) {
             throw NoOperatorMatch::create($this->filterList->keys());
         }
 
