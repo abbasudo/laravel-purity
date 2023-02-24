@@ -2,12 +2,14 @@
 
 namespace Abbasudo\Purity\Filters\Strategies;
 
-use Abbasudo\Purity\Contracts\Filter;
+use Abbasudo\Purity\Filters\Filter;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
-class InFilter implements Filter
+class InFilter extends Filter
 {
+    protected static string $operator = '$in';
+
     /**
      * @param  Builder  $query
      * @param  string  $column
@@ -22,11 +24,4 @@ class InFilter implements Filter
         };
     }
 
-    /**
-     * @return string
-     */
-    public static function operator(): string
-    {
-        return '$in';
-    }
 }

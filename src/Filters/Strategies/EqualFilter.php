@@ -2,12 +2,14 @@
 
 namespace Abbasudo\Purity\Filters\Strategies;
 
-use Abbasudo\Purity\Contracts\Filter;
+use Abbasudo\Purity\Filters\Filter;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
-class EqualFilter implements Filter
+class EqualFilter extends Filter
 {
+    public static string $operator = '$eq';
+
     /**
      * @param  Builder  $query
      * @param  string  $column
