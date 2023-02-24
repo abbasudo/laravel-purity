@@ -128,7 +128,9 @@ class Resolve
      */
     private function applyFilterStrategy(Builder $query, string $operator, array $filters): void
     {
-        $callback = $this->filterList->get($operator)::apply($query, end($this->fields), $filters);
+        $filter = $this->filterList->get($operator);
+
+        $callback = (new $filter($query, end($this->fields), $filters))->apply();
 
         $this->filterRelations($query, $callback);
     }
