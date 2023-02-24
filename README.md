@@ -66,7 +66,7 @@ class Post extends Model
     //
 }
 ```
-now add `filter()` to your model query in the controller.
+now add `sort()` to your model query in the controller.
 ```php
 use App\Models\Post;
 
