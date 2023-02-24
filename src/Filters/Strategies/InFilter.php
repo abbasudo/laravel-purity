@@ -18,9 +18,7 @@ class InFilter implements Filter
     public static function apply(Builder $query, string $column, array $filters): Closure
     {
         return function ($query) use ($column, $filters) {
-            $callback = function ($query) use ($column, $filters) {
-                $query->whereIn($column, $filters);
-            };
+            $query->whereIn($column, $filters);
         };
     }
 
