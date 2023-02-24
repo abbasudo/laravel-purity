@@ -7,9 +7,16 @@ use Closure;
 
 class EqualFilter extends Filter
 {
-    public static string $operator = '$eq';
+    /**
+     * Operator string to detect in the query params.
+     *
+     * @var string
+     */
+    protected static string $operator = '$eq';
 
     /**
+     * Apply filter logic to $query.
+     *
      * @return Closure
      */
     public function apply(): Closure

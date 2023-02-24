@@ -1,0 +1,31 @@
+<?php
+
+namespace {{ namespace }};
+
+use Abbasudo\Purity\Contracts\Filter;
+use Closure;
+use Illuminate\Database\Eloquent\Builder;
+
+class {{ class }} implements Filter
+{
+
+    /**
+     * Operator string to detect in the query params.
+     *
+     * @var string
+     */
+    protected static string $operator = '$costume';
+
+
+    /**
+     * Apply filter logic to $query.
+     *
+     * @return Closure
+     */
+    public static function apply(): Closure
+    {
+        return function (Builder $query) use ($column, $filters) {
+            $query;
+        };
+    }
+}
