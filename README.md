@@ -3,6 +3,11 @@
   <h2 align="center">Elegant way to filter and sort</h2>
 </p>
 
+
+> **Note**
+> if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
+
+
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
 Features :
@@ -13,10 +18,7 @@ Features :
 
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
 
-> **Note**
-> if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
-
-the way that this package handles filters is inspired by strapi [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
+The way this package handles filters is inspired by strapi's [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
 ## Installation
 Install the package via composer by this command:
