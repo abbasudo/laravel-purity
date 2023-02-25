@@ -1,6 +1,6 @@
 <p align="center">
   <img src="/art/purity-logo.png" alt="Social Card of Laravel Purity">
-  <h2 align="center">Elegant way to filter and sort</h2>
+  <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
 </p>
 
 
@@ -54,7 +54,7 @@ class PostController extends Controller
     }
 }
 ```
-By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [allowed filters](#allowed-filters) section.
+By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
 ```php
@@ -81,7 +81,7 @@ class PostController extends Controller
 ```
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
-### Allowed Filters
+### Restrict Filters
 The system validates allowed filters in the following order of priority:
 - Filters passed as an array to the `filter()` function.
 ```php
@@ -209,7 +209,7 @@ const query = qs.stringify({
 await request(`/api/restaurants?${query}`);
   ```
 #### Complex Filtering
-Complex filtering is combining multiple filters using advanced methods such as combining $and & $or. This allows for more flexibility to request exactly the data needed.
+Complex filtering is combining multiple filters using advanced methods such as combining `$and` & `$or`. This allows for more flexibility to request exactly the data needed.
 
 Find books with 2 possible dates and a specific author.
 
