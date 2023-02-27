@@ -22,7 +22,7 @@ class InFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            $query->whereIn($this->column, $this->filters);
+            $query->whereIn($this->column, $this->values);
         };
     }
 

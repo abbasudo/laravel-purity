@@ -22,7 +22,7 @@ class NotInFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->filters as $filter) {
+            foreach ($this->values as $filter) {
                 $query->whereNotIn($this->column, $filter);
             }
         };

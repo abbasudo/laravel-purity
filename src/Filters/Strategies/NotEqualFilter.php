@@ -22,7 +22,7 @@ class NotEqualFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->filters as $filter) {
+            foreach ($this->values as $filter) {
                 $query->whereNot($this->column, $filter);
             }
         };

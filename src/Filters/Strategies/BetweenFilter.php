@@ -22,7 +22,7 @@ class BetweenFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            $query->whereBetween($this->column, $this->filters);
+            $query->whereBetween($this->column, $this->values);
         };
     }
 }

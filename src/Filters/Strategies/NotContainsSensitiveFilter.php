@@ -23,7 +23,7 @@ class NotContainsSensitiveFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->filters as $filter) {
+            foreach ($this->values as $filter) {
                 $query->where("BINARY `{$this->column}` not like ?", ["%{$filter}%"]);
             }
         };
