@@ -2,6 +2,7 @@
 
 namespace Abbasudo\Purity\Traits;
 
+use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,12 +33,16 @@ trait Filterable
             );
         }
 
+        app()->singleton(FilterList::class, function () {
+            return (new FilterList())->only($this->getFilters());
+        });
+
         // Retrieve the filters from the request
         $filters = request('filters', []);
 
         // Apply each filter to the query builder instance
         foreach ($filters as $field => $value) {
-            (new Resolve($this->getFilters()))->apply($query, $field, $value);
+            app(Resolve::class)->apply($query, $field, $value);
         }
 
         return $query;

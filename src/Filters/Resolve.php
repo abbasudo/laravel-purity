@@ -27,11 +27,11 @@ class Resolve
     private FilterList $filterList;
 
     /**
-     * @param  array|FilterContract[]|string[]  $filters
+     * @param  \Abbasudo\Purity\Filters\FilterList  $filterList
      */
-    public function __construct(array $filters)
+    public function __construct(FilterList $filterList)
     {
-        $this->filterList = (new FilterList())->only($filters);
+        $this->filterList = $filterList;
     }
 
     /**
