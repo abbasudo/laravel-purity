@@ -147,7 +147,7 @@ Queries can accept a filters parameter with the following syntax:
 | Operator       | Description                                      |
 | -------------- | ------------------------------------------------ |
 | `$eq`          | Equal                                            |
-| `$eqi`         | Equal (case-insensitive)                         |
+| `$eqc`         | Equal (case-sensitive)                           |
 | `$ne`          | Not equal                                        |
 | `$lt`          | Less than                                        |
 | `$lte`         | Less than or equal to                            |
@@ -157,15 +157,15 @@ Queries can accept a filters parameter with the following syntax:
 | `$notIn`       | Not included in an array                         |
 | `$contains`    | Contains                                         |
 | `$notContains` | Does not contain                                 |
-| `$containsi`   | Contains (case-insensitive)                      |
-| `$notContainsi`| Does not contain (case-insensitive)              |
+| `$containsc`   | Contains (case-sensitive)                        |
+| `$notContainsc`| Does not contain (case-sensitive)                |
 | `$null`        | Is null                                          |
 | `$notNull`     | Is not null                                      |
 | `$between`     | Is between                                       |
 | `$startsWith`  | Starts with                                      |
-| `$startsWithi` | Starts with (case-insensitive)                   |
+| `$startsWithc` | Starts with (case-sensitive)                     |
 | `$endsWith`    | Ends with                                        |
-| `$endsWithi`   | Ends with (case-insensitive)                     |
+| `$endsWithc`   | Ends with (case-sensitive)                       |
 | `$or`          | Joins the filters in an "or" expression          |
 | `$and`         | Joins the filters in an "and" expression         |
 
