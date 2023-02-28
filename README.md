@@ -3,6 +3,7 @@
   <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
 </p>
 
+[![tests](https://github.com/abbasudo/laravel-purity/actions/workflows/php.yml/badge.svg)](https://github.com/abbasudo/laravel-purity/actions/workflows/php.yml)
 
 > **Note**
 > if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
