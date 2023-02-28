@@ -4,7 +4,7 @@ layout: home
 ---
 
 <p align="center">
-  <img src="/art/purity-logo.png" alt="Social Card of Laravel Purity">
+  <img src="https://github.com/abbasudo/laravel-purity/raw/master/art/purity-logo.png" alt="Social Card of Laravel Purity">
   <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
 </p>
 
@@ -28,63 +28,71 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 
 ## Installation
 Install the package via composer by this command:
-   ```sh
-   composer require abbasudo/laravel-purity 
-   ```
+```sh
+composer require abbasudo/laravel-purity 
+```
 Get configs (`configs/purity.php`) file to customize package's behavior by this command:
-   ```sh
-   php artisan vendor:publish --tag=purity 
-   ```
+```sh
+php artisan vendor:publish --tag=purity 
+```
 ## Basic Usage
 ### Filters
 Add `Filterable` trait to your model to get filters functionalities.
-    ```php
-    use Abbasudo\Purity\Traits\Filterable;
+
+```php
+use Abbasudo\Purity\Traits\Filterable;
+
+class Post extends Model
+{
+    use Filterable;
     
-    class Post extends Model
-    {
-        use Filterable;
-        
-        //
-    }
-    ```
+    //
+}
+```
+
 now add `filter()` to your model query in the controller.
-    ```php
-    use App\Models\Post;
-    
-    class PostController extends Controller
+
+```php
+use App\Models\Post;
+
+class PostController extends Controller
+{
+    public function index()
     {
-        public function index()
-        {
-            return Post::filter()->get();
-        }
+        return Post::filter()->get();
     }
-    ```
+}
+```
+
 By default, it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
-    ```php
-    use Abbasudo\Purity\Traits\Sortable;
+
+```php
+use Abbasudo\Purity\Traits\Sortable;
+
+class Post extends Model
+{
+    use Sortable;
     
-    class Post extends Model
-    {
-        use Sortable;
-        
-        //
-    }
-    ```
+    //
+}
+```
+
 now add `sort()` to your model query in the controller.
-    ```php
-    use App\Models\Post;
-    
-    class PostController extends Controller
+
+```php
+use App\Models\Post;
+
+class PostController extends Controller
+{
+    public function index()
     {
-        public function index()
-        {
-            return Post::sort()->get();
-        }
+        return Post::sort()->get();
     }
-    ```
+}
+```
+
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
 ### Restrict Filters
@@ -116,9 +124,11 @@ private array $filters = [
   InFilter::class,
 ];
 ```
+
 - Filters specified in the `filters` configuration in the `configs/purity.php` file.
 > **Note**
 > applied only if above parameters are not set.
+> 
 ```php
 // configs/purity.php
 'filters' => [
@@ -126,24 +136,31 @@ private array $filters = [
   InFilter::class,
 ],
 ```
+
 ### Custom Filters
 Create custom filter class by this command:
+
 ```sh
 php artisan make:filter EqualFilter
 ```
+
 this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can chage scan folder location in purity config file.
+
 ```php
 // configs/purity.php
 
 'custom_filters_location' => app_path('Filters'),
 ```
+
 ### Silent Exceptions
-By default the package silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+By default, the package silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+
 ```php
 // configs/purity.php
 
 'silent' => false,
 ```
+
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses this package.
 ### Avalable Filters
