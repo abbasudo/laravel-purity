@@ -22,8 +22,8 @@ class NotInFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->whereNotIn($this->column, $filter);
+            foreach ($this->values as $value) {
+                $query->whereNotIn($this->column, $value);
             }
         };
     }

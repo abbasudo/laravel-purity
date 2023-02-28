@@ -22,8 +22,8 @@ class NotContainsFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->where($this->column, 'not like', "%{$filter}%");
+            foreach ($this->values as $value) {
+                $query->where($this->column, 'not like', "%{$value}%");
             }
         };
     }

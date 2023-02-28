@@ -22,8 +22,8 @@ class StartsWithFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->where($this->column, 'like', $filter.'%');
+            foreach ($this->values as $value) {
+                $query->where($this->column, 'like', $value.'%');
             }
         };
     }

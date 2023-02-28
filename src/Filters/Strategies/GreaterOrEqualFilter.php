@@ -22,8 +22,8 @@ class GreaterOrEqualFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->where($this->column, '>=', $filter);
+            foreach ($this->values as $value) {
+                $query->where($this->column, '>=', $value);
             }
         };
     }

@@ -22,8 +22,8 @@ class NotEqualFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->whereNot($this->column, $filter);
+            foreach ($this->values as $value) {
+                $query->whereNot($this->column, $value);
             }
         };
     }

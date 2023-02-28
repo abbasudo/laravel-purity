@@ -22,8 +22,8 @@ class ContainsSensitiveFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $filter) {
-                $query->where("BINARY `{$this->column}` like ?", ["%{$filter}%"]);
+            foreach ($this->values as $value) {
+                $query->where("BINARY `{$this->column}` like ?", ["%{$value}%"]);
             }
         };
     }
