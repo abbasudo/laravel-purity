@@ -36,5 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
 
+    steps:
     - name: Run PHPUnit tests
       run: vendor/bin/phpunit
