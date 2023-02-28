@@ -17,8 +17,8 @@ layout: home
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
 Features :
-- Verios filter methods
-- Filter by relation coulmns
+- Various filter methods
+- Filter by relation columns
 - Custom filters
 - Multi-column sort
 
@@ -64,7 +64,7 @@ class PostController extends Controller
 }
 ```
 
-By default, it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
+By default, it gives access to all filters available. here is the list of [available filters](#available-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
 
@@ -107,8 +107,10 @@ Post::filter(EqualFilter::class, InFilter::class)->get();
 ```
 
 - Filters declared in the `$filters` variable in the model.
+
 > **Note**
 > applied only if no parameters passed to `filter()` function.
+
 ```php
 // App\Models\Post
 
@@ -126,9 +128,10 @@ private array $filters = [
 ```
 
 - Filters specified in the `filters` configuration in the `configs/purity.php` file.
+
 > **Note**
 > applied only if above parameters are not set.
-> 
+ 
 ```php
 // configs/purity.php
 'filters' => [
@@ -144,7 +147,7 @@ Create custom filter class by this command:
 php artisan make:filter EqualFilter
 ```
 
-this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can chage scan folder location in purity config file.
+this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
 
 ```php
 // configs/purity.php
@@ -163,8 +166,8 @@ By default, the package silences it own exceptions (not sql exceptions). to chan
 
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses this package.
-### Avalable Filters
-Queries can accept a filters parameter with the following syntax:
+### Available Filters
+Queries can accept a filters' parameter with the following syntax:
 
 `GET /api/posts?filters[field][operator]=value`
 
@@ -293,7 +296,7 @@ const query = qs.stringify({
 await request(`/api/restaurants?${query}`);
 ```
 ### Apply Sort
-Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntaxes:
+Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntax's:
 
 `GET /api/:pluralApiId?sort=value` to sort on 1 field
 
@@ -339,4 +342,4 @@ await request(`/api/articles?${query}`);
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/abbasudo/laravel-purity/blob/master/LICENSE) for more information.
