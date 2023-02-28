@@ -38,64 +38,66 @@ Get configs (`configs/purity.php`) file to customize package's behavior by this 
 ## Basic Usage
 ### Filters
 Add `Filterable` trait to your model to get filters functionalities.
-```php
-use Abbasudo\Purity\Traits\Filterable;
-
-class Post extends Model
-{
-    use Filterable;
+    ```php
+    use Abbasudo\Purity\Traits\Filterable;
     
-    //
-}
-```
-now add `filter()` to your model query in the controller.
-```php
-use App\Models\Post;
-
-class PostController extends Controller
-{
-    public function index()
+    class Post extends Model
     {
-        return Post::filter()->get();
+        use Filterable;
+        
+        //
     }
-}
-```
-By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
+    ```
+now add `filter()` to your model query in the controller.
+    ```php
+    use App\Models\Post;
+    
+    class PostController extends Controller
+    {
+        public function index()
+        {
+            return Post::filter()->get();
+        }
+    }
+    ```
+By default, it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
-```php
-use Abbasudo\Purity\Traits\Sortable;
-
-class Post extends Model
-{
-    use Sortable;
+    ```php
+    use Abbasudo\Purity\Traits\Sortable;
     
-    //
-}
-```
-now add `sort()` to your model query in the controller.
-```php
-use App\Models\Post;
-
-class PostController extends Controller
-{
-    public function index()
+    class Post extends Model
     {
-        return Post::sort()->get();
+        use Sortable;
+        
+        //
     }
-}
-```
+    ```
+now add `sort()` to your model query in the controller.
+    ```php
+    use App\Models\Post;
+    
+    class PostController extends Controller
+    {
+        public function index()
+        {
+            return Post::sort()->get();
+        }
+    }
+    ```
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
 ### Restrict Filters
+
 The system validates allowed filters in the following order of priority:
 - Filters passed as an array to the `filter()` function.
+
 ```php
 Post::filter('$eq', '$in')->get();
 // or
 Post::filter(EqualFilter::class, InFilter::class)->get();
 ```
->
+
 - Filters declared in the `$filters` variable in the model.
 > **Note**
 > applied only if no parameters passed to `filter()` function.
@@ -150,30 +152,31 @@ Queries can accept a filters parameter with the following syntax:
 `GET /api/posts?filters[field][operator]=value`
 
 **By Default** the following operators are available:
-| Operator       | Description                                      |
-| -------------- | ------------------------------------------------ |
-| `$eq`          | Equal                                            |
-| `$eqc`         | Equal (case-sensitive)                           |
-| `$ne`          | Not equal                                        |
-| `$lt`          | Less than                                        |
-| `$lte`         | Less than or equal to                            |
-| `$gt`          | Greater than                                     |
-| `$gte`         | Greater than or equal to                         |
-| `$in`          | Included in an array                             |
-| `$notIn`       | Not included in an array                         |
-| `$contains`    | Contains                                         |
-| `$notContains` | Does not contain                                 |
-| `$containsc`   | Contains (case-sensitive)                        |
-| `$notContainsc`| Does not contain (case-sensitive)                |
-| `$null`        | Is null                                          |
-| `$notNull`     | Is not null                                      |
-| `$between`     | Is between                                       |
-| `$startsWith`  | Starts with                                      |
-| `$startsWithc` | Starts with (case-sensitive)                     |
-| `$endsWith`    | Ends with                                        |
-| `$endsWithc`   | Ends with (case-sensitive)                       |
-| `$or`          | Joins the filters in an "or" expression          |
-| `$and`         | Joins the filters in an "and" expression         |
+
+| Operator        | Description                              |
+|-----------------|------------------------------------------|
+| `$eq`           | Equal                                    |
+| `$eqc`          | Equal (case-sensitive)                   |
+| `$ne`           | Not equal                                |
+| `$lt`           | Less than                                |
+| `$lte`          | Less than or equal to                    |
+| `$gt`           | Greater than                             |
+| `$gte`          | Greater than or equal to                 |
+| `$in`           | Included in an array                     |
+| `$notIn`        | Not included in an array                 |
+| `$contains`     | Contains                                 |
+| `$notContains`  | Does not contain                         |
+| `$containsc`    | Contains (case-sensitive)                |
+| `$notContainsc` | Does not contain (case-sensitive)        |
+| `$null`         | Is null                                  |
+| `$notNull`      | Is not null                              |
+| `$between`      | Is between                               |
+| `$startsWith`   | Starts with                              |
+| `$startsWithc`  | Starts with (case-sensitive)             |
+| `$endsWith`     | Ends with                                |
+| `$endsWithc`    | Ends with (case-sensitive)               |
+| `$or`           | Joins the filters in an "or" expression  |
+| `$and`          | Joins the filters in an "and" expression |
 
 #### Simple Filtering
 
