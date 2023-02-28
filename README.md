@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/art/purity-logo.png" alt="Social Card of Laravel Purity">
+  <img src="https://github.com/abbasudo/laravel-purity/raw/master/art/purity-logo.png" alt="Social Card of Laravel Purity">
   <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
 </p>
 
@@ -12,10 +12,10 @@
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
 
 Features :
- - Verios filter methods
- - Filter by relation coulmns
- - Custom filters
- - Multi-column sort
+- Various filter methods
+- Filter by relation columns
+- Custom filters
+- Multi-column sort
 
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
 
@@ -23,16 +23,17 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 
 ## Installation
 Install the package via composer by this command:
-   ```sh
-   composer require abbasudo/laravel-purity 
-   ```
+```sh
+composer require abbasudo/laravel-purity 
+```
 Get configs (`configs/purity.php`) file to customize package's behavior by this command:
-   ```sh
-   php artisan vendor:publish --tag=purity 
-   ```
+```sh
+php artisan vendor:publish --tag=purity 
+```
 ## Basic Usage
 ### Filters
 Add `Filterable` trait to your model to get filters functionalities.
+
 ```php
 use Abbasudo\Purity\Traits\Filterable;
 
@@ -43,7 +44,9 @@ class Post extends Model
     //
 }
 ```
+
 now add `filter()` to your model query in the controller.
+
 ```php
 use App\Models\Post;
 
@@ -55,9 +58,11 @@ class PostController extends Controller
     }
 }
 ```
-By default it gives access to all filters available. here is the list of [avalable filters](#avalable-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
+
+By default, it gives access to all filters available. here is the list of [available filters](#available-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
 ### Sort
 Add `Sortable` trait to your model to get sorts functionalities.
+
 ```php
 use Abbasudo\Purity\Traits\Sortable;
 
@@ -68,7 +73,9 @@ class Post extends Model
     //
 }
 ```
+
 now add `sort()` to your model query in the controller.
+
 ```php
 use App\Models\Post;
 
@@ -80,20 +87,25 @@ class PostController extends Controller
     }
 }
 ```
+
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
 ### Restrict Filters
+
 The system validates allowed filters in the following order of priority:
 - Filters passed as an array to the `filter()` function.
+
 ```php
 Post::filter('$eq', '$in')->get();
 // or
 Post::filter(EqualFilter::class, InFilter::class)->get();
 ```
-> 
+
 - Filters declared in the `$filters` variable in the model.
+
 > **Note**
 > applied only if no parameters passed to `filter()` function.
+
 ```php
 // App\Models\Post
 
@@ -109,9 +121,12 @@ private array $filters = [
   InFilter::class,
 ];
 ```
+
 - Filters specified in the `filters` configuration in the `configs/purity.php` file.
+
 > **Note**
 > applied only if above parameters are not set.
+ 
 ```php
 // configs/purity.php
 'filters' => [
@@ -119,56 +134,64 @@ private array $filters = [
   InFilter::class,
 ],
 ```
+
 ### Custom Filters
 Create custom filter class by this command:
+
 ```sh
 php artisan make:filter EqualFilter
 ```
-this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can chage scan folder location in purity config file.
+
+this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
+
 ```php
 // configs/purity.php
 
 'custom_filters_location' => app_path('Filters'),
 ```
+
 ### Silent Exceptions
-By default the package silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+By default, the package silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+
 ```php
 // configs/purity.php
 
 'silent' => false,
 ```
+
 ## Queries and javascript examples
-This section is a guide for front-end developers who want to use an API that uses this package. 
-### Avalable Filters
-Queries can accept a filters parameter with the following syntax:
+This section is a guide for front-end developers who want to use an API that uses this package.
+### Available Filters
+Queries can accept a filters' parameter with the following syntax:
 
 `GET /api/posts?filters[field][operator]=value`
 
 **By Default** the following operators are available:
-| Operator       | Description                                      |
-| -------------- | ------------------------------------------------ |
-| `$eq`          | Equal                                            |
-| `$eqc`         | Equal (case-sensitive)                           |
-| `$ne`          | Not equal                                        |
-| `$lt`          | Less than                                        |
-| `$lte`         | Less than or equal to                            |
-| `$gt`          | Greater than                                     |
-| `$gte`         | Greater than or equal to                         |
-| `$in`          | Included in an array                             |
-| `$notIn`       | Not included in an array                         |
-| `$contains`    | Contains                                         |
-| `$notContains` | Does not contain                                 |
-| `$containsc`   | Contains (case-sensitive)                        |
-| `$notContainsc`| Does not contain (case-sensitive)                |
-| `$null`        | Is null                                          |
-| `$notNull`     | Is not null                                      |
-| `$between`     | Is between                                       |
-| `$startsWith`  | Starts with                                      |
-| `$startsWithc` | Starts with (case-sensitive)                     |
-| `$endsWith`    | Ends with                                        |
-| `$endsWithc`   | Ends with (case-sensitive)                       |
-| `$or`          | Joins the filters in an "or" expression          |
-| `$and`         | Joins the filters in an "and" expression         |
+
+| Operator        | Description                              |
+|-----------------|------------------------------------------|
+| `$eq`           | Equal                                    |
+| `$eqc`          | Equal (case-sensitive)                   |
+| `$ne`           | Not equal                                |
+| `$lt`           | Less than                                |
+| `$lte`          | Less than or equal to                    |
+| `$gt`           | Greater than                             |
+| `$gte`          | Greater than or equal to                 |
+| `$in`           | Included in an array                     |
+| `$notIn`        | Not included in an array                 |
+| `$contains`     | Contains                                 |
+| `$notContains`  | Does not contain                         |
+| `$containsc`    | Contains (case-sensitive)                |
+| `$notContainsc` | Does not contain (case-sensitive)        |
+| `$null`         | Is null                                  |
+| `$notNull`      | Is not null                              |
+| `$between`      | Is between                               |
+| `$startsWith`   | Starts with                              |
+| `$startsWithc`  | Starts with (case-sensitive)             |
+| `$endsWith`     | Ends with                                |
+| `$endsWithc`    | Ends with (case-sensitive)               |
+| `$or`           | Joins the filters in an "or" expression  |
+| `$and`          | Joins the filters in an "and" expression |
 
 #### Simple Filtering
 
@@ -268,7 +291,7 @@ const query = qs.stringify({
 await request(`/api/restaurants?${query}`);
 ```
 ### Apply Sort
-Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntaxes:
+Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntax's:
 
 `GET /api/:pluralApiId?sort=value` to sort on 1 field
 
@@ -314,4 +337,4 @@ await request(`/api/articles?${query}`);
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/abbasudo/laravel-purity/blob/master/LICENSE) for more information.
