@@ -3,7 +3,10 @@
   <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
 </p>
 
-[![tests](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml/badge.svg)](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml)
+[![Tests](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml/badge.svg)](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml)
+[![License](http://poser.pugx.org/abbasudo/laravel-purity/license)](https://packagist.org/packages/abbasudo/laravel-purity)
+[![Latest Unstable Version](http://poser.pugx.org/abbasudo/laravel-purity/v)](https://packagist.org/packages/abbasudo/laravel-purity)
+[![PHP Version Require](http://poser.pugx.org/abbasudo/laravel-purity/require/php)](https://packagist.org/packages/abbasudo/laravel-purity)
 
 > **Note**
 > if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
