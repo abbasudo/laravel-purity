@@ -3,7 +3,6 @@
 namespace Abbasudo\Purity;
 
 use Abbasudo\Purity\Console\FilterMakeCommand;
-use Abbasudo\Purity\Filters\FilterList;
 use Illuminate\Support\ServiceProvider;
 
 class PurityServiceProvider extends ServiceProvider
