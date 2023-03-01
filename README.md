@@ -17,6 +17,7 @@ Laravel Purity is an elegant and efficient filtering and sorting package for Lar
 
 Features :
 - Various filter methods
+- Simple installation and usage
 - Filter by relation columns
 - Custom filters
 - Multi-column sort
