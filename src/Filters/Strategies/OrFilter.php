@@ -15,7 +15,6 @@ class OrFilter extends Filter
      */
     protected static string $operator = '$or';
 
-
     /**
      * Apply filter logic to $query.
      *

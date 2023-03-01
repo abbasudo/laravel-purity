@@ -2,9 +2,7 @@
 
 namespace Abbasudo\Purity\Filters;
 
-
 use Abbasudo\Purity\Contracts\Filter;
-use Abbasudo\Purity\Contracts\Filter as FilterContract;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
 use Closure;
 use Exception;
@@ -13,21 +11,21 @@ use Illuminate\Database\Eloquent\Builder;
 class Resolve
 {
     /**
-     * List of relations and the column
+     * List of relations and the column.
      *
      * @var array
      */
     private array $fields = [];
 
     /**
-     * List of available filters
+     * List of available filters.
      *
      * @var filterList
      */
     private FilterList $filterList;
 
     /**
-     * @param  \Abbasudo\Purity\Filters\FilterList  $filterList
+     * @param \Abbasudo\Purity\Filters\FilterList $filterList
      */
     public function __construct(FilterList $filterList)
     {
@@ -35,29 +33,31 @@ class Resolve
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $field
-     * @param  array  $values
+     * @param Builder $query
+     * @param string  $field
+     * @param array   $values
+     *
+     * @throws Exception
      *
      * @return void
-     * @throws Exception
      */
     public function apply(Builder $query, string $field, array $values)
     {
-        if ( ! $this->safe(fn() => $this->validate($values))) {
+        if (!$this->safe(fn () => $this->validate($values))) {
             return;
-        };
+        }
 
         $this->filter($query, $field, $values);
     }
 
     /**
-     * run functions with or without exception
+     * run functions with or without exception.
      *
-     * @param  Closure  $closure
+     * @param Closure $closure
+     *
+     * @throws Exception
      *
      * @return bool
-     * @throws Exception
      */
     private function safe(Closure $closure): bool
     {
@@ -75,7 +75,7 @@ class Resolve
     }
 
     /**
-     * @param  array|string  $values
+     * @param array|string $values
      *
      * @return void
      */
@@ -93,36 +93,37 @@ class Resolve
     }
 
     /**
-     * Apply a single filter to the query builder instance
+     * Apply a single filter to the query builder instance.
      *
-     * @param  Builder  $query
-     * @param  string  $field
-     * @param  array|string|null  $filters
+     * @param Builder           $query
+     * @param string            $field
+     * @param array|string|null $filters
+     *
+     * @throws Exception
      *
      * @return void
-     * @throws Exception
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
         // Ensure that the filter is an array
-        if ( ! is_array($filters)) {
+        if (!is_array($filters)) {
             $filters = [$filters];
         }
 
         // Resolve the filter using the appropriate strategy
         if ($this->filterList->get($field) !== null) {
             //call apply method of the appropriate filter class
-            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
+            $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
+            $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
         }
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $operator
-     * @param  array  $filters
+     * @param Builder $query
+     * @param string  $operator
+     * @param array   $filters
      *
      * @return void
      */
@@ -136,8 +137,8 @@ class Resolve
     }
 
     /**
-     * @param  Builder  $query
-     * @param  Closure  $callback
+     * @param Builder $query
+     * @param Closure $callback
      *
      * @return void
      */
@@ -149,10 +150,10 @@ class Resolve
     }
 
     /**
-     * Resolve nested relations if any
+     * Resolve nested relations if any.
      *
-     * @param  Builder  $query
-     * @param  Closure  $callback
+     * @param Builder $query
+     * @param Closure $callback
      *
      * @return void
      */
@@ -168,8 +169,8 @@ class Resolve
     }
 
     /**
-     * @param  Builder  $query
-     * @param  Closure  $callback
+     * @param Builder $query
+     * @param Closure $callback
      *
      * @return void
      */
@@ -183,12 +184,13 @@ class Resolve
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $field
-     * @param  array  $filters
+     * @param Builder $query
+     * @param string  $field
+     * @param array   $filters
+     *
+     * @throws Exception
      *
      * @return void
-     * @throws Exception
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {

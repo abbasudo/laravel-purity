@@ -1,6 +1,5 @@
 <?php
 
-
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +18,6 @@ class FilterableTest extends TestCase
             'title' => 'laravel purity is the best',
         ]);
     }
-
 
     /** @test */
     public function it_can_process_a_basic_request_without_any_filter(): void
