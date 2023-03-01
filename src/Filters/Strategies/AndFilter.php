@@ -3,7 +3,6 @@
 namespace Abbasudo\Purity\Filters\Strategies;
 
 use Abbasudo\Purity\Filters\Filter;
-use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;
 use Closure;
 
@@ -15,7 +14,6 @@ class AndFilter extends Filter
      * @var string
      */
     protected static string $operator = '$and';
-
 
     /**
      * Apply filter logic to $query.

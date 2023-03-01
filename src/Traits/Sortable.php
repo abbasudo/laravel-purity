@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 trait Sortable
 {
     /**
-     * Apply sorts to the query builder instance
+     * Apply sorts to the query builder instance.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -18,7 +18,7 @@ trait Sortable
     {
         $fields = request('sort', []);
 
-        if ( ! is_array($fields)) {
+        if (!is_array($fields)) {
             $fields = [$fields];
         }
 
@@ -34,5 +34,4 @@ trait Sortable
 
         return $query;
     }
-
 }
