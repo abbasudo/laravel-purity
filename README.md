@@ -4,9 +4,10 @@
 </p>
 
 [![Tests](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml/badge.svg)](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml)
-[![License](http://poser.pugx.org/abbasudo/laravel-purity/license)](https://packagist.org/packages/abbasudo/laravel-purity)
+[![License](http://poser.pugx.org/abbasudo/laravel-purity/license)](https://github.com/abbasudo/laravel-purity)
 [![Latest Unstable Version](http://poser.pugx.org/abbasudo/laravel-purity/v)](https://packagist.org/packages/abbasudo/laravel-purity)
 [![PHP Version Require](http://poser.pugx.org/abbasudo/laravel-purity/require/php)](https://packagist.org/packages/abbasudo/laravel-purity)
+[![StyleCI](https://github.styleci.io/repos/603931433/shield)](https://packagist.org/packages/abbasudo/laravel-purity)
 
 > **Note**
 > if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
