@@ -5,7 +5,7 @@ namespace Abbasudo\Purity\Filters\Strategies;
 use Abbasudo\Purity\Filters\Filter;
 use Closure;
 
-class ContainsSensitiveFilter extends Filter
+class ContainsCaseSensitiveFilter extends Filter
 {
     /**
      * Operator string to detect in the query params.
@@ -23,7 +23,7 @@ class ContainsSensitiveFilter extends Filter
     {
         return function ($query) {
             foreach ($this->values as $value) {
-                $query->where("BINARY `{$this->column}` like ?", ["%{$value}%"]);
+                $query->whereRaw("BINARY `{$this->column}` like ?", ["%{$value}%"]);
             }
         };
     }
