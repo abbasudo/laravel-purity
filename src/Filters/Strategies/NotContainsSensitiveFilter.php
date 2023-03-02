@@ -14,7 +14,6 @@ class NotContainsSensitiveFilter extends Filter
      */
     protected static string $operator = '$notContainsc';
 
-
     /**
      * Apply filter logic to $query.
      *

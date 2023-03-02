@@ -10,10 +10,9 @@ abstract class Filter implements \Abbasudo\Purity\Contracts\Filter
     protected string  $column;
     protected array   $values;
 
-
     public function __construct(Builder $query, string $column, array $values)
     {
-        $this->query  = $query;
+        $this->query = $query;
         $this->column = $column;
         $this->values = $values;
     }

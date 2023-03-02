@@ -45,7 +45,7 @@ class FilterMakeCommand extends GeneratorCommand
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      *
      * @return string
      */
@@ -59,7 +59,7 @@ class FilterMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      *
      * @return string
      */

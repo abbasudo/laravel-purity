@@ -8,20 +8,21 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * List of available filters, can be set on the model otherwise it will be read from config
+ * List of available filters, can be set on the model otherwise it will be read from config.
  *
  * @property array $filters
  */
 trait Filterable
 {
     /**
-     * Apply filters to the query builder instance
+     * Apply filters to the query builder instance.
      *
-     * @param  Builder  $query
-     * @param  array|string|null  $availableFilters
+     * @param Builder           $query
+     * @param array|string|null $availableFilters
+     *
+     * @throws Exception
      *
      * @return Builder
-     * @throws Exception
      */
     public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
     {

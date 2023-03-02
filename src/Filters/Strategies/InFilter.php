@@ -25,5 +25,4 @@ class InFilter extends Filter
             $query->whereIn($this->column, $this->values);
         };
     }
-
 }
