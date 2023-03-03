@@ -14,7 +14,6 @@ class StartsWithCaseSensitiveFilter extends Filter
      */
     protected static string $operator = '$startsWithc';
 
-
     /**
      * Apply filter logic to $query.
      *
@@ -24,7 +23,7 @@ class StartsWithCaseSensitiveFilter extends Filter
     {
         return function ($query) {
             foreach ($this->values as $value) {
-                $query->whereRaw("BINARY `{$this->column}` like ?", $value . '%');
+                $query->whereRaw("BINARY `{$this->column}` like ?", $value.'%');
             }
         };
     }

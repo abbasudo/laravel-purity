@@ -14,7 +14,6 @@ class EndsWithCaseSensitiveFilter extends Filter
      */
     protected static string $operator = '$endsWithc';
 
-
     /**
      * Apply filter logic to $query.
      *
@@ -24,7 +23,7 @@ class EndsWithCaseSensitiveFilter extends Filter
     {
         return function ($query) {
             foreach ($this->values as $value) {
-                $query->whereRaw("BINARY `{$this->column}` like ?", '%' . $value);
+                $query->whereRaw("BINARY `{$this->column}` like ?", '%'.$value);
             }
         };
     }
