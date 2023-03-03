@@ -14,7 +14,6 @@ class EqualCaseSensitiveFilter extends Filter
      */
     protected static string $operator = '$eqc';
 
-
     /**
      * Apply filter logic to $query.
      *
