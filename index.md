@@ -32,6 +32,11 @@ Laravel Purity is not only developer-friendly but also front-end developer-frien
 
 The way this package handles filters is inspired by strapi's [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
+## Articles
+- [The correct way of adding filters to Laravel](https://medium.com/@abbasudo/the-correct-way-of-adding-filters-to-laravel-10-bb9957c2ddc6)
+- [Add filter to your laravel app](https://dev.to/abbasudo/add-filter-to-your-laravel-10-app-4f5f)
+- [Enable filtering queries in your laravel 10 app with ease](https://medium.com/@abbasudo/enable-filtering-in-your-laravel-app-with-ease-a63f79b5e452)
+
 ## Installation
 Install the package via composer by this command:
 ```sh
