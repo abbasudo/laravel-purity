@@ -9,3 +9,5 @@ aux_links:
 
 ga_tracking: G-C75TGXT64W
 ga_tracking_anonymize_ip: true
+
+favicon_ico: "/art/favicon.ico"
