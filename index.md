@@ -12,16 +12,18 @@ layout: home
 [![License](http://poser.pugx.org/abbasudo/laravel-purity/license)](https://github.com/abbasudo/laravel-purity)
 [![Latest Unstable Version](http://poser.pugx.org/abbasudo/laravel-purity/v)](https://packagist.org/packages/abbasudo/laravel-purity)
 [![PHP Version Require](http://poser.pugx.org/abbasudo/laravel-purity/require/php)](https://packagist.org/packages/abbasudo/laravel-purity)
-[![StyleCI](https://github.styleci.io/repos/603931433/shield?style=plastic)](https://packagist.org/packages/abbasudo/laravel-purity)
+[![StyleCI](https://github.styleci.io/repos/603931433/shield)](https://packagist.org/packages/abbasudo/laravel-purity)
+<!-- [![visitors](https://visitor-badge.glitch.me/badge?page_id=abbasudo.laravel-purity)](https://packagist.org/packages/abbasudo/laravel-purity) -->
 
 > **Note**
 > if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
 
 
-Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters.
+Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on url query string parameters like a breeze.
 
 Features :
 - Various filter methods
+- Simple installation and usage
 - Filter by relation columns
 - Custom filters
 - Multi-column sort
@@ -54,7 +56,7 @@ class Post extends Model
 }
 ```
 
-now add `filter()` to your model query in the controller.
+Now add `filter()` to your model eloquent query in the controller.
 
 ```php
 use App\Models\Post;
@@ -83,7 +85,7 @@ class Post extends Model
 }
 ```
 
-now add `sort()` to your model query in the controller.
+Now add `sort()` to your eloquent query in the controller.
 
 ```php
 use App\Models\Post;
