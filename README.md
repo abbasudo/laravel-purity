@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://github.com/abbasudo/laravel-purity/raw/master/art/purity-logo.png" alt="Social Card of Laravel Purity">
-  <h2 align="center">Elegant way to filter and sort queries in Laravel</h2>
+  <h1 align="center">Elegant way to filter and sort queries in Laravel</h1>
 </p>
 
 [![Tests](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml/badge.svg)](https://github.com/abbasudo/laravel-purity/actions/workflows/tests.yml)
