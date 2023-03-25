@@ -33,17 +33,17 @@ class Resolve
     }
 
     /**
-     * @param Builder $query
-     * @param string  $field
-     * @param array   $values
+     * @param Builder      $query
+     * @param string       $field
+     * @param array|string $values
      *
      * @throws Exception
      *
      * @return void
      */
-    public function apply(Builder $query, string $field, array $values)
+    public function apply(Builder $query, string $field, array|string $values): void
     {
-        if (!$this->safe(fn () => $this->validate($values))) {
+        if (!$this->safe(fn () => $this->validate([$field => $values]))) {
             return;
         }
 
