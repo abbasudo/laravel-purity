@@ -16,7 +16,7 @@ layout: home
 <!-- [![visitors](https://visitor-badge.glitch.me/badge?page_id=abbasudo.laravel-purity)](https://packagist.org/packages/abbasudo/laravel-purity) -->
 
 > **Note**
-> if you are front-end developer and what to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
+> if you are front-end developer and want to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
 
 
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on url query string parameters like a breeze.
