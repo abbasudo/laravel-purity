@@ -2,7 +2,6 @@
 
 namespace Abbasudo\Purity\Filters;
 
-use Abbasudo\Purity\Contracts\Filter;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
 use Closure;
 use Exception;
