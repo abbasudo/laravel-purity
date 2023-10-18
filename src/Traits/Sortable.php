@@ -11,23 +11,20 @@ trait Sortable
      * Apply sorts to the query builder instance.
      *
      * @param Builder $query
-     * @param array|null $customSortSource
-     *
+     * @param array|null $params
      * @return Builder
      */
-    public function scopeSort(Builder $query, array|null $customSortSource = null): Builder
+    public function scopeSort(Builder $query, array|null $params = null): Builder
     {
-        if (!is_null($customSortSource)) {
-            $fields = $customSortSource;
-        } else {
-            $fields = request('sort', []);
+        if (!isset($params)) {
+            $params = request('sort', []);
         }
 
-        if (!is_array($fields)) {
-            $fields = [$fields];
+        if (!is_array($params)) {
+            $params = [$params];
         }
 
-        foreach ($fields as $field) {
+        foreach ($params as $field) {
             $column = Str::of($field)->beforeLast(':');
 
             if (Str::of($field)->endsWith(':desc')) {
