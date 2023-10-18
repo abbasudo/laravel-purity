@@ -10,6 +10,7 @@ use ReflectionClass;
 
 /**
  * List of available filters, can be set on the model otherwise it will be read from config.
+ *
  * @property array $filters
  *
  * List of available fields, if not declared will accept every thing.
@@ -72,6 +73,16 @@ trait Filterable
     private function getFilters(): array
     {
         return $this->filters ?? config('purity.filters');
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getField(string $field): string
+    {
+        return $this->realName($this->availableFields(), $field);
     }
 
     /**

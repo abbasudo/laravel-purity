@@ -205,7 +205,7 @@ class Resolve
             }
             $this->validateField($field);
 
-            $this->fields[] = $field;
+            $this->fields[] = $this->model->getField($field);
             $this->filter($query, $subField, $subFilter);
         }
         array_pop($this->fields);
