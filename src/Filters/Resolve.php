@@ -29,7 +29,7 @@ class Resolve
 
     /**
      * @param FilterList $filterList
-     * @param Model $model
+     * @param Model      $model
      */
     public function __construct(FilterList $filterList, Model $model)
     {
@@ -38,17 +38,17 @@ class Resolve
     }
 
     /**
-     * @param Builder $query
-     * @param string $field
+     * @param Builder      $query
+     * @param string       $field
      * @param array|string $values
      *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     public function apply(Builder $query, string $field, array|string $values): void
     {
-        if (!$this->safe(fn() => $this->validate([$field => $values]))) {
+        if (!$this->safe(fn () => $this->validate([$field => $values]))) {
             return;
         }
 
@@ -60,9 +60,9 @@ class Resolve
      *
      * @param Closure $closure
      *
-     * @return bool
      * @throws Exception
      *
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
@@ -100,13 +100,13 @@ class Resolve
     /**
      * Apply a single filter to the query builder instance.
      *
-     * @param Builder $query
-     * @param string $field
+     * @param Builder           $query
+     * @param string            $field
      * @param array|string|null $filters
      *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
@@ -118,17 +118,17 @@ class Resolve
         // Resolve the filter using the appropriate strategy
         if ($this->filterList->get($field) !== null) {
             //call apply method of the appropriate filter class
-            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
+            $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
+            $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
         }
     }
 
     /**
      * @param Builder $query
-     * @param string $operator
-     * @param array $filters
+     * @param string  $operator
+     * @param array   $filters
      *
      * @return void
      */
@@ -203,12 +203,12 @@ class Resolve
 
     /**
      * @param Builder $query
-     * @param string $field
-     * @param array $filters
+     * @param string  $field
+     * @param array   $filters
      *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
