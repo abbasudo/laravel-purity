@@ -24,7 +24,6 @@ class FilterList
     private function extract(array $classes): array
     {
         $result = [];
-
         foreach ($classes as $class) {
             $result[$class::operator()] = $class;
         }
@@ -41,7 +40,7 @@ class FilterList
 
     private function load(string $directory): array
     {
-        $files = glob("$directory/*.php");
+        $files = glob("$directory/*.php", GLOB_NOSORT);
 
         $classes = [];
 
@@ -69,7 +68,6 @@ class FilterList
                     $filters[$key] = $filter::operator();
                 }
             } catch (ReflectionException) {
-                continue;
             }
         }
 
