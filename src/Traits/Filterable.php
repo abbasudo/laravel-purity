@@ -19,12 +19,13 @@ trait Filterable
      *
      * @param Builder           $query
      * @param array|string|null $availableFilters
+     * @param array|null $customFilterSource
      *
      * @throws Exception
      *
      * @return Builder
      */
-    public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
+    public function scopeFilter(Builder $query, array|string|null $availableFilters = null, array|null $customFilterSource = null): Builder
     {
         // if not passed it will get the available filters from config
         if (isset($availableFilters)) {
@@ -38,9 +39,14 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        // Retrieve the filters from the request
-        $filters = request('filters', []);
-
+        if (!is_null($customFilterSource)) {
+            // Retrieve the filters from the scope function args
+            $filters = $customFilterSource;
+        } else {
+            // Retrieve the filters from the request
+            $filters = request('filters', []);
+        }
+        
         // Apply each filter to the query builder instance
         foreach ($filters as $field => $value) {
             app(Resolve::class)->apply($query, $field, $value);
