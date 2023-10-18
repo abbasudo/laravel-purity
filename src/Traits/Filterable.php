@@ -43,7 +43,7 @@ trait Filterable
 
         // Apply each filter to the query builder instance
         foreach ($filters as $field => $value) {
-            app(Resolve::class,['model' => $this])->apply($query, $field, $value);
+            app(Resolve::class, ['model' => $this])->apply($query, $field, $value);
         }
 
         return $query;
