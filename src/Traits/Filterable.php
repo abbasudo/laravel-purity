@@ -26,9 +26,9 @@ trait Filterable
      * @param Builder           $query
      * @param array|string|null $availableFilters
      *
-     * @return Builder
      * @throws Exception
      *
+     * @return Builder
      */
     public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
     {
@@ -94,7 +94,7 @@ trait Filterable
     }
 
     /**
-     *  list models relations
+     *  list models relations.
      *
      * @return array
      */
@@ -104,16 +104,15 @@ trait Filterable
 
         return collect($methods)
             ->filter(
-                fn($method) => !empty($method->getReturnType()) &&
+                fn ($method) => !empty($method->getReturnType()) &&
                     str_contains(
                         $method->getReturnType(),
                         'Illuminate\Database\Eloquent\Relations'
                     )
             )
-            ->map(fn($method) => $method->name)
+            ->map(fn ($method) => $method->name)
             ->values()->all();
     }
-
 
     /**
      * @param Builder      $query

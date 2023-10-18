@@ -22,8 +22,9 @@ trait Sortable
      *
      * @param Builder $query
      *
-     * @return Builder
      * @throws Exception
+     *
+     * @return Builder
      */
     public function scopeSort(Builder $query): Builder
     {
@@ -77,8 +78,9 @@ trait Sortable
      *
      * @param Closure $closure
      *
-     * @return bool
      * @throws Exception
+     *
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
