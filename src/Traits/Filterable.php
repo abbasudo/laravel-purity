@@ -71,10 +71,11 @@ trait Filterable
 
     public function availableFields()
     {
-         return   $this->filterFields ?? $this->getTableColumns();
+        return   $this->filterFields ?? $this->getTableColumns();
     }
 
-    private function getTableColumns() {
+    private function getTableColumns()
+    {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
     }
 }
