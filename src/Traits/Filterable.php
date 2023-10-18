@@ -10,11 +10,15 @@ use ReflectionClass;
 
 /**
  * List of available filters, can be set on the model otherwise it will be read from config.
- *
  * @property array $filters
+ *
+ * List of available fields, if not declared will accept every thing.
+ * @property array $filterFields
  */
 trait Filterable
 {
+    use getColumns;
+
     /**
      * Apply filters to the query builder instance.
      *
@@ -71,19 +75,11 @@ trait Filterable
     }
 
     /**
-     * @return array|mixed
-     */
-    public function availableFields()
-    {
-        return $this->filterFields ?? array_merge($this->getTableColumns(), $this->relations());
-    }
-
-    /**
      * @return array
      */
-    private function getTableColumns()
+    public function availableFields(): array
     {
-        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        return $this->filterFields ?? array_merge($this->getTableColumns(), $this->relations());
     }
 
     /**
@@ -91,7 +87,7 @@ trait Filterable
      *
      * @return array
      */
-    public function relations(): array
+    private function relations(): array
     {
         $methods = (new ReflectionClass(get_called_class()))->getMethods();
 
