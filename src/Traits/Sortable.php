@@ -65,16 +65,6 @@ trait Sortable
     }
 
     /**
-     * @param string $field
-     *
-     * @return string
-     */
-    public function getSortField(string $field): string
-    {
-        return $this->realName($this->availableSort(), $field);
-    }
-
-    /**
      * @return array
      */
     private function availableSort(): array
@@ -103,5 +93,28 @@ trait Sortable
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getSortField(string $field): string
+    {
+        return $this->realName($this->availableSort(), $field);
+    }
+
+    /**
+     * @param Builder      $query
+     * @param array|string $fields
+     *
+     * @return Builder
+     */
+    public function scopeSortFields(Builder $query, array|string $fields): Builder
+    {
+        $this->sortFields = is_array($fields) ? $fields : array_slice(func_get_args(), 1);
+
+        return $query;
     }
 }

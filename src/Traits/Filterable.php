@@ -113,4 +113,18 @@ trait Filterable
             ->map(fn($method) => $method->name)
             ->values()->all();
     }
+
+
+    /**
+     * @param Builder      $query
+     * @param array|string $fields
+     *
+     * @return Builder
+     */
+    public function scopeFilterFields(Builder $query, array|string $fields): Builder
+    {
+        $this->filterFields = is_array($fields) ? $fields : array_slice(func_get_args(), 1);
+
+        return $query;
+    }
 }
