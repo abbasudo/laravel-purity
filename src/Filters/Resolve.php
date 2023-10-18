@@ -2,6 +2,7 @@
 
 namespace Abbasudo\Purity\Filters;
 
+use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
 use Closure;
 use Exception;
@@ -137,11 +138,20 @@ class Resolve
 
         $field = end($this->fields);
 
-
+        $this->validateField($field);
 
         $callback = (new $filter($query, $field, $filters))->apply();
 
         $this->filterRelations($query, $callback);
+    }
+
+    private function validateField(string $field): void
+    {
+        $availableFields = $this->model->availableFields();
+
+        if (!array_search($field, $availableFields)) {
+            throw FieldNotSupported::create($availableFields);
+        }
     }
 
     /**
