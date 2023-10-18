@@ -220,7 +220,7 @@ class Resolve
     {
         $availableFields = $this->model->availableFields();
 
-        if (!array_search($field, $availableFields)) {
+        if (!in_array($field, $availableFields)) {
             throw FieldNotSupported::create($field, $this->model::class, $availableFields);
         }
     }

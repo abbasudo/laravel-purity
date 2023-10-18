@@ -36,7 +36,9 @@ trait Sortable
         foreach ($fields as $field) {
             $column = Str::of($field)->beforeLast(':');
 
-            $this->validate($field);
+            $this->validate($column);
+
+            $column = $this->getSortField($column);
 
             if (Str::of($field)->endsWith(':desc')) {
                 $query->orderByDesc($column);
@@ -51,15 +53,25 @@ trait Sortable
     /**
      * @throws Exception
      */
-    private function validate(mixed $field): void
+    private function validate(string $field): void
     {
         $available = $this->availableSort();
 
         $this->safe(function () use ($field, $available) {
-            if (!isset($available[$field])) {
+            if (!in_array($field, $available)) {
                 throw FieldNotSupported::create($field, self::class, $available);
             }
         });
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getSortField(string $field): string
+    {
+        return $this->realName($this->availableSort(), $field);
     }
 
     /**
