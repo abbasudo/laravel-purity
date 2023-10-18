@@ -2,7 +2,7 @@
 
 namespace Abbasudo\Purity\Traits;
 
-use Abbasudo\Purity\Exceptions\NoOperatorMatch;
+use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * List of available fields, if not declared will accept every thing.
+ *
  * @property array $sortFields
  */
 trait Sortable
@@ -56,7 +57,7 @@ trait Sortable
 
         $this->safe(function () use ($field, $available) {
             if (!isset($available[$field])) {
-                throw NoOperatorMatch::create($available);
+                throw FieldNotSupported::create($field, self::class, $available);
             }
         });
     }

@@ -221,7 +221,7 @@ class Resolve
         $availableFields = $this->model->availableFields();
 
         if (!array_search($field, $availableFields)) {
-            throw FieldNotSupported::create($availableFields);
+            throw FieldNotSupported::create($field, $this->model::class, $availableFields);
         }
     }
 }
