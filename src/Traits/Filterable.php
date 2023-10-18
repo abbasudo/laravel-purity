@@ -6,6 +6,7 @@ use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use ReflectionClass;
 
 /**
  * List of available filters, can be set on the model otherwise it will be read from config.
@@ -20,9 +21,9 @@ trait Filterable
      * @param Builder           $query
      * @param array|string|null $availableFilters
      *
+     * @return Builder
      * @throws Exception
      *
-     * @return Builder
      */
     public function scopeFilter(Builder $query, array|string|null $availableFilters = null): Builder
     {
@@ -69,13 +70,40 @@ trait Filterable
         return $this->filters ?? config('purity.filters');
     }
 
+    /**
+     * @return array|mixed
+     */
     public function availableFields()
     {
-        return   $this->filterFields ?? $this->getTableColumns();
+        return $this->filterFields ?? array_merge($this->getTableColumns(), $this->relations());
     }
 
+    /**
+     * @return array
+     */
     private function getTableColumns()
     {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+    }
+
+    /**
+     *  list models relations
+     *
+     * @return array
+     */
+    public function relations(): array
+    {
+        $methods = (new ReflectionClass(get_called_class()))->getMethods();
+
+        return collect($methods)
+            ->filter(
+                fn($method) => !empty($method->getReturnType()) &&
+                    str_contains(
+                        $method->getReturnType(),
+                        'Illuminate\Database\Eloquent\Relations'
+                    )
+            )
+            ->map(fn($method) => $method->name)
+            ->values()->all();
     }
 }
