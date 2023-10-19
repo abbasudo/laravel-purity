@@ -18,10 +18,18 @@ layout: home
 > **Note**
 > if you are front-end developer and want to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
 
+> **Note**
+> If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
 
-Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on url query string parameters like a breeze.
+> **Note**
+> Version 2 changed filter method read more at [upgrade guide](#upgrade-guide) section
+
+
+Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
 
 Features :
+- Livewire support (v2)
+- Rename and restrict fields (v2)
 - Various filter methods
 - Simple installation and usage
 - Filter by relation columns
@@ -45,7 +53,7 @@ Install the package via composer by this command:
 ```sh
 composer require abbasudo/laravel-purity 
 ```
-Get configs (`configs/purity.php`) file to customize package's behavior by this command:
+Get configs (`configs/purity.php`) file to customize the package's behavior by this command:
 ```sh
 php artisan vendor:publish --tag=purity 
 ```
@@ -109,21 +117,78 @@ class PostController extends Controller
 
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
-### Restrict Filters
-
-The system validates allowed filters in the following order of priority:
-- Filters passed as an array to the `filter()` function.
+### Allowed Fields
+By default, purity allows every database column and all model relations to be filtered. you can overwrite the allowed columns as follows:
 
 ```php
-Post::filter('$eq', '$in')->get();
-// or
-Post::filter(EqualFilter::class, InFilter::class)->get();
+// App\Models\User
+
+protected $filterFields = [
+  'email',
+  'mobile',
+  'posts', // relation
+];
+    
+protected $sortFields = [
+  'name',
+  'mobile',
+];
+```
+any field other than email, mobile, or posts will be rejected when filtering.
+#### Overwrite Allowed Fields
+to overwrite allowed fields in the controller add `filterFields` or `sortFields` before calling filter or sort method.
+```php
+Post::filterFields('title', 'created_at')->filter()->get();
+
+Post::sortFields('created_at', 'updated_at')->sort()->get();
+```
+> **Note**
+> filterFields and sortFields will overwrite fields defined in the model.
+### Rename Fields
+To rename fields simply add a value to fields defined in `$filterFields` and `$sortFields` arrays:
+```php
+// App\Models\User
+
+protected $filterFields = [
+  'email',
+  'mobile' => 'phone',
+  'posts'  => 'writing', // relation
+];
+    
+protected $sortFields = [
+  'name',
+  'mobile' => 'phone',
+];
+```
+the client should send phone in order to filter by mobile.
+#### Overwrite Renamed Fields
+to overwrite renamed fields in the controller you pass renamed fields to `filterFields` and `sortFields`.
+```php
+Post::filterFields(['title', 'created_at' => 'published_date'])->filter()->get();
+
+Post::sortFields([
+    'created_at' => 'published_date',
+    'updated_at'
+  ])->sort()->get();
+```
+> **Note**
+> filterFields and sortFields will overwrite fields defined in the model.
+### Restrict Filters
+
+purity validates allowed filters in the following order of priority:
+- Filters specified in the `filters` configuration in the `configs/purity.php` file.
+  
+```php
+// configs/purity.php
+'filters' => [
+  EqualFilter::class,
+  InFilter::class,
+],
 ```
 
 - Filters declared in the `$filters` variable in the model.
-
-> **Note**
-> applied only if no parameters passed to `filter()` function.
+  
+note that, $filters will overwrite configs filters.
 
 ```php
 // App\Models\Post
@@ -141,27 +206,62 @@ private array $filters = [
 ];
 ```
 
-- Filters specified in the `filters` configuration in the `configs/purity.php` file.
+- Filters passed as an array to the `filterBy()` function.
 
-> **Note**
-> applied only if above parameters are not set.
- 
+note that, filterBy will overwrite all other defined filters.
+
 ```php
-// configs/purity.php
-'filters' => [
-  EqualFilter::class,
-  InFilter::class,
-],
+Post::filterBy('$eq', '$in')->filter()->get();
+// or
+Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
 ```
+### Changing Params Source
+By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
 
+```php
+Post::filter($params)->get();
+
+Post::filter([
+            'title' => ['$eq' => 'good post']
+        ])->get();
+
+Post::sort([
+            'title' => ['$in' => [1, 2, 3]]
+        ])->get();
+```
+### Livewire
+to add filter to your livewire app, first define `$filters` variable in your component and pass it to filter or sort method:
+```php
+// component
+
+#[Url]
+public $filters = [
+  'title' => [],
+];
+
+public function render()
+{
+  $transactions = Transaction::filter($this->filters)->get();
+
+  return view('livewire.transacrion-table',compact('transactions'));
+}
+
+```
+then bind the variable in your blade template.
+```blade
+<!-- in blade template -->
+
+<input type="text" wire:model.live="filters.title.$eq" placeholder="title" />
+```
+read more in [livewire docs](https://livewire.laravel.com/docs/url)
 ### Custom Filters
-Create custom filter class by this command:
+Create a custom filter class by this command:
 
 ```sh
 php artisan make:filter EqualFilter
 ```
 
-this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
+this will generate a filter class in `Filters` directory. By default, all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
 
 ```php
 // configs/purity.php
@@ -170,7 +270,7 @@ this will generate a filter class in `Filters` directory. by default all classes
 ```
 
 ### Silent Exceptions
-By default, purity silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+By default, purity silences its own exceptions. to change that behavior change the `silent` index to `false` in the config file.
 
 ```php
 // configs/purity.php
@@ -181,7 +281,7 @@ By default, purity silences it own exceptions (not sql exceptions). to change th
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses Laravel Purity.
 ### Available Filters
-Queries can accept a filters' parameter with the following syntax:
+Queries can accept a filters parameter with the following syntax:
 
 `GET /api/posts?filters[field][operator]=value`
 
@@ -215,9 +315,9 @@ Queries can accept a filters' parameter with the following syntax:
 #### Simple Filtering
 
 > **Tip**
->   in javascript use [qs](https://www.npmjs.com/package/qs) directly to generate complex queries instead of creating them manually. Examples in this documentation showcase how you can use `qs`.
+>   In javascript use [qs](https://www.npmjs.com/package/qs) directly to generate complex queries instead of creating them manually. Examples in this documentation showcase how you can use `qs`.
 
-Find users having 'John' as first name
+Find users having 'John' as their first name
 
 `GET /api/users?filters[name][$eq]=John`
   ```js
@@ -316,7 +416,7 @@ Queries can accept a sort parameter that allows sorting on one or multiple field
 
 `GET /api/:pluralApiId?sort[0]=value1&sort[1]=value2` to sort on multiple fields (e.g. on 2 fields)
 
-The sorting order can be defined with:
+The sorting order can be defined as:
 - `:asc` for ascending order (default order, can be omitted)
 - `:desc` for descending order.
 
@@ -353,6 +453,11 @@ const query = qs.stringify({
 
 await request(`/api/articles?${query}`);
 ```
+## Upgrade Guide
+
+### Version 2
+changed filter function arguments. filter function no longer accepts filter methods, instead, filter function now accepts filter source as mentioned in [Custom Filters](#custom-filters) section.
+to specify allowed filter methods use filterBy as mentioned in [Restrict Filters](#restrict-filters)
 
 ## License
 
