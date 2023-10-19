@@ -216,6 +216,31 @@ Post::sort([
             'title' => ['$in' => [1, 2, 3]]
         ])->get();
 ```
+### Livewire
+to add filter to your livewire app, first define `$filters` variable in your component and pass it to filter or sort method:
+```php
+// component
+
+#[Url]
+public $filters = [
+  'title' => [],
+];
+
+public function render()
+{
+  $transactions = Transaction::filter($this->filters)->get();
+
+  return view('livewire.transacrion-table',compact('transactions'));
+}
+
+```
+then bind the variable in your blade template.
+```blade
+<!-- in blade template -->
+
+<input type="text" wire:model.live="filters.title.$eq" placeholder="title" />
+```
+read more in [livewire docs](https://livewire.laravel.com/docs/url)
 ### Custom Filters
 Create a custom filter class by this command:
 
