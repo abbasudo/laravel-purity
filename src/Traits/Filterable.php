@@ -23,10 +23,12 @@ trait Filterable
     /**
      * Apply filters to the query builder instance.
      *
-     * @param Builder $query
+     * @param Builder    $query
      * @param array|null $params
-     * @return Builder
+     *
      * @throws Exception
+     *
+     * @return Builder
      */
     public function scopeFilter(Builder $query, array|null $params = null): Builder
     {
@@ -43,7 +45,6 @@ trait Filterable
 
         foreach ($params as $field => $value) {
             app(Resolve::class, ['model' => $this])->apply($query, $field, $value);
-
         }
 
         return $query;
@@ -58,7 +59,7 @@ trait Filterable
     }
 
     /**
-     * @param Builder $query
+     * @param Builder      $query
      * @param array|string $filters
      *
      * @return Builder
