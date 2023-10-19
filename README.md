@@ -13,10 +13,15 @@
 > **Note**
 > If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
 
+> **Note**
+> Version 2 changed filter method read more at [upgrade guide](#upgrade-guide) section
+
 
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
 
 Features :
+- Livewire support (v2)
+- Rename and restrict fields (v2)
 - Various filter methods
 - Simple installation and usage
 - Filter by relation columns
@@ -440,6 +445,11 @@ const query = qs.stringify({
 
 await request(`/api/articles?${query}`);
 ```
+## Upgrade Guide
+
+### Version 2
+changed filter function arguments. filter function no longer accepts filter methods, instead, filter function now accepts filter source as mentioned in [Custom Filters](#custom-filters) section.
+to specify allowed filter methods use filterBy as mentioned in [Restrict Filters](#restrict-filters)
 
 ## License
 
