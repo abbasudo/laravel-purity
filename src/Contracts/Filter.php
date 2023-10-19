@@ -7,9 +7,9 @@ use Closure;
 interface Filter
 {
     /**
-     * @return string
+     * @return string|null
      */
-    public static function operator(): string;
+    public static function operator(): string|null;
 
     /**
      * @return Closure

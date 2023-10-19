@@ -2,10 +2,12 @@
 
 namespace Abbasudo\Purity\Filters;
 
+use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class Resolve
 {
@@ -23,12 +25,16 @@ class Resolve
      */
     private FilterList $filterList;
 
+    private Model $model;
+
     /**
-     * @param \Abbasudo\Purity\Filters\FilterList $filterList
+     * @param FilterList $filterList
+     * @param Model      $model
      */
-    public function __construct(FilterList $filterList)
+    public function __construct(FilterList $filterList, Model $model)
     {
         $this->filterList = $filterList;
+        $this->model = $model;
     }
 
     /**
@@ -130,7 +136,9 @@ class Resolve
     {
         $filter = $this->filterList->get($operator);
 
-        $callback = (new $filter($query, end($this->fields), $filters))->apply();
+        $field = end($this->fields);
+
+        $callback = (new $filter($query, $field, $filters))->apply();
 
         $this->filterRelations($query, $callback);
     }
@@ -194,9 +202,29 @@ class Resolve
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
         foreach ($filters as $subField => $subFilter) {
-            $this->fields[] = $field;
+            $relation = end($this->fields);
+            if ($relation !== false) {
+                $this->model = $this->model->$relation()->getRelated();
+            }
+            $this->validateField($field);
+
+            $this->fields[] = $this->model->getField($field);
             $this->filter($query, $subField, $subFilter);
         }
         array_pop($this->fields);
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return void
+     */
+    private function validateField(string $field): void
+    {
+        $availableFields = $this->model->availableFields();
+
+        if (!in_array($field, $availableFields)) {
+            throw FieldNotSupported::create($field, $this->model::class, $availableFields);
+        }
     }
 }
