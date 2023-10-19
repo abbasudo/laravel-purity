@@ -20,7 +20,7 @@ trait Sortable
     /**
      * Apply sorts to the query builder instance.
      *
-     * @param Builder $query
+     * @param Builder    $query
      * @param array|null $params
      *
      * @throws Exception
