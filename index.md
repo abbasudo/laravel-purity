@@ -19,9 +19,6 @@ layout: home
 > if you are front-end developer and want to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
 
 > **Note**
-> If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
-
-> **Note**
 > Version 2 changed filter method read more at [upgrade guide](#upgrade-guide) section
 
 
