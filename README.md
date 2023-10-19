@@ -104,9 +104,65 @@ class PostController extends Controller
 
 Now sort can be applied as instructed in [sort usage](#usage-examples).
 ## Advanced Usage
+### Allowed Fields
+By default, purity allows every database column and all model relations to be filtered. you can overwrite the allowed columns as follows:
+
+```php
+// App\Models\User
+
+protected $filterFields = [
+  'email',
+  'mobile',
+  'posts', // relation
+];
+    
+protected $sortFields = [
+  'name',
+  'mobile',
+];
+```
+any field other than email, mobile, or posts will be rejected when filtering.
+#### Overwrite Allowed Fields
+to overwrite allowed fields in the controller add `filterFields` or `sortFields` before calling filter or sort method.
+```php
+Post::filterFields('title', 'created_at')->filter()->get();
+
+Post::sortFields('created_at', 'updated_at')->sort()->get();
+```
+> **Note**
+> filterFields and sortFields will overwrite fields defined in the model.
+### Rename Fields
+To rename fields simply add a value to fields defined in `$filterFields` and `$sortFields` arrays:
+```php
+// App\Models\User
+
+protected $filterFields = [
+  'email',
+  'mobile' => 'phone',
+  'posts'  => 'writing', // relation
+];
+    
+protected $sortFields = [
+  'name',
+  'mobile' => 'phone',
+];
+```
+the client should send phone in order to filter by mobile.
+#### Overwrite Renamed Fields
+to overwrite renamed fields in the controller you pass renamed fields to `filterFields` and `sortFields`.
+```php
+Post::filterFields(['title', 'created_at' => 'published_date'])->filter()->get();
+
+Post::sortFields([
+    'created_at' => 'published_date',
+    'updated_at'
+  ])->sort()->get();
+```
+> **Note**
+> filterFields and sortFields will overwrite fields defined in the model.
 ### Restrict Filters
 
-The system validates allowed filters in the following order of priority:
+purity validates allowed filters in the following order of priority:
 - Filters passed as an array to the `filter()` function.
 
 ```php
