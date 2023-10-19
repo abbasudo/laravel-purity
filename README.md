@@ -202,7 +202,20 @@ Post::filterBy('$eq', '$in')->filter()->get();
 // or
 Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
 ```
+### Changing Params Source
+By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
 
+```php
+Post::filter($params)->get();
+
+Post::filter([
+            'title' => ['$eq' => 'good post']
+        ])->get();
+
+Post::sort([
+            'title' => ['$in' => [1, 2, 3]]
+        ])->get();
+```
 ### Custom Filters
 Create a custom filter class by this command:
 
