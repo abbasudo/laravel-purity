@@ -11,10 +11,10 @@
 <!-- [![visitors](https://visitor-badge.glitch.me/badge?page_id=abbasudo.laravel-purity)](https://packagist.org/packages/abbasudo/laravel-purity) -->
 
 > **Note**
-> if you are front-end developer and want to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
+> If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
 
 
-Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on url query string parameters like a breeze.
+Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
 
 Features :
 - Various filter methods
@@ -40,7 +40,7 @@ Install the package via composer by this command:
 ```sh
 composer require abbasudo/laravel-purity 
 ```
-Get configs (`configs/purity.php`) file to customize package's behavior by this command:
+Get configs (`configs/purity.php`) file to customize the package's behavior by this command:
 ```sh
 php artisan vendor:publish --tag=purity 
 ```
@@ -163,18 +163,19 @@ Post::sortFields([
 ### Restrict Filters
 
 purity validates allowed filters in the following order of priority:
-- Filters passed as an array to the `filter()` function.
-
+- Filters specified in the `filters` configuration in the `configs/purity.php` file.
+  
 ```php
-Post::filter('$eq', '$in')->get();
-// or
-Post::filter(EqualFilter::class, InFilter::class)->get();
+// configs/purity.php
+'filters' => [
+  EqualFilter::class,
+  InFilter::class,
+],
 ```
 
 - Filters declared in the `$filters` variable in the model.
-
-> **Note**
-> applied only if no parameters passed to `filter()` function.
+  
+note that, $filters will overwrite configs filters.
 
 ```php
 // App\Models\Post
@@ -192,27 +193,24 @@ private array $filters = [
 ];
 ```
 
-- Filters specified in the `filters` configuration in the `configs/purity.php` file.
+- Filters passed as an array to the `filterBy()` function.
 
-> **Note**
-> applied only if above parameters are not set.
- 
+note that, filterBy will overwrite all other defined filters.
+
 ```php
-// configs/purity.php
-'filters' => [
-  EqualFilter::class,
-  InFilter::class,
-],
+Post::filterBy('$eq', '$in')->filter()->get();
+// or
+Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
 ```
 
 ### Custom Filters
-Create custom filter class by this command:
+Create a custom filter class by this command:
 
 ```sh
 php artisan make:filter EqualFilter
 ```
 
-this will generate a filter class in `Filters` directory. by default all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
+this will generate a filter class in `Filters` directory. By default, all classes defined in `Filters` directory are loaded into the package. you can change scan folder location in purity config file.
 
 ```php
 // configs/purity.php
@@ -221,7 +219,7 @@ this will generate a filter class in `Filters` directory. by default all classes
 ```
 
 ### Silent Exceptions
-By default, purity silences it own exceptions (not sql exceptions). to change that behavior change `silent` index to `false` in config file.
+By default, purity silences its own exceptions. to change that behavior change the `silent` index to `false` in the config file.
 
 ```php
 // configs/purity.php
@@ -232,7 +230,7 @@ By default, purity silences it own exceptions (not sql exceptions). to change th
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses Laravel Purity.
 ### Available Filters
-Queries can accept a filters' parameter with the following syntax:
+Queries can accept a filters parameter with the following syntax:
 
 `GET /api/posts?filters[field][operator]=value`
 
@@ -266,9 +264,9 @@ Queries can accept a filters' parameter with the following syntax:
 #### Simple Filtering
 
 > **Tip**
->   in javascript use [qs](https://www.npmjs.com/package/qs) directly to generate complex queries instead of creating them manually. Examples in this documentation showcase how you can use `qs`.
+>   In javascript use [qs](https://www.npmjs.com/package/qs) directly to generate complex queries instead of creating them manually. Examples in this documentation showcase how you can use `qs`.
 
-Find users having 'John' as first name
+Find users having 'John' as their first name
 
 `GET /api/users?filters[name][$eq]=John`
   ```js
@@ -367,7 +365,7 @@ Queries can accept a sort parameter that allows sorting on one or multiple field
 
 `GET /api/:pluralApiId?sort[0]=value1&sort[1]=value2` to sort on multiple fields (e.g. on 2 fields)
 
-The sorting order can be defined with:
+The sorting order can be defined as:
 - `:asc` for ascending order (default order, can be omitted)
 - `:desc` for descending order.
 
