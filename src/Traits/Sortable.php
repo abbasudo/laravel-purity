@@ -21,20 +21,23 @@ trait Sortable
      * Apply sorts to the query builder instance.
      *
      * @param Builder $query
+     * @param array|null $params
      *
      * @throws Exception
      *
      * @return Builder
      */
-    public function scopeSort(Builder $query): Builder
+    public function scopeSort(Builder $query, array|null $params = null): Builder
     {
-        $fields = request('sort', []);
-
-        if (!is_array($fields)) {
-            $fields = [$fields];
+        if (!isset($params)) {
+            $params = request('sort', []);
         }
 
-        foreach ($fields as $field) {
+        if (!is_array($params)) {
+            $params = [$params];
+        }
+
+        foreach ($params as $field) {
             $column = Str::of($field)->beforeLast(':');
 
             $this->validate($column);
