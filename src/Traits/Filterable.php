@@ -6,6 +6,7 @@ use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
 
 /**
@@ -26,15 +27,13 @@ trait Filterable
      * @param Builder    $query
      * @param array|null $params
      *
+     * @return Builder
      * @throws Exception
      *
-     * @return Builder
      */
     public function scopeFilter(Builder $query, array|null $params = null): Builder
     {
-        app()->singleton(FilterList::class, function () {
-            return (new FilterList())->only($this->getFilters());
-        });
+        $this->bootFilter();
 
         if (!isset($params)) {
             // Retrieve the filters from the request
@@ -44,10 +43,24 @@ trait Filterable
         // Apply each filter to the query builder instance
 
         foreach ($params as $field => $value) {
-            app(Resolve::class, ['model' => $this])->apply($query, $field, $value);
+            app(Resolve::class)->apply($query, $field, $value);
         }
 
         return $query;
+    }
+
+    /**
+     * boots filter bindings.
+     *
+     * @return void
+     */
+    private function bootFilter(): void
+    {
+        app()->singleton(FilterList::class, function () {
+            return (new FilterList())->only($this->getFilters());
+        });
+
+        app()->when(Resolve::class)->needs(Model::class)->give(fn() => $this);
     }
 
     /**
@@ -100,13 +113,13 @@ trait Filterable
 
         return collect($methods)
             ->filter(
-                fn ($method) => !empty($method->getReturnType()) &&
+                fn($method) => !empty($method->getReturnType()) &&
                     str_contains(
                         $method->getReturnType(),
                         'Illuminate\Database\Eloquent\Relations'
                     )
             )
-            ->map(fn ($method) => $method->name)
+            ->map(fn($method) => $method->name)
             ->values()->all();
     }
 
