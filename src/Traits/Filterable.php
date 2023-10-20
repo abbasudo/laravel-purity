@@ -27,9 +27,9 @@ trait Filterable
      * @param Builder    $query
      * @param array|null $params
      *
-     * @return Builder
      * @throws Exception
      *
+     * @return Builder
      */
     public function scopeFilter(Builder $query, array|null $params = null): Builder
     {
@@ -60,7 +60,7 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        app()->when(Resolve::class)->needs(Model::class)->give(fn() => $this);
+        app()->when(Resolve::class)->needs(Model::class)->give(fn () => $this);
     }
 
     /**
@@ -113,13 +113,13 @@ trait Filterable
 
         return collect($methods)
             ->filter(
-                fn($method) => !empty($method->getReturnType()) &&
+                fn ($method) => !empty($method->getReturnType()) &&
                     str_contains(
                         $method->getReturnType(),
                         'Illuminate\Database\Eloquent\Relations'
                     )
             )
-            ->map(fn($method) => $method->name)
+            ->map(fn ($method) => $method->name)
             ->values()->all();
     }
 
