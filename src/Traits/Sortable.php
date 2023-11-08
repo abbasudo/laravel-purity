@@ -30,7 +30,7 @@ trait Sortable
     public function scopeSort(Builder $query, array|null $params = null): Builder
     {
         if (!isset($params)) {
-            $params = request('sort', []);
+            $params = request()->query('sort', []);
         }
 
         if (!is_array($params)) {

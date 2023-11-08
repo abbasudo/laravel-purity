@@ -36,8 +36,8 @@ trait Filterable
         $this->bootFilter();
 
         if (!isset($params)) {
-            // Retrieve the filters from the request
-            $params = request('filters', []);
+            // Retrieve the filters from the request query
+            $params = request()->query('filters', []);
         }
 
         // Apply each filter to the query builder instance
