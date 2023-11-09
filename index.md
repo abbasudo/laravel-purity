@@ -16,7 +16,7 @@ layout: home
 <!-- [![visitors](https://visitor-badge.glitch.me/badge?page_id=abbasudo.laravel-purity)](https://packagist.org/packages/abbasudo/laravel-purity) -->
 
 > **Note**
-> if you are front-end developer and want to make queries in an API that uses this package head to [queries](#queries-and-javascript-examples) section
+> If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
 
 > **Note**
 > Version 2 changed filter method read more at [upgrade guide](#upgrade-guide) section
@@ -25,8 +25,8 @@ layout: home
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
 
 Features :
-- Livewire support (v2)
-- Rename and restrict fields (v2)
+- Livewire support (added in v2)
+- Rename and restrict fields (added in v2)
 - Various filter methods
 - Simple installation and usage
 - Filter by relation columns
@@ -224,7 +224,8 @@ Post::filter([
         ])->get();
 
 Post::sort([
-            'title' => ['$in' => [1, 2, 3]]
+            'title',
+            'id:desc'
         ])->get();
 ```
 ### Livewire
