@@ -167,6 +167,7 @@ Post::sortFields([
 ```
 > **Note**
 > filterFields and sortFields will overwrite fields defined in the model.
+
 ### Restrict Filters
 
 purity validates allowed filters in the following order of priority:
@@ -242,13 +243,17 @@ public function render()
 }
 
 ```
+
 then bind the variable in your blade template.
-```blade
+
+```html
 <!-- in blade template -->
 
 <input type="text" wire:model.live="filters.title.$eq" placeholder="title" />
 ```
+
 read more in [livewire docs](https://livewire.laravel.com/docs/url)
+
 ### Custom Filters
 Create a custom filter class by this command:
 
