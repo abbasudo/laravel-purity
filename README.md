@@ -219,7 +219,8 @@ Post::filter([
         ])->get();
 
 Post::sort([
-            'title' => ['$in' => [1, 2, 3]]
+            'title',
+            'id:desc'
         ])->get();
 ```
 ### Livewire
