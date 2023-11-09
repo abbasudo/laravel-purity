@@ -172,6 +172,7 @@ Post::sortFields([
 ```
 > **Note**
 > filterFields and sortFields will overwrite fields defined in the model.
+
 ### Restrict Filters
 
 purity validates allowed filters in the following order of priority:
@@ -230,7 +231,7 @@ Post::sort([
         ])->get();
 ```
 ### Livewire
-to add filter to your livewire app, first define `$filters` variable in your component and pass it to filter or sort method:
+to add filter to your livewire app, first define `$filters` variable in your component and pass it to the filter or sort method:
 ```php
 // component
 
@@ -247,13 +248,17 @@ public function render()
 }
 
 ```
+
 then bind the variable in your blade template.
-```blade
+
+```html
 <!-- in blade template -->
 
 <input type="text" wire:model.live="filters.title.$eq" placeholder="title" />
 ```
+
 read more in [livewire docs](https://livewire.laravel.com/docs/url)
+
 ### Custom Filters
 Create a custom filter class by this command:
 
@@ -467,3 +472,4 @@ Laravel Purity is Licensed under The MIT License (MIT). Please see [License File
 
 If you've found a bug regarding security please mail [amkhzomi@gmail.com](mailto:amkhzomi@gmail.com) instead of
 using the issue tracker.
+
