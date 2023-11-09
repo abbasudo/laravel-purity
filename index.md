@@ -142,6 +142,7 @@ Post::sortFields('created_at', 'updated_at')->sort()->get();
 ```
 > **Note**
 > filterFields and sortFields will overwrite fields defined in the model.
+
 ### Rename Fields
 To rename fields simply add a value to fields defined in `$filterFields` and `$sortFields` arrays:
 ```php
@@ -461,3 +462,8 @@ to specify allowed filter methods use filterBy as mentioned in [Restrict Filters
 ## License
 
 Laravel Purity is Licensed under The MIT License (MIT). Please see [License File](https://github.com/abbasudo/laravel-purity/blob/master/LICENSE) for more information.
+
+## Security
+
+If you've found a bug regarding security please mail [amkhzomi@gmail.com](mailto:amkhzomi@gmail.com) instead of
+using the issue tracker.
