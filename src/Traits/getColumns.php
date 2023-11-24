@@ -13,7 +13,12 @@ trait getColumns
         $this->columns = $this->columns ??
             $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
 
-        return $this->columns;
+        // allow using qualified column names
+        $qualifiedColumns = collect($this->columns)
+                ->map(fn($column) => $this->qualifyColumn($column))
+                ->toArray();
+
+        return array_merge($this->columns, $qualifiedColumns);
     }
 
     private function realName(array $fields, string $field): string
