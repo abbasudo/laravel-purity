@@ -7,6 +7,7 @@ use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use ReflectionClass;
 
