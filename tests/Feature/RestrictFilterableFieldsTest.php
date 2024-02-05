@@ -163,5 +163,28 @@ class RestrictFilterableFieldsTest extends TestCase
         // it must return all the post as $eq operator is omitted
         $response->assertJsonCount(1);
     }
+
+    /** @test */
+    public function it_can_set_restricted_filters_on_eloquent_builder(): void
+    {
+        $post = new Post();
+        $post->restrictedFilters = ['title' => ['$ecq']];
+
+        $post->create([
+            'title' => 'this is invalid operator',
+        ]);
+
+        Route::get('/posts', function () use ($post){
+            return $post->restrictedFilters(
+                ['title' => ['$eq']]
+            )->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+
+        $response->assertOk();
+        // It returns o records as builder level filters take priority
+        $response->assertJsonCount(0);
+    }
 }
 

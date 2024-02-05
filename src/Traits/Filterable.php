@@ -209,4 +209,16 @@ trait Filterable
 
         return $query;
     }
+
+    /**
+     * @param  Builder  $query
+     * @param  array|string  $restrictedFilters
+     * @return Builder
+     */
+    public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
+    {
+        $this->restrictedFilters = Arr::wrap($restrictedFilters);
+
+        return $query;
+    }
 }
