@@ -18,6 +18,9 @@ use ReflectionClass;
  *
  * List of available fields, if not declared will accept every thing.
  * @property array $filterFields
+ *
+ * Fields will restrict to defined filters.
+ * @property array $restrictedFilters
  */
 trait Filterable
 {
@@ -133,6 +136,44 @@ trait Filterable
         }
 
         return $this->userDefinedFilterFields = $userDefinedFilterFields;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getRestrictedFilters(): array
+    {
+        if (isset($this->sanitizedRestrictedFilters)) {
+            return $this->sanitizedRestrictedFilters;
+        }
+
+        $restrictedFilters = [];
+
+        $filters = $this->restrictedFilters ?? $this->filterFields ?? [];
+
+        foreach ($filters as $key => $value) {
+            if (is_int($key) && Str::contains($value, ':')) {
+                $tKey = \str($value)->before(':')->squish()->toString();
+                $tValue = \str($value)->after(':')->squish()->explode(',')->all();
+                $restrictedFilters[$tKey] = $tValue;
+            }
+            if (is_string($key)) {
+                $restrictedFilters[$key] = Arr::wrap($value);
+            }
+        }
+
+        return $this->sanitizedRestrictedFilters = $restrictedFilters;
+    }
+
+    /**
+     * @param string $field
+     * @return array<int, string>|null
+     */
+    public function getAvailableFiltersFor(string $field): array|null
+    {
+        $this->getRestrictedFilters();
+
+        return Arr::get($this->sanitizedRestrictedFilters, $field);
     }
 
     /**
