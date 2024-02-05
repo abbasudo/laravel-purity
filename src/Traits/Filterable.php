@@ -7,6 +7,7 @@ use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
@@ -99,7 +100,38 @@ trait Filterable
      */
     public function availableFields(): array
     {
-        return $this->filterFields ?? array_merge($this->getTableColumns(), $this->relations());
+        if (!isset($this->filterFields)) {
+            return array_merge($this->getTableColumns(), $this->relations());
+        }
+
+        return $this->getUserDefinedFilterFields();
+    }
+
+    /**
+     * Get formatted fields from filterFields
+     * @return array
+     */
+    public function getUserDefinedFilterFields(): array
+    {
+        if (isset($this->userDefinedFilterFields)) {
+            return $this->userDefinedFilterFields;
+        }
+
+        $userDefinedFilterFields = [];
+
+        foreach ($this->filterFields as $key => $value) {
+            if (is_int($key)) {
+                if (Str::contains($value, ':')) {
+                    $userDefinedFilterFields[] = str($value)->before(':')->squish()->toString();
+                } else {
+                    $userDefinedFilterFields[] = $value;
+                }
+            } else {
+                $userDefinedFilterFields[] = $key;
+            }
+        }
+
+        return $this->userDefinedFilterFields = $userDefinedFilterFields;
     }
 
     /**
