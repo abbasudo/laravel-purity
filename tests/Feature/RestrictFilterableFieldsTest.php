@@ -105,5 +105,63 @@ class RestrictFilterableFieldsTest extends TestCase
 
         assertEquals([], $restrictedFilters);
     }
+
+    /** @test */
+    public function it_can_process_a_request_without_restricted_filters(): void
+    {
+        Route::get('/posts', function () {
+            return Post::filter()->get();
+        });
+
+        Post::create([
+            'title' => 'laravel purity is the best',
+        ]);
+
+        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+
+        $response->assertOk();
+        $response->assertJsonCount(0);
+    }
+
+    /** @test */
+    public function it_can_process_when_a_valid_filter_is_applied(): void
+    {
+        $post = new Post();
+        $post->restrictedFilters = ['title' => ['$eq']];
+
+        $post->create([
+            'title' => 'this is valid operator',
+        ]);
+
+        Route::get('/posts', function () use ($post){
+            return $post->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[title][$eq]=this is valid operator');
+
+        $response->assertOk();
+        $response->assertJsonCount(1);
+    }
+
+    /** @test */
+    public function it_can_avoid_when_invalid_filter_is_applied(): void
+    {
+        $post = new Post();
+        $post->restrictedFilters = ['title' => ['$ecq']];
+
+        $post->create([
+            'title' => 'this is invalid operator',
+        ]);
+
+        Route::get('/posts', function () use ($post){
+            return $post->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+
+        $response->assertOk();
+        // it must return all the post as $eq operator is omitted
+        $response->assertJsonCount(1);
+    }
 }
 
