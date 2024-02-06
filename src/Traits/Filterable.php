@@ -21,6 +21,8 @@ use ReflectionClass;
  *
  * Fields will restrict to defined filters.
  * @property array $restrictedFilters
+ *
+ * @property array $renamedFilterFields
  */
 trait Filterable
 {
@@ -96,7 +98,7 @@ trait Filterable
      */
     public function getField(string $field): string
     {
-        return $this->realName($this->availableFields(), $field);
+        return $this->realName($this->renamedFilterFields ?? [], $field);
     }
 
     /**
@@ -218,6 +220,18 @@ trait Filterable
     public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
     {
         $this->restrictedFilters = Arr::wrap($restrictedFilters);
+
+        return $query;
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  array|string  $renamedFilterFields
+     * @return Builder
+     */
+    public function scopeRenamedFilterFields(Builder $query, array $renamedFilterFields): Builder
+    {
+        $this->renamedFilterFields = $renamedFilterFields;
 
         return $query;
     }

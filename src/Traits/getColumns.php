@@ -2,6 +2,8 @@
 
 namespace Abbasudo\Purity\Traits;
 
+use Illuminate\Support\Arr;
+
 trait getColumns
 {
     /**
@@ -23,8 +25,6 @@ trait getColumns
 
     private function realName(array $fields, string $field): string
     {
-        $real = array_search($field, $fields, true);
-
-        return is_int($real) ? $field : $real;
+        return Arr::get($fields, $field, $field);
     }
 }
