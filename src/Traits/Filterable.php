@@ -7,6 +7,8 @@ use Abbasudo\Purity\Filters\Resolve;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
@@ -16,6 +18,9 @@ use ReflectionClass;
  *
  * List of available fields, if not declared will accept every thing.
  * @property array $filterFields
+ *
+ * Fields will restrict to defined filters.
+ * @property array $restrictedFilters
  */
 trait Filterable
 {
@@ -99,7 +104,76 @@ trait Filterable
      */
     public function availableFields(): array
     {
-        return $this->filterFields ?? array_merge($this->getTableColumns(), $this->relations());
+        if (!isset($this->filterFields)) {
+            return array_merge($this->getTableColumns(), $this->relations());
+        }
+
+        return $this->getUserDefinedFilterFields();
+    }
+
+    /**
+     * Get formatted fields from filterFields
+     * @return array
+     */
+    public function getUserDefinedFilterFields(): array
+    {
+        if (isset($this->userDefinedFilterFields)) {
+            return $this->userDefinedFilterFields;
+        }
+
+        $userDefinedFilterFields = [];
+
+        foreach ($this->filterFields as $key => $value) {
+            if (is_int($key)) {
+                if (Str::contains($value, ':')) {
+                    $userDefinedFilterFields[] = str($value)->before(':')->squish()->toString();
+                } else {
+                    $userDefinedFilterFields[] = $value;
+                }
+            } else {
+                $userDefinedFilterFields[] = $key;
+            }
+        }
+
+        return $this->userDefinedFilterFields = $userDefinedFilterFields;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getRestrictedFilters(): array
+    {
+        if (isset($this->sanitizedRestrictedFilters)) {
+            return $this->sanitizedRestrictedFilters;
+        }
+
+        $restrictedFilters = [];
+
+        $filters = $this->restrictedFilters ?? $this->filterFields ?? [];
+
+        foreach ($filters as $key => $value) {
+            if (is_int($key) && Str::contains($value, ':')) {
+                $tKey = \str($value)->before(':')->squish()->toString();
+                $tValue = \str($value)->after(':')->squish()->explode(',')->all();
+                $restrictedFilters[$tKey] = $tValue;
+            }
+            if (is_string($key)) {
+                $restrictedFilters[$key] = Arr::wrap($value);
+            }
+        }
+
+        return $this->sanitizedRestrictedFilters = $restrictedFilters;
+    }
+
+    /**
+     * @param string $field
+     * @return array<int, string>|null
+     */
+    public function getAvailableFiltersFor(string $field): array|null
+    {
+        $this->getRestrictedFilters();
+
+        return Arr::get($this->sanitizedRestrictedFilters, $field);
     }
 
     /**
@@ -132,6 +206,18 @@ trait Filterable
     public function scopeFilterFields(Builder $query, array|string $fields): Builder
     {
         $this->filterFields = is_array($fields) ? $fields : array_slice(func_get_args(), 1);
+
+        return $query;
+    }
+
+    /**
+     * @param  Builder  $query
+     * @param  array|string  $restrictedFilters
+     * @return Builder
+     */
+    public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
+    {
+        $this->restrictedFilters = Arr::wrap($restrictedFilters);
 
         return $query;
     }

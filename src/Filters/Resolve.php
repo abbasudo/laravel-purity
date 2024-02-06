@@ -4,6 +4,7 @@ namespace Abbasudo\Purity\Filters;
 
 use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Abbasudo\Purity\Exceptions\NoOperatorMatch;
+use Abbasudo\Purity\Exceptions\OperatorNotSupported;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -207,6 +208,7 @@ class Resolve
                 $this->model = $this->model->$relation()->getRelated();
             }
             $this->validateField($field);
+            $this->validateOperator($field, $subField);
 
             $this->fields[] = $this->model->getField($field);
             $this->filter($query, $subField, $subFilter);
@@ -226,5 +228,22 @@ class Resolve
         if (!in_array($field, $availableFields)) {
             throw FieldNotSupported::create($field, $this->model::class, $availableFields);
         }
+    }
+
+    /**
+     * @param  string  $field
+     * @param  string  $operator
+     * @return void
+     */
+    private function validateOperator(string $field, string $operator): void
+    {
+
+        $availableFilters = $this->model->getAvailableFiltersFor($field);
+
+        if (!$availableFilters || in_array($operator, $availableFilters)) {
+            return;
+        }
+
+        throw OperatorNotSupported::create($field, $operator, $availableFilters);
     }
 }
