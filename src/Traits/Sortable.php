@@ -40,7 +40,9 @@ trait Sortable
         foreach ($params as $field) {
             $column = Str::of($field)->beforeLast(':');
 
-            $this->validate($column);
+            if (!$this->validate($column)) {
+                continue;
+            }
 
             $column = $this->getSortField($column);
 
@@ -57,11 +59,11 @@ trait Sortable
     /**
      * @throws Exception
      */
-    private function validate(string $field): void
+    private function validate(string $field): bool
     {
         $available = $this->availableSort();
 
-        $this->safe(function () use ($field, $available) {
+        return $this->safe(function () use ($field, $available) {
             if (!in_array($field, $available)) {
                 throw FieldNotSupported::create($field, self::class, $available);
             }
