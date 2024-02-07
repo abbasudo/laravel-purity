@@ -23,6 +23,10 @@ use ReflectionClass;
  * @property array $restrictedFilters
  *
  * @property array $renamedFilterFields
+ *
+ * @property array $userDefinedFilterFields;
+ *
+ * @property array $sanitizedRestrictedFilters;
  */
 trait Filterable
 {
@@ -98,7 +102,7 @@ trait Filterable
      */
     public function getField(string $field): string
     {
-        return $this->realName($this->renamedFilterFields ?? [], $field);
+        return $this->realName(($this->renamedFilterFields ?? []) + $this->availableFields(), $field);
     }
 
     /**
@@ -151,12 +155,10 @@ trait Filterable
 
         $restrictedFilters = [];
 
-        $filters = $this->restrictedFilters ?? $this->filterFields ?? [];
-
-        foreach ($filters as $key => $value) {
+        foreach ($this->restrictedFilters ?? $this->filterFields ?? [] as $key => $value) {
             if (is_int($key) && Str::contains($value, ':')) {
-                $tKey = \str($value)->before(':')->squish()->toString();
-                $tValue = \str($value)->after(':')->squish()->explode(',')->all();
+                $tKey = str($value)->before(':')->squish()->toString();
+                $tValue = str($value)->after(':')->squish()->explode(',')->all();
                 $restrictedFilters[$tKey] = $tValue;
             }
             if (is_string($key)) {
@@ -225,8 +227,8 @@ trait Filterable
     }
 
     /**
-     * @param  Builder  $query
-     * @param  array|string  $renamedFilterFields
+     * @param Builder $query
+     * @param array $renamedFilterFields
      * @return Builder
      */
     public function scopeRenamedFilterFields(Builder $query, array $renamedFilterFields): Builder
