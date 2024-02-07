@@ -18,7 +18,7 @@ class RenameFilterableFieldsTest extends TestCase
     public function it_can_return_relevant_table_column_after_renamed(): void
     {
         $post = new Post();
-        $post->renamedFilterFields = ['post_title' => 'title'];
+        $post->renamedFilterFields = ['title' => 'post_title'];
 
         assertEquals('title', $post->getField('post_title'));
     }
@@ -46,7 +46,7 @@ class RenameFilterableFieldsTest extends TestCase
     {
         $post = new Post();
         $post->filterFields = ['post_title'];
-        $post->renamedFilterFields = ['post_title' => 'title'];
+        $post->renamedFilterFields = ['title' => 'post_title'];
 
         $post->create([
             'title' => 'title_1',
@@ -70,7 +70,7 @@ class RenameFilterableFieldsTest extends TestCase
     {
         $post = new Post();
         $post->filterFields = ['post_title'];
-        $post->renamedFilterFields = ['post_title' => 'invalid_column']; // invalid column name
+        $post->renamedFilterFields = ['invalid_column' => 'post_title']; // invalid column name
 
         $post->create([
             'title' => 'title_1',
@@ -80,7 +80,7 @@ class RenameFilterableFieldsTest extends TestCase
 
         Route::get('/posts', function () use($post) {
             // reset with valid column name
-            return $post->renamedFilterFields(['post_title' => 'title'])->filter()->get();
+            return $post->renamedFilterFields(['title' => 'post_title'])->filter()->get();
         });
 
         $response = $this->getJson('/posts?filters[post_title][$eq]=title_1');
@@ -91,4 +91,3 @@ class RenameFilterableFieldsTest extends TestCase
     }
 
 }
-
