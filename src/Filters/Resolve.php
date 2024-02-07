@@ -231,13 +231,13 @@ class Resolve
     }
 
     /**
-     * @param  string  $field
-     * @param  string  $operator
+     * @param string $field
+     * @param string $operator
+     *
      * @return void
      */
     private function validateOperator(string $field, string $operator): void
     {
-
         $availableFilters = $this->model->getAvailableFiltersFor($field);
 
         if (!$availableFilters || in_array($operator, $availableFilters)) {

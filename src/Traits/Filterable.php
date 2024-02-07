@@ -21,11 +21,8 @@ use ReflectionClass;
  *
  * Fields will restrict to defined filters.
  * @property array $restrictedFilters
- *
  * @property array $renamedFilterFields
- *
  * @property array $userDefinedFilterFields;
- *
  * @property array $sanitizedRestrictedFilters;
  */
 trait Filterable
@@ -118,7 +115,8 @@ trait Filterable
     }
 
     /**
-     * Get formatted fields from filterFields
+     * Get formatted fields from filterFields.
+     *
      * @return array
      */
     public function getUserDefinedFilterFields(): array
@@ -171,6 +169,7 @@ trait Filterable
 
     /**
      * @param string $field
+     *
      * @return array<int, string>|null
      */
     public function getAvailableFiltersFor(string $field): array|null
@@ -215,8 +214,9 @@ trait Filterable
     }
 
     /**
-     * @param  Builder  $query
-     * @param  array|string  $restrictedFilters
+     * @param Builder      $query
+     * @param array|string $restrictedFilters
+     *
      * @return Builder
      */
     public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
@@ -228,7 +228,8 @@ trait Filterable
 
     /**
      * @param Builder $query
-     * @param array $renamedFilterFields
+     * @param array   $renamedFilterFields
+     *
      * @return Builder
      */
     public function scopeRenamedFilterFields(Builder $query, array $renamedFilterFields): Builder
