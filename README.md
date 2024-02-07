@@ -141,26 +141,33 @@ Post::sortFields('created_at', 'updated_at')->sort()->get();
 > filterFields and sortFields will overwrite fields defined in the model.
 
 ### Rename Fields
-To rename fields simply add a value to fields defined in `$filterFields` and `$sortFields` arrays:
+#### Rename Filter Fields
+To rename filter fields simply add a value to fields defined in `$renamedFilterFields`.
 ```php
 // App\Models\User
 
-protected $filterFields = [
-  'email',
-  'mobile' => 'phone',
-  'posts'  => 'writing', // relation
+// ?filter[phone][$eq]=0000000000
+protected $renamedFilterFields = [
+  'phone' => 'mobile', // Actual database column is mobile
+  'writing'  => 'posts', // actual relation is posts
 ];
-    
+
+```
+The client should send phone in order to filter by mobile column in database.
+#### Rename Sort Fields
+To rename sort fields simply add a value to defined in `$sortFields`
+```php
+// ?sort[0]=phone
 protected $sortFields = [
   'name',
-  'mobile' => 'phone',
+  'mobile' => 'phone', // Actual database column is mobile
 ];
 ```
-the client should send phone in order to filter by mobile.
+The client should send phone in order to sort by mobile column in database.
 #### Overwrite Renamed Fields
-to overwrite renamed fields in the controller you pass renamed fields to `filterFields` and `sortFields`.
+To overwrite renamed fields in the controller you pass renamed fields to `$rebamedFilterFields` and `sortFields`.
 ```php
-Post::filterFields(['title', 'created_at' => 'published_date'])->filter()->get();
+Post::renamedFilterFields(['title', 'created_at' => 'published_date'])->filter()->get();
 
 Post::sortFields([
     'created_at' => 'published_date',
@@ -168,7 +175,7 @@ Post::sortFields([
   ])->sort()->get();
 ```
 > **Note**
-> filterFields and sortFields will overwrite fields defined in the model.
+> SortFields will overwrite fields defined in the model.
 
 ### Restrict Filters
 
@@ -211,6 +218,37 @@ note that, filterBy will overwrite all other defined filters.
 Post::filterBy('$eq', '$in')->filter()->get();
 // or
 Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
+```
+### Restrict filters by field
+There are three available options for your convenience. They take priority respectively.
+- **Option 01 : Define restricted filters inside `$filterFields` property, as shown below**
+```php
+ $filterFields = [
+                     'title' => ['eq'],  // title will be limited to the eq operator
+                     'title' => 'eq',    // works only for one restricted operator
+                     'title,eq' ,        // same as above
+                     'title' ,           // this won't be restricted to any operator
+                 ];
+```
+The drawback here is that you have to define all the allowed fields, regardless of any restrictions fields.
+- **Option 2 : Define them inside `$restrictedFilters` property**
+```php
+$restrictedFields = [
+    'title' => ['eq'],  // title will be limited to the eq operator
+    'title,eq'          // same as above
+    'title'             // this won't be restricted to any operator
+];
+```
+- **Option 3 : Finally, you can set it on the Eloquent builder, which takes the highest priority (overwrite all the above options)**
+```php
+Post::restrictedFilters(['title' => ['eq']])->filter()->get();
+
+```
+**Note**
+>All field-restricted filter operations are respected to filters defined in $filter [see the Restrict Filters section]. This means you are not allowed to restrict a field operation that is not permitted in restricted fields.
+```php
+$filters = [$eq];
+$restrictedFilters = ['title' => ['$eqc']] // This won't work
 ```
 ### Changing Params Source
 By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
