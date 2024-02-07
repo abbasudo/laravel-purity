@@ -8,6 +8,7 @@ use function PHPUnit\Framework\assertTrue;
 
 class RestrictFilterableFieldsTest extends TestCase
 {
+
     /** @test */
     public function it_return_all_available_fields_when_filter_fields_not_defined(): void
     {
@@ -136,10 +137,10 @@ class RestrictFilterableFieldsTest extends TestCase
             return $post->filter()->get();
         });
 
-        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+        $response = $this->getJson('/posts?filters[title][$eq]=this is valid operator');
 
         $response->assertOk();
-        $response->assertJsonCount(0);
+        $response->assertJsonCount(1);
     }
 
     /** @test */

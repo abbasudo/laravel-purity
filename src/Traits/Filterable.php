@@ -21,12 +21,6 @@ use ReflectionClass;
  *
  * Fields will restrict to defined filters.
  * @property array $restrictedFilters
- *
- * @property array $renamedFilterFields
- *
- * @property array $userDefinedFilterFields;
- *
- * @property array $sanitizedRestrictedFilters;
  */
 trait Filterable
 {
@@ -102,7 +96,7 @@ trait Filterable
      */
     public function getField(string $field): string
     {
-        return $this->realName(($this->renamedFilterFields ?? []) + $this->availableFields(), $field);
+        return $this->realName($this->availableFields(), $field);
     }
 
     /**
@@ -155,10 +149,12 @@ trait Filterable
 
         $restrictedFilters = [];
 
-        foreach ($this->restrictedFilters ?? $this->filterFields ?? [] as $key => $value) {
+        $filters = $this->restrictedFilters ?? $this->filterFields ?? [];
+
+        foreach ($filters as $key => $value) {
             if (is_int($key) && Str::contains($value, ':')) {
-                $tKey = str($value)->before(':')->squish()->toString();
-                $tValue = str($value)->after(':')->squish()->explode(',')->all();
+                $tKey = \str($value)->before(':')->squish()->toString();
+                $tValue = \str($value)->after(':')->squish()->explode(',')->all();
                 $restrictedFilters[$tKey] = $tValue;
             }
             if (is_string($key)) {
@@ -222,18 +218,6 @@ trait Filterable
     public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
     {
         $this->restrictedFilters = Arr::wrap($restrictedFilters);
-
-        return $query;
-    }
-
-    /**
-     * @param Builder $query
-     * @param array $renamedFilterFields
-     * @return Builder
-     */
-    public function scopeRenamedFilterFields(Builder $query, array $renamedFilterFields): Builder
-    {
-        $this->renamedFilterFields = $renamedFilterFields;
 
         return $query;
     }

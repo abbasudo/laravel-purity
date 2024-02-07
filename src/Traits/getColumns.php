@@ -2,8 +2,6 @@
 
 namespace Abbasudo\Purity\Traits;
 
-use Illuminate\Support\Arr;
-
 trait getColumns
 {
     /**
@@ -17,8 +15,8 @@ trait getColumns
 
         // allow using qualified column names
         $qualifiedColumns = collect($this->columns)
-            ->map(fn ($column) => $this->qualifyColumn($column))
-            ->toArray();
+                ->map(fn ($column) => $this->qualifyColumn($column))
+                ->toArray();
 
         return array_merge($this->columns, $qualifiedColumns);
     }
