@@ -221,7 +221,7 @@ Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
 ```
 ### Restrict filters by field
 There are three available options for your convenience. They take priority respectively.
-- **Option 01 : Define restricted filters inside `$filterFields` property, as shown below**
+- **Option 1 : Define restricted filters inside `$filterFields` property, as shown below**
 ```php
  $filterFields = [
                      'title' => ['eq'],  // title will be limited to the eq operator
@@ -245,7 +245,7 @@ Post::restrictedFilters(['title' => ['eq']])->filter()->get();
 
 ```
 **Note**
->All field-restricted filter operations are respected to filters defined in $filter [see the Restrict Filters section]. This means you are not allowed to restrict a field operation that is not permitted in restricted fields.
+>All field-restricted filter operations are respected to filters defined in $filter ([here](#restrict-filters)). This means you are not allowed to restrict a field operation that is not permitted in restricted fields.
 ```php
 $filters = [$eq];
 $restrictedFilters = ['title' => ['$eqc']] // This won't work
