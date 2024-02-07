@@ -3,6 +3,7 @@
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
 
@@ -29,7 +30,7 @@ class RestrictFilterableFieldsTest extends TestCase
             'title :$gt, $lt',
             'status',
             'description' => ['$ne', '$ecs'],
-            'rank' => '$eq',
+            'rank'        => '$eq',
         ];
 
         $availableFields = $post->availableFields();
@@ -50,15 +51,15 @@ class RestrictFilterableFieldsTest extends TestCase
             'title : $gt,$lt',
             'status',
             'description' => ['$ne', '$ecs'],
-            'rank' => '$eq',
+            'rank'        => '$eq',
         ];
 
         $restrictedFilters = $post->getRestrictedFilters();
 
         assertEquals([
-            'title' => ['$gt', '$lt'],
+            'title'       => ['$gt', '$lt'],
             'description' => ['$ne', '$ecs'],
-            'rank' => ['$eq'],
+            'rank'        => ['$eq'],
         ], $restrictedFilters);
     }
 
@@ -70,22 +71,22 @@ class RestrictFilterableFieldsTest extends TestCase
             'title : $gt,$lt',
             'status',
             'description' => ['$ne', '$ecs'],
-            'rank' => '$eq',
+            'rank'        => '$eq',
         ];
 
         $post->restrictedFilters = [
             'title : $gte,$lte',
             'status',
             'description' => ['$ne'],
-            'rank' => ['$eq', 'lt'],
+            'rank'        => ['$eq', 'lt'],
         ];
 
         $restrictedFilters = $post->getRestrictedFilters();
 
         assertEquals([
-            'title' => ['$gte', '$lte'],
+            'title'       => ['$gte', '$lte'],
             'description' => ['$ne'],
-            'rank' => ['$eq', 'lt'],
+            'rank'        => ['$eq', 'lt'],
         ], $restrictedFilters);
     }
 
@@ -132,7 +133,7 @@ class RestrictFilterableFieldsTest extends TestCase
             'title' => 'this is valid operator',
         ]);
 
-        Route::get('/posts', function () use ($post){
+        Route::get('/posts', function () use ($post) {
             return $post->filter()->get();
         });
 
@@ -152,7 +153,7 @@ class RestrictFilterableFieldsTest extends TestCase
             'title' => 'this is invalid operator',
         ]);
 
-        Route::get('/posts', function () use ($post){
+        Route::get('/posts', function () use ($post) {
             return $post->filter()->get();
         });
 
@@ -173,7 +174,7 @@ class RestrictFilterableFieldsTest extends TestCase
             'title' => 'this is invalid operator',
         ]);
 
-        Route::get('/posts', function () use ($post){
+        Route::get('/posts', function () use ($post) {
             return $post->restrictedFilters(
                 ['title' => ['$eq']]
             )->filter()->get();
@@ -186,4 +187,3 @@ class RestrictFilterableFieldsTest extends TestCase
         $response->assertJsonCount(0);
     }
 }
-

@@ -10,7 +10,7 @@ class OperatorNotSupported extends InvalidArgumentException
     {
         return new static(
             "The operator {$operator} is not supported for the field {$field} supported operators : "
-            . implode(', ', $supportedOperators)
+            .implode(', ', $supportedOperators)
         );
     }
 }

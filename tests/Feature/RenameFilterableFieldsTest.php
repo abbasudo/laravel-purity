@@ -3,8 +3,8 @@
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertTrue;
 
 class RenameFilterableFieldsTest extends TestCase
 {
@@ -30,7 +30,7 @@ class RenameFilterableFieldsTest extends TestCase
             'title' => 'this is renamed field',
         ]);
 
-        Route::get('/posts', function (){
+        Route::get('/posts', function () {
             return Post::filter()->get();
         });
 
@@ -54,7 +54,7 @@ class RenameFilterableFieldsTest extends TestCase
             'title' => 'title_2',
         ]);
 
-        Route::get('/posts', function () use($post) {
+        Route::get('/posts', function () use ($post) {
             return $post->filter()->get();
         });
 
@@ -78,7 +78,7 @@ class RenameFilterableFieldsTest extends TestCase
             'title' => 'title_2',
         ]);
 
-        Route::get('/posts', function () use($post) {
+        Route::get('/posts', function () use ($post) {
             // reset with valid column name
             return $post->renamedFilterFields(['title' => 'post_title'])->filter()->get();
         });
@@ -89,5 +89,4 @@ class RenameFilterableFieldsTest extends TestCase
         // It returns o records as builder level filters take priority
         $response->assertJsonCount(1);
     }
-
 }

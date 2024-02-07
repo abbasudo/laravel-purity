@@ -6,7 +6,6 @@ use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -63,8 +62,9 @@ trait Sortable
     private function validate(string $field): bool
     {
         $available = $this->availableSort();
+
         return $this->safe(function () use ($field, $available) {
-            if (!array_key_exists($field, $available) && !(Arr::isList($available) && in_array($field, $available))) {
+            if (!in_array($field, $available)) {
                 throw FieldNotSupported::create($field, self::class, $available);
             }
         });

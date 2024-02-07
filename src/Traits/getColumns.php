@@ -2,8 +2,6 @@
 
 namespace Abbasudo\Purity\Traits;
 
-use Illuminate\Support\Arr;
-
 trait getColumns
 {
     /**
