@@ -62,9 +62,9 @@ trait Sortable
     private function validate(string $field): bool
     {
         $available = $this->availableSort();
-
         return $this->safe(function () use ($field, $available) {
-            if (!in_array($field, $available)) {
+            $allowed = $available[$field] ?? false;
+            if (!$allowed) {
                 throw FieldNotSupported::create($field, self::class, $available);
             }
         });
