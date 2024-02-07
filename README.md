@@ -157,10 +157,10 @@ The client should send phone in order to filter by mobile column in database.
 #### Rename Sort Fields
 To rename sort fields simply add a value to defined in `$sortFields`
 ```php
-// ?sort[0]=phone
+// ?sort=phone
 protected $sortFields = [
   'name',
-  'mobile' => 'phone', // Actual database column is mobile
+  'phone' => 'mobile', // Actual database column is mobile
 ];
 ```
 The client should send phone in order to sort by mobile column in database.
