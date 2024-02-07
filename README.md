@@ -148,8 +148,8 @@ To rename filter fields simply add a value to fields defined in `$renamedFilterF
 
 // ?filter[phone][$eq]=0000000000
 protected $renamedFilterFields = [
-  'phone' => 'mobile', // Actual database column is mobile
-  'writing'  => 'posts', // actual relation is posts
+  'mobile' => 'phone', // Actual database column is mobile
+  'posts'  => 'writing', // actual relation is posts
 ];
 
 ```
@@ -160,14 +160,14 @@ To rename sort fields simply add a value to defined in `$sortFields`
 // ?sort=phone
 protected $sortFields = [
   'name',
-  'phone' => 'mobile', // Actual database column is mobile
+  'mobile' => 'phone', // Actual database column is mobile
 ];
 ```
 The client should send phone in order to sort by mobile column in database.
 #### Overwrite Renamed Fields
-To overwrite renamed fields in the controller you pass renamed fields to `$rebamedFilterFields` and `sortFields`.
+To overwrite renamed fields in the controller you pass renamed fields to `rebamedFilterFields` and `sortFields`.
 ```php
-Post::renamedFilterFields(['title', 'created_at' => 'published_date'])->filter()->get();
+Post::renamedFilterFields(['created_at' => 'published_date'])->filter()->get();
 
 Post::sortFields([
     'created_at' => 'published_date',
