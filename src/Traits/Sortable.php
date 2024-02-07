@@ -20,12 +20,12 @@ trait Sortable
     /**
      * Apply sorts to the query builder instance.
      *
-     * @param Builder $query
+     * @param Builder    $query
      * @param array|null $params
      *
-     * @return Builder
      * @throws Exception
      *
+     * @return Builder
      */
     public function scopeSort(Builder $query, array|null $params = null): Builder
     {
@@ -62,6 +62,7 @@ trait Sortable
     private function validate(string $field): bool
     {
         $available = $this->availableSort();
+
         return $this->safe(function () use ($field, $available) {
             if (!in_array($field, $available)) {
                 throw FieldNotSupported::create($field, self::class, $available);
@@ -82,9 +83,9 @@ trait Sortable
      *
      * @param Closure $closure
      *
-     * @return bool
      * @throws Exception
      *
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
@@ -112,7 +113,7 @@ trait Sortable
     }
 
     /**
-     * @param Builder $query
+     * @param Builder      $query
      * @param array|string $fields
      *
      * @return Builder

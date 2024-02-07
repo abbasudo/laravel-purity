@@ -3,8 +3,8 @@
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertNotEquals;
 use function PHPUnit\Framework\assertTrue;
 
 class SortableTest extends TestCase
