@@ -23,13 +23,15 @@ class OrFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            foreach ($this->values as $value) {
-                $query->orWhere(function ($query) use ($value) {
-                    foreach ($value as $key => $item) {
-                        app(Resolve::class)->apply($query, $key, $item);
-                    }
-                });
-            }
+            $query->where(function ($query) {
+                foreach ($this->values as $value) {
+                    $query->orWhere(function ($query) use ($value) {
+                        foreach ($value as $key => $item) {
+                            app(Resolve::class)->apply($query, $key, $item);
+                        }
+                    });
+                }
+            });
         };
     }
 }
