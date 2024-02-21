@@ -4,6 +4,7 @@ use Abbasudo\Purity\Tests\Models\Comment;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+
 use function PHPUnit\Framework\assertEquals;
 
 class FilterableTest extends TestCase
