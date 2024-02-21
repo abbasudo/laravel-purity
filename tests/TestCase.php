@@ -3,6 +3,7 @@
 namespace Abbasudo\Purity\Tests;
 
 use Abbasudo\Purity\PurityServiceProvider;
+use Abbasudo\Purity\Tests\Models\Post;
 use Illuminate\Database\Schema\Blueprint;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -24,7 +25,15 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $schema = $app['db']->connection()->getSchemaBuilder();
 
         $schema->create('posts', function (Blueprint $table) {
+            $table->id();
             $table->string('title');
+            $table->timestamps();
+        });
+
+        $schema->create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Post::class)->nullable();
+            $table->string('content');
             $table->timestamps();
         });
     }
