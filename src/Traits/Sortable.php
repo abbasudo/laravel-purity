@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 trait Sortable
 {
     use getColumns;
+    use CanSortNullable;
 
     /**
      * Apply sorts to the query builder instance.
@@ -45,15 +46,21 @@ trait Sortable
             }
 
             $column = $this->getSortField($column);
-
-            if (Str::of($field)->endsWith(':desc')) {
-                $query->orderByDesc($column);
-            } else {
-                $query->orderBy($column);
-            }
+            $this->applySort($column, $field, $query);
         }
 
         return $query;
+    }
+
+    public function applySort(string $column, string $field, Builder $query): void
+    {
+        $direction = Str::of($field)->lower()->endsWith(':desc') ? 'desc' : 'asc';
+
+        if (config('purity.null_last', false)) {
+            $this->sortByNullLast($column, $direction, $query);
+        } else {
+            $query->orderByRaw("$column $direction");
+        }
     }
 
     /**
