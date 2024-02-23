@@ -494,7 +494,7 @@ const query = qs.stringify({
 await request(`/api/articles?${query}`);
 ```
 
-#### Sort null values last
+### Sort null values last
 When sorting a column that contains null values, it's typically preferred to have those values appear last, regardless of the sorting direction. You can enable this feature in the configuration as follows:
 ```php
 null_last => true;

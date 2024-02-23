@@ -6,6 +6,7 @@ use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -16,7 +17,6 @@ use Illuminate\Support\Str;
 trait Sortable
 {
     use getColumns;
-    use CanSortNullable;
 
     /**
      * Apply sorts to the query builder instance.
@@ -52,17 +52,6 @@ trait Sortable
         return $query;
     }
 
-    public function applySort(string $column, string $field, Builder $query): void
-    {
-        $direction = Str::of($field)->lower()->endsWith(':desc') ? 'desc' : 'asc';
-
-        if (config('purity.null_last', false)) {
-            $this->sortByNullLast($column, $direction, $query);
-        } else {
-            $query->orderByRaw("$column $direction");
-        }
-    }
-
     /**
      * @throws Exception
      */
@@ -75,6 +64,38 @@ trait Sortable
                 throw FieldNotSupported::create($field, self::class, $available);
             }
         });
+    }
+
+    /**
+     * @param  string  $column
+     * @param  string  $field
+     * @param  Builder  $query
+     * @return void
+     */
+    public function applySort(string $column, string $field, Builder $query): void
+    {
+        $direction = Str::of($field)->lower()->endsWith(':desc') ? 'desc' : 'asc';
+
+        if (config('purity.null_last', false)) {
+            $this->sortByNullLast($column, $direction, $query);
+        } else {
+            $query->orderByRaw("$column $direction");
+        }
+    }
+
+    /**
+     * @param  string  $column
+     * @param $direction
+     * @param  Builder  $query
+     * @return Builder
+     */
+    public function sortByNullLast(string $column, $direction, Builder $query): Builder
+    {
+        return match (DB::getDriverName()) {
+            'pgsql' => $query->orderByRaw("$column $direction nulls last"),
+            default => $query->orderByRaw("$column is null")
+                             ->orderByRaw("$column $direction")
+        };
     }
 
     /**
