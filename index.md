@@ -328,7 +328,7 @@ When sorting a column that contains null values, it's typically preferred to hav
 ```php
 // configs/purity.php
 
-null_last => true;
+null_last => true,
 ```
 
 ## Queries and javascript examples
