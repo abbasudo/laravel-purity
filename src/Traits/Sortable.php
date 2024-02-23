@@ -67,9 +67,10 @@ trait Sortable
     }
 
     /**
-     * @param  string  $column
-     * @param  string  $field
-     * @param  Builder  $query
+     * @param string  $column
+     * @param string  $field
+     * @param Builder $query
+     *
      * @return void
      */
     public function applySort(string $column, string $field, Builder $query): void
@@ -84,9 +85,10 @@ trait Sortable
     }
 
     /**
-     * @param  string  $column
-     * @param $direction
-     * @param  Builder  $query
+     * @param string  $column
+     * @param         $direction
+     * @param Builder $query
+     *
      * @return Builder
      */
     public function sortByNullLast(string $column, $direction, Builder $query): Builder
