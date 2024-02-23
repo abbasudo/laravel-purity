@@ -317,6 +317,13 @@ By default, purity silences its own exceptions. to change that behavior change t
 
 'silent' => false,
 ```
+### Sort null values last
+When sorting a column that contains null values, it's typically preferred to have those values appear last, regardless of the sorting direction. You can enable this feature in the configuration as follows:
+```php
+// configs/purity.php
+
+null_last => true;
+```
 
 ## Queries and javascript examples
 This section is a guide for front-end developers who want to use an API that uses Laravel Purity.
@@ -493,6 +500,7 @@ const query = qs.stringify({
 
 await request(`/api/articles?${query}`);
 ```
+
 ## Upgrade Guide
 
 ### Version 3
