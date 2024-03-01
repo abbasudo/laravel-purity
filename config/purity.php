@@ -53,6 +53,6 @@ return [
 
     'custom_filters_location' => app_path('Filters'),
 
-    'null_last' => true,
+    'null_last' => false,
 
 ];
