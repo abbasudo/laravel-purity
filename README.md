@@ -43,6 +43,13 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 - [Add filter to your laravel app](https://dev.to/abbasudo/add-filter-to-your-laravel-10-app-4f5f)
 - [Enable filtering queries in your laravel 10 app with ease](https://medium.com/@abbasudo/enable-filtering-in-your-laravel-app-with-ease-a63f79b5e452)
 
+## Table of Contents
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+  - [Filters](#filters) 
+  - [sort](#sort)
+
+
 ## Installation
 Install the package via composer by this command:
 ```sh
