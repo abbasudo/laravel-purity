@@ -32,6 +32,41 @@ Laravel Purity is not only developer-friendly but also front-end developer-frien
 
 The way this package handles filters is inspired by strapi's [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
+## Table of Contents
+- [Tutorials](#tutorials)
+  * [Video](#video)
+  * [Articles](#articles)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+  * [Filters](#filters)
+  * [Sort](#sort)
+- [Advanced Usage](#advanced-usage)
+  * [Allowed Fields](#allowed-fields)
+    + [Overwrite Allowed Fields](#overwrite-allowed-fields)
+  * [Rename Fields](#rename-fields)
+    + [Rename Filter Fields](#rename-filter-fields)
+    + [Rename Sort Fields](#rename-sort-fields)
+    + [Overwrite Renamed Fields](#overwrite-renamed-fields)
+  * [Restrict Filters](#restrict-filters)
+  * [Restrict filters by field](#restrict-filters-by-field)
+  * [Changing Params Source](#changing-params-source)
+  * [Livewire](#livewire)
+  * [Custom Filters](#custom-filters)
+  * [Silent Exceptions](#silent-exceptions)
+  * [Sort null values last](#sort-null-values-last)
+- [Queries and javascript examples](#queries-and-javascript-examples)
+  * [Available Filters](#available-filters)
+    + [Simple Filtering](#simple-filtering)
+    + [Complex Filtering](#complex-filtering)
+    + [Deep Filtering](#deep-filtering)
+  * [Apply Sort](#apply-sort)
+    + [Usage Examples](#usage-examples)
+- [Upgrade Guide](#upgrade-guide)
+  * [Version 3](#version-3)
+  * [Version 2](#version-2)
+- [License](#license)
+- [Security](#security)
+
 ## Tutorials
 ### Video
 [![youtube](https://user-images.githubusercontent.com/86796762/227452155-3644f431-a8ce-41bc-ad4b-95383a3209fa.png)](https://youtu.be/nvCTEKvRdec)
@@ -42,12 +77,6 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 - [The correct way of adding filters to Laravel](https://medium.com/@abbasudo/the-correct-way-of-adding-filters-to-laravel-10-bb9957c2ddc6)
 - [Add filter to your laravel app](https://dev.to/abbasudo/add-filter-to-your-laravel-10-app-4f5f)
 - [Enable filtering queries in your laravel 10 app with ease](https://medium.com/@abbasudo/enable-filtering-in-your-laravel-app-with-ease-a63f79b5e452)
-
-## Table of Contents
-- [Installation](#installation)
-- [Basic Usage](#basic-usage)
-  - [Filters](#filters) 
-  - [sort](#sort)
 
 
 ## Installation
