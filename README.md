@@ -315,7 +315,7 @@ public function render()
 {
   $transactions = Transaction::filter($this->filters)->get();
 
-  return view('livewire.transacrion-table',compact('transactions'));
+  return view('livewire.transaction-table',compact('transactions'));
 }
 
 ```
