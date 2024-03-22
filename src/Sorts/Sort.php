@@ -4,10 +4,12 @@ namespace Abbasudo\Purity\Sorts;
 
 use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Abbasudo\Purity\Helpers;
+use Abbasudo\Purity\Sorts\Strategies\BelongsToSort;
 use Abbasudo\Purity\Sorts\Strategies\DefaultSort;
 use Abbasudo\Purity\Sorts\Strategies\NullSort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Sort
@@ -49,6 +51,17 @@ class Sort
 
     public function sortByRelation(): Builder
     {
+        $method = new \ReflectionMethod($this->model, $this->relationName);
+
+        $type = $method->getReturnType()?->getName();
+
+        if (config('purity.null_last')){
+            $this->query->orderByRaw("{$this->field} is null");
+        }
+
+        return match ($type) {
+            BelongsTo::class => (new BelongsToSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+        };
     }
 
     private function setRelationName(): void

@@ -1,6 +1,7 @@
 <?php
 
 use Abbasudo\Purity\Tests\Models\Post;
+use Abbasudo\Purity\Tests\Models\User;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,11 @@ class SortableTest extends TestCase
         });
 
         $this->post = $post;
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
     }
 
     /** @test */
@@ -79,6 +85,43 @@ class SortableTest extends TestCase
             assertEquals(['a', 'b', null, null], $response->collect()->pluck('title')->all());
         } else {
             assertEquals(['b', 'a', null, null], $response->collect()->pluck('title')->all());
+        }
+    }
+
+    /**
+     *@test
+     *@dataProvider directionProvider
+     */
+    public function it_can_sort_by_belongs_to_relationship(string $direction)
+    {
+        Post::query()->truncate();
+        User::query()->truncate();
+
+        $user2 = User::query()->create(['name' => 'user2']);
+        $post2 = Post::query()->create(['title' =>'post2']);
+        $post2->user()->associate($user2);
+        $post2->save();
+
+        $user1 = User::query()->create(['name' => 'user1']);
+        $post1 = Post::query()->create(['title' =>'post1']);
+        $post1->user()->associate($user1);
+        $post1->save();
+
+        $user3 = User::query()->create(['name' => 'user3']);
+        $post3 = Post::query()->create(['title' =>'post3']);
+        $post3->user()->associate($user3);
+        $post3->save();
+
+        Route::get('/posts', function ()  {
+            return Post::sort()->get();
+        });
+
+        $response = $this->getJson("/posts?sort=user.name:{$direction}");
+
+        if ($direction === 'asc') {
+            assertEquals(['post1', 'post2', 'post3'], $response->collect()->pluck('title')->all());
+        } else {
+            assertEquals(['post3', 'post2', 'post1'], $response->collect()->pluck('title')->all());
         }
     }
 
