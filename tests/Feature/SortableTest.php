@@ -2,6 +2,7 @@
 
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Project;
+use Abbasudo\Purity\Tests\Models\Tag;
 use Abbasudo\Purity\Tests\Models\User;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
@@ -191,6 +192,43 @@ class SortableTest extends TestCase
             assertEquals(['user1', 'user2', 'user3'], $response->collect()->pluck('name')->all());
         } else {
             assertEquals(['user3', 'user2', 'user1'], $response->collect()->pluck('name')->all());
+        }
+    }
+
+    /**
+     *@test
+     *@dataProvider directionProvider
+     */
+    public function it_can_sort_by_belongs_to_many_relationship(string $direction)
+    {
+        Post::query()->truncate();
+        Tag::query()->truncate();
+
+        $post2 = Post::query()->create(['title' => 'title2']);
+        $post1 = Post::query()->create(['title' => 'title1']);
+        $post3 = Post::query()->create(['title' => 'title3']);
+
+        $tag1 = Tag::query()->create(['name' => 'tag1']);
+        $tag2 = Tag::query()->create(['name' => 'tag2']);
+        $tag3 = Tag::query()->create(['name' => 'tag3']);
+        $tag4 = Tag::query()->create(['name' => 'tag4']);
+        $tag5 = Tag::query()->create(['name' => 'tag5']);
+        $tag6 = Tag::query()->create(['name' => 'tag6']);
+
+        $post1->tags()->attach([$tag4->getKey(), $tag1->getKey()]);
+        $post2->tags()->attach([$tag5->getKey(), $tag2->getKey()]);
+        $post3->tags()->attach([$tag6->getKey(), $tag4->getKey()]);
+
+        Route::get('/posts', function ()  {
+            return Post::sort()->get();
+        });
+
+        $response = $this->getJson("/posts?sort=tags.name:{$direction}");
+
+        if ($direction === 'asc') {
+            assertEquals(['title1', 'title2', 'title3'], $response->collect()->pluck('title')->all());
+        } else {
+            assertEquals(['title3', 'title2', 'title1'], $response->collect()->pluck('title')->all());
         }
     }
 
