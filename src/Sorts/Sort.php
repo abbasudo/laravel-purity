@@ -6,11 +6,13 @@ use Abbasudo\Purity\Exceptions\FieldNotSupported;
 use Abbasudo\Purity\Helpers;
 use Abbasudo\Purity\Sorts\Strategies\BelongsToSort;
 use Abbasudo\Purity\Sorts\Strategies\DefaultSort;
+use Abbasudo\Purity\Sorts\Strategies\HasManySort;
 use Abbasudo\Purity\Sorts\Strategies\HasOneSort;
 use Abbasudo\Purity\Sorts\Strategies\NullSort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
@@ -64,6 +66,7 @@ class Sort
         return match ($type) {
             BelongsTo::class => (new BelongsToSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
             HasOne::class => (new HasOneSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+            HasMany::class => (new HasManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
         };
     }
 

@@ -158,6 +158,42 @@ class SortableTest extends TestCase
         }
     }
 
+    /**
+     *@test
+     *@dataProvider directionProvider
+     */
+    public function it_can_sort_by_has_many_relationship(string $direction)
+    {
+        Post::query()->truncate();
+
+        $user2 = User::query()->create(['name' => 'user2']);
+        $post2 = Post::query()->create(['title' =>'post2']);
+        $post2->user()->associate($user2);
+        $post2->save();
+
+        $user1 = User::query()->create(['name' => 'user1']);
+        $post1 = Post::query()->create(['title' =>'post1']);
+        $post1->user()->associate($user1);
+        $post1->save();
+
+        $user3 = User::query()->create(['name' => 'user3']);
+        $post3 = Post::query()->create(['title' =>'post3']);
+        $post3->user()->associate($user3);
+        $post3->save();
+
+        Route::get('/users', function ()  {
+            return User::sort()->get();
+        });
+
+        $response = $this->getJson("/users?sort=post.title:{$direction}");
+
+        if ($direction === 'asc') {
+            assertEquals(['user1', 'user2', 'user3'], $response->collect()->pluck('name')->all());
+        } else {
+            assertEquals(['user3', 'user2', 'user1'], $response->collect()->pluck('name')->all());
+        }
+    }
+
     public static function directionProvider(): array
     {
         return [['asc'], ['desc']];
