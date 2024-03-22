@@ -3,6 +3,7 @@
 namespace Abbasudo\Purity\Sorts;
 
 use Abbasudo\Purity\Exceptions\FieldNotSupported;
+use Abbasudo\Purity\Exceptions\RelationshipNotSupport;
 use Abbasudo\Purity\Helpers;
 use Abbasudo\Purity\Sorts\Strategies\BelongsToManySort;
 use Abbasudo\Purity\Sorts\Strategies\BelongsToSort;
@@ -70,6 +71,7 @@ class Sort
             HasOne::class => (new HasOneSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
             HasMany::class => (new HasManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
             BelongsToMany::class => (new BelongsToManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+            default => throw RelationshipNotSupport::create()
         };
     }
 
