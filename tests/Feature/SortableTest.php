@@ -1,5 +1,6 @@
 <?php
 
+use Abbasudo\Purity\Tests\Models\Comment;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Project;
 use Abbasudo\Purity\Tests\Models\Tag;
@@ -61,8 +62,9 @@ class SortableTest extends TestCase
         $response->assertOk();
     }
 
-    /** @test
-     * @dataProvider directionProvider
+    /**
+     *@test
+     *@dataProvider directionProvider
      */
     public function it_can_sort_null_values_last($direction): void
     {
@@ -91,8 +93,7 @@ class SortableTest extends TestCase
      */
     public function it_can_sort_by_belongs_to_relationship(string $direction)
     {
-        Post::query()->truncate();
-        User::query()->truncate();
+        $this->truncateAll();
 
         $user2 = User::query()->create(['name' => 'user2']);
         $post2 = Post::query()->create(['title' =>'post2']);
@@ -128,8 +129,7 @@ class SortableTest extends TestCase
      */
     public function it_can_sort_by_has_one_relationship(string $direction)
     {
-        Post::query()->truncate();
-        User::query()->truncate();
+        $this->truncateAll();
 
         $user2 = User::query()->create(['name' => 'user2']);
         $project2 = Project::query()->create(['name' =>'project2']);
@@ -165,7 +165,7 @@ class SortableTest extends TestCase
      */
     public function it_can_sort_by_has_many_relationship(string $direction)
     {
-        Post::query()->truncate();
+        $this->truncateAll();
 
         $user2 = User::query()->create(['name' => 'user2']);
         $post2 = Post::query()->create(['title' =>'post2']);
@@ -201,8 +201,7 @@ class SortableTest extends TestCase
      */
     public function it_can_sort_by_belongs_to_many_relationship(string $direction)
     {
-        Post::query()->truncate();
-        Tag::query()->truncate();
+        $this->truncateAll();
 
         $post2 = Post::query()->create(['title' => 'title2']);
         $post1 = Post::query()->create(['title' => 'title1']);
@@ -230,6 +229,14 @@ class SortableTest extends TestCase
         } else {
             assertEquals(['title3', 'title2', 'title1'], $response->collect()->pluck('title')->all());
         }
+    }
+
+    public function truncateAll(): void
+    {
+        Post::query()->truncate();
+        Tag::query()->truncate();
+        Comment::query()->truncate();
+        User::query()->truncate();
     }
 
     public static function directionProvider(): array
