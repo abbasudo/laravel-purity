@@ -3,16 +3,19 @@
 namespace Abbasudo\Purity\Traits;
 
 use Abbasudo\Purity\Exceptions\FieldNotSupported;
+use Abbasudo\Purity\Helpers;
+use Abbasudo\Purity\Sorts\Sort;
 use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
  * List of available fields, if not declared will accept every thing.
  *
  * @property array $sortFields
+ * @mixin Model
  */
 trait Sortable
 {
@@ -21,12 +24,12 @@ trait Sortable
     /**
      * Apply sorts to the query builder instance.
      *
-     * @param Builder    $query
-     * @param array|null $params
-     *
-     * @throws Exception
+     * @param  Builder  $query
+     * @param  array|null  $params
      *
      * @return Builder
+     * @throws Exception
+     *
      */
     public function scopeSort(Builder $query, array|null $params = null): Builder
     {
@@ -45,6 +48,7 @@ trait Sortable
                 continue;
             }
 
+            $column = Str::contains($column, '.') ? Str::before($column, '.') : $column;
             $column = $this->getSortField($column);
             $this->applySort($column, $field, $query);
         }
@@ -60,6 +64,8 @@ trait Sortable
         $available = $this->availableSort();
 
         return $this->safe(function () use ($field, $available) {
+            $field = Str::contains($field, '.') ? Str::before($field, '.') : $field;
+
             if (!in_array($field, $available)) {
                 throw FieldNotSupported::create($field, self::class, $available);
             }
@@ -67,37 +73,14 @@ trait Sortable
     }
 
     /**
-     * @param string  $column
-     * @param string  $field
-     * @param Builder $query
-     *
-     * @return void
-     */
-    public function applySort(string $column, string $field, Builder $query): void
-    {
-        $direction = Str::of($field)->lower()->endsWith(':desc') ? 'desc' : 'asc';
-
-        if (config('purity.null_last', false)) {
-            $this->sortByNullLast($column, $direction, $query);
-        } else {
-            $query->orderByRaw("$column $direction");
-        }
-    }
-
-    /**
-     * @param string  $column
-     * @param         $direction
-     * @param Builder $query
-     *
+     * @param  string  $column
+     * @param  string  $field
+     * @param  Builder  $query
      * @return Builder
      */
-    public function sortByNullLast(string $column, $direction, Builder $query): Builder
+    public function applySort(string $column, string $field, Builder $query): Builder
     {
-        return match (DB::getDriverName()) {
-            'pgsql' => $query->orderByRaw("$column $direction nulls last"),
-            default => $query->orderByRaw("$column is null")
-                             ->orderByRaw("$column $direction")
-        };
+        return (new Sort($column, $field, $query, $this))();
     }
 
     /**
@@ -105,17 +88,17 @@ trait Sortable
      */
     private function availableSort(): array
     {
-        return $this->sortFields ?? $this->getTableColumns();
+        return $this->sortFields ?? array_merge($this->getTableColumns(), Helpers::getRelations($this));
     }
 
     /**
      * run functions with or without exception.
      *
-     * @param Closure $closure
-     *
-     * @throws Exception
+     * @param  Closure  $closure
      *
      * @return bool
+     * @throws Exception
+     *
      */
     private function safe(Closure $closure): bool
     {
@@ -133,7 +116,7 @@ trait Sortable
     }
 
     /**
-     * @param string $field
+     * @param  string  $field
      *
      * @return string
      */
@@ -143,8 +126,8 @@ trait Sortable
     }
 
     /**
-     * @param Builder      $query
-     * @param array|string $fields
+     * @param  Builder  $query
+     * @param  array|string  $fields
      *
      * @return Builder
      */
