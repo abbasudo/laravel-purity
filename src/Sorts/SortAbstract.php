@@ -13,7 +13,8 @@ abstract class SortAbstract
         protected Builder $query,
         protected ?Model $model = null,
         protected ?string $relationName = null
-    ) {}
+    ) {
+    }
 
-    public abstract function apply(): Builder;
+    abstract public function apply(): Builder;
 }

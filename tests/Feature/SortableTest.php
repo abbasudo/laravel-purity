@@ -64,6 +64,7 @@ class SortableTest extends TestCase
 
     /**
      *@test
+     *
      *@dataProvider directionProvider
      */
     public function it_can_sort_null_values_last($direction): void
@@ -89,6 +90,7 @@ class SortableTest extends TestCase
 
     /**
      *@test
+     *
      *@dataProvider directionProvider
      */
     public function it_can_sort_by_belongs_to_relationship(string $direction)
@@ -110,7 +112,7 @@ class SortableTest extends TestCase
         $post3->user()->associate($user3);
         $post3->save();
 
-        Route::get('/posts', function ()  {
+        Route::get('/posts', function () {
             return Post::sort()->get();
         });
 
@@ -125,6 +127,7 @@ class SortableTest extends TestCase
 
     /**
      *@test
+     *
      *@dataProvider directionProvider
      */
     public function it_can_sort_by_has_one_relationship(string $direction)
@@ -146,7 +149,7 @@ class SortableTest extends TestCase
         $project3->user()->associate($user3);
         $project3->save();
 
-        Route::get('/users', function ()  {
+        Route::get('/users', function () {
             return User::sort()->get();
         });
 
@@ -161,6 +164,7 @@ class SortableTest extends TestCase
 
     /**
      *@test
+     *
      *@dataProvider directionProvider
      */
     public function it_can_sort_by_has_many_relationship(string $direction)
@@ -182,7 +186,7 @@ class SortableTest extends TestCase
         $post3->user()->associate($user3);
         $post3->save();
 
-        Route::get('/users', function ()  {
+        Route::get('/users', function () {
             return User::sort()->get();
         });
 
@@ -197,6 +201,7 @@ class SortableTest extends TestCase
 
     /**
      *@test
+     *
      *@dataProvider directionProvider
      */
     public function it_can_sort_by_belongs_to_many_relationship(string $direction)
@@ -218,7 +223,7 @@ class SortableTest extends TestCase
         $post2->tags()->attach([$tag5->getKey(), $tag2->getKey()]);
         $post3->tags()->attach([$tag6->getKey(), $tag4->getKey()]);
 
-        Route::get('/posts', function ()  {
+        Route::get('/posts', function () {
             return Post::sort()->get();
         });
 

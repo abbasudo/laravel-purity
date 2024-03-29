@@ -5,7 +5,6 @@ namespace Abbasudo\Purity\Sorts\Strategies;
 use Abbasudo\Purity\Sorts\SortAbstract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class HasOneSort extends SortAbstract
 {
@@ -17,13 +16,13 @@ class HasOneSort extends SortAbstract
         $localKey = $this->model->{$this->relationName}()->getQualifiedParentKeyName();
         $relatedTable = $relatedModel->getTable();
 
-         return $this->query->orderBy(
-              $relatedModel::query()
+        return $this->query->orderBy(
+            $relatedModel::query()
             ->select("{$relatedTable}.{$this->column}")
             ->whereColumn($localKey, $foreignKeyKey)
             ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
             ->limit(1),
-             $this->direction
+            $this->direction
         );
     }
 }

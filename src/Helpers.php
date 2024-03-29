@@ -11,9 +11,11 @@ class Helpers
     /**
      * list models relations.
      *
-     * @param  Model|string  $model
-     * @return array
+     * @param Model|string $model
+     *
      * @throws \ReflectionException
+     *
+     * @return array
      */
     public static function getRelations(Model|string $model): array
     {
@@ -21,13 +23,13 @@ class Helpers
 
         return collect($methods)
             ->filter(
-                fn($method) => !empty($method->getReturnType()) &&
+                fn ($method) => !empty($method->getReturnType()) &&
                     str_contains(
                         $method->getReturnType(),
                         'Illuminate\Database\Eloquent\Relations'
                     )
             )
-            ->map(fn($method) => $method->name)
+            ->map(fn ($method) => $method->name)
             ->values()->all();
     }
 
@@ -40,7 +42,7 @@ class Helpers
     {
         $rModel = new \ReflectionObject($model);
 
-        if ($rModel->hasProperty('sortFields')){
+        if ($rModel->hasProperty('sortFields')) {
             $rProperty = $rModel->getProperty('sortFields');
             $rProperty->setAccessible(true);
 

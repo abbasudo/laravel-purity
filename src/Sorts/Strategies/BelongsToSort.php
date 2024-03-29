@@ -16,13 +16,13 @@ class BelongsToSort extends SortAbstract
         $localKey = $this->model->{$this->relationName}()->getQualifiedOwnerKeyName();
         $relatedTable = $relatedModel->getTable();
 
-         return $this->query->orderBy(
-              $relatedModel::query()
+        return $this->query->orderBy(
+            $relatedModel::query()
             ->select("{$relatedTable}.{$this->column}")
             ->whereColumn($localKey, $foreignKeyKey)
             ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
             ->limit(1),
-             $this->direction
+            $this->direction
         );
     }
 }
