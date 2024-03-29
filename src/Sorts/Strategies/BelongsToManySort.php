@@ -5,9 +5,6 @@ namespace Abbasudo\Purity\Sorts\Strategies;
 use Abbasudo\Purity\Sorts\SortAbstract;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\DB;
-use function Laravel\Prompts\select;
 
 class BelongsToManySort extends SortAbstract
 {
@@ -28,7 +25,8 @@ class BelongsToManySort extends SortAbstract
             ->join($pivotTableName, $qualifiedParentKeyName, '=', $qualifiedForeignPivotKeyName)
             ->join($relatedTable, $qualifiedRelatedPivotKeyName, '=', $qualifiedRelatedKeyName)
             ->groupBy($qualifiedParentKeyName)
-            ->when($this->direction === 'desc',
+            ->when(
+                $this->direction === 'desc',
                 function (Builder $query) use ($relatedTable) {
                     $query->orderByRaw("max({$relatedTable}.{$this->column}) {$this->direction}");
                 },

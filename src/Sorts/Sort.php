@@ -53,6 +53,7 @@ class Sort
         if (config('purity.null_last', false)) {
             return (new NullSort($this->column, $this->direction, $this->query))->apply();
         }
+
         return (new DefaultSort($this->column, $this->direction, $this->query))->apply();
     }
 
@@ -62,16 +63,16 @@ class Sort
 
         $type = $method->getReturnType()?->getName();
 
-        if (config('purity.null_last')){
+        if (config('purity.null_last')) {
             $this->query->orderByRaw("{$this->field} is null");
         }
 
         return match ($type) {
-            BelongsTo::class => (new BelongsToSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
-            HasOne::class => (new HasOneSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
-            HasMany::class => (new HasManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+            BelongsTo::class     => (new BelongsToSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+            HasOne::class        => (new HasOneSort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
+            HasMany::class       => (new HasManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
             BelongsToMany::class => (new BelongsToManySort($this->field, $this->direction, $this->query, $this->model, $this->relationName))->apply(),
-            default => throw RelationshipNotSupport::create()
+            default              => throw RelationshipNotSupport::create()
         };
     }
 
@@ -113,7 +114,6 @@ class Sort
 
         return is_int($real) ? $field : $real;
     }
-
 
     private function checkFieldHasRelationship(): bool
     {

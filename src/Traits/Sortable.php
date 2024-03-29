@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
  * List of available fields, if not declared will accept every thing.
  *
  * @property array $sortFields
+ *
  * @mixin Model
  */
 trait Sortable
@@ -24,12 +25,12 @@ trait Sortable
     /**
      * Apply sorts to the query builder instance.
      *
-     * @param  Builder  $query
-     * @param  array|null  $params
+     * @param Builder    $query
+     * @param array|null $params
      *
-     * @return Builder
      * @throws Exception
      *
+     * @return Builder
      */
     public function scopeSort(Builder $query, array|null $params = null): Builder
     {
@@ -73,9 +74,10 @@ trait Sortable
     }
 
     /**
-     * @param  string  $column
-     * @param  string  $field
-     * @param  Builder  $query
+     * @param string  $column
+     * @param string  $field
+     * @param Builder $query
+     *
      * @return Builder
      */
     public function applySort(string $column, string $field, Builder $query): Builder
@@ -94,11 +96,11 @@ trait Sortable
     /**
      * run functions with or without exception.
      *
-     * @param  Closure  $closure
+     * @param Closure $closure
      *
-     * @return bool
      * @throws Exception
      *
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
@@ -116,7 +118,7 @@ trait Sortable
     }
 
     /**
-     * @param  string  $field
+     * @param string $field
      *
      * @return string
      */
@@ -126,8 +128,8 @@ trait Sortable
     }
 
     /**
-     * @param  Builder  $query
-     * @param  array|string  $fields
+     * @param Builder      $query
+     * @param array|string $fields
      *
      * @return Builder
      */

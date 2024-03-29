@@ -10,13 +10,13 @@ class RelationshipNotSupport extends InvalidArgumentException
         'hasOne',
         'belongsTo',
         'hasMany',
-        'belongsToMany'
+        'belongsToMany',
     ];
 
     public static function create()
     {
         return new static(
-            "Relationship not support, supported relationships " . implode(", ", self::$supportedRelationships)
+            'Relationship not support, supported relationships '.implode(', ', self::$supportedRelationships)
         );
     }
 }
