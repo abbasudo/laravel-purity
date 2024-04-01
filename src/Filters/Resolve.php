@@ -27,6 +27,8 @@ class Resolve
     private FilterList $filterList;
 
     private Model $model;
+    
+    private array $previousModels = [];
 
     /**
      * @param FilterList $filterList
@@ -205,6 +207,7 @@ class Resolve
         foreach ($filters as $subField => $subFilter) {
             $relation = end($this->fields);
             if ($relation !== false) {
+                array_push($this->previousModels, $this->model);
                 $this->model = $this->model->$relation()->getRelated();
             }
             $this->validateField($field);
@@ -214,6 +217,10 @@ class Resolve
             $this->filter($query, $subField, $subFilter);
         }
         array_pop($this->fields);
+        if(count($this->previousModels)) {
+            $this->model = end($this->previousModels);
+            array_pop($this->previousModels);
+        }
     }
 
     /**
