@@ -217,7 +217,7 @@ class Resolve
             $this->filter($query, $subField, $subFilter);
         }
         array_pop($this->fields);
-        if(count($this->previousModels) > 0) {
+        if(count($this->previousModels)) {
             $this->model = end($this->previousModels);
             array_pop($this->previousModels);
         }
