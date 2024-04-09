@@ -27,7 +27,7 @@ class Resolve
     private FilterList $filterList;
 
     private Model $model;
-    
+
     private array $previousModels = [];
 
     /**
