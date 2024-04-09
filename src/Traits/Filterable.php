@@ -99,7 +99,7 @@ trait Filterable
      */
     public function getField(string $field): string
     {
-        return $this->realName(($this->renamedFilterFields ?? []) + $this->availableFields(), $field);
+        return str_contains($field, '->') ? $field : $this->realName(($this->renamedFilterFields ?? []) + $this->availableFields(), $field);
     }
 
     /**
