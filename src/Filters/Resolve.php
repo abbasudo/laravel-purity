@@ -232,7 +232,7 @@ class Resolve
     {
         $availableFields = $this->model->availableFields();
 
-        if (!in_array($field, $availableFields)) {
+        if (!in_array($field, $availableFields) && !str_contains($field, '->')) {
             throw FieldNotSupported::create($field, $this->model::class, $availableFields);
         }
     }
