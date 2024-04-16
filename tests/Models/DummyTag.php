@@ -17,7 +17,7 @@ class DummyTag extends Model
 
     protected function getFilterResolver(): string
     {
-      return DummyFilterResolver::class;
+        return DummyFilterResolver::class;
     }
 
     protected $fillable = [

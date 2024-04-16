@@ -16,7 +16,7 @@ class DummyFilterResolver extends Resolve
 
     public function apply(Builder $query, string $field, array|string $values): void
     {
-      $this->dummyFilter($query, $field, $values);
+        $this->dummyFilter($query, $field, $values);
     }
 
     public function dummyFilter(Builder $query, string $field, array|string $values): void
