@@ -54,25 +54,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
             $table->timestamps();
         });
 
-        $schema->create('dummy_tags', function (Blueprint $table) {
-          $table->id();
-          $table->foreignIdFor(User::class)->nullable();
-          $table->string('name');
-          $table->timestamps();
-        });
-
         $schema->create('post_tag', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Post::class)->nullable();
             $table->foreignIdFor(Tag::class)->nullable();
             $table->timestamps();
-        });
-
-        $schema->create('dummy_tag_post', function (Blueprint $table) {
-          $table->id();
-          $table->foreignIdFor(Post::class)->nullable();
-          $table->foreignIdFor(DummyTag::class)->nullable();
-          $table->timestamps();
         });
 
         $schema->create('comments', function (Blueprint $table) {

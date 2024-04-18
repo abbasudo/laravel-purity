@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\Purity\Tests\Fiilters;
+namespace Abbasudo\Purity\Tests\Filters;
 
 use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;
@@ -17,7 +17,8 @@ class CustomFilterResolver extends Resolve
     public function apply(Builder $query, string $field, array|string $values): void
     {
         // do some custom logic
-        if (isset($values['$customOp']) AND $values['$customOp'] === 'ignore') {
+        if (isset($values['$pure']) AND $values['$pure'] === 'true') {
+            parent::apply($query, $field, ['$startsWith' => 'pure_']);
             return;
         }
 
