@@ -11,28 +11,28 @@ class FilterableWithCustomResolverTest extends TestCase
 {
     public function setUp(): void
     {
-      parent::setUp();
+        parent::setUp();
 
-      Route::get('/tags', function () {
-          return Tag::with('posts')->filter()->get();
-      });
+        Route::get('/tags', function () {
+            return Tag::with('posts')->filter()->get();
+        });
 
-      Tag::create([
-          'name' => 'laravel',
-      ])
-      ->posts()->create([
-          'title' => 'laravel is the best',
-      ]);
+        Tag::create([
+            'name' => 'laravel',
+        ])
+        ->posts()->create([
+            'title' => 'laravel is the best',
+        ]);
 
-      Tag::create([
-          'name' => 'purity',
-      ])->posts()->create([
-          'title' => 'purity is great',
-      ]);
+        Tag::create([
+            'name' => 'purity',
+        ])->posts()->create([
+            'title' => 'purity is great',
+        ]);
 
-      Tag::create([
-          'name' => 'pure_tag',
-      ]);
+        Tag::create([
+            'name' => 'pure_tag',
+        ]);
     }
 
     /** @test */
