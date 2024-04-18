@@ -34,4 +34,9 @@ class Post extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function dummyTags(): BelongsToMany
+    {
+        return $this->belongsToMany(DummyTag::class);
+    }
 }

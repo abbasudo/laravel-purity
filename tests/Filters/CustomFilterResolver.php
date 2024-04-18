@@ -7,7 +7,7 @@ use Abbasudo\Purity\Filters\Resolve;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class DummyFilterResolver extends Resolve
+class CustomFilterResolver extends Resolve
 {
     public function __construct(FilterList $filterList, Model $model)
     {
@@ -16,11 +16,11 @@ class DummyFilterResolver extends Resolve
 
     public function apply(Builder $query, string $field, array|string $values): void
     {
-        $this->dummyFilter($query, $field, $values);
-    }
+        // do some custom logic
+        if (isset($values['$customOp']) AND $values['$customOp'] === 'ignore') {
+            return;
+        }
 
-    public function dummyFilter(Builder $query, string $field, array|string $values): void
-    {
-        // does nothing
+        parent::apply($query, $field, $values);
     }
 }
