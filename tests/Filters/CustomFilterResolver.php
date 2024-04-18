@@ -17,8 +17,9 @@ class CustomFilterResolver extends Resolve
     public function apply(Builder $query, string $field, array|string $values): void
     {
         // do some custom logic
-        if (isset($values['$pure']) AND $values['$pure'] === 'true') {
+        if (isset($values['$pure']) && $values['$pure'] === 'true') {
             parent::apply($query, $field, ['$startsWith' => 'pure_']);
+
             return;
         }
 

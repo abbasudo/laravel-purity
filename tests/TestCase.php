@@ -3,7 +3,6 @@
 namespace Abbasudo\Purity\Tests;
 
 use Abbasudo\Purity\PurityServiceProvider;
-use Abbasudo\Purity\Tests\Models\DummyTag;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Tag;
 use Abbasudo\Purity\Tests\Models\User;
