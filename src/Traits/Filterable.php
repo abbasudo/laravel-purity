@@ -29,6 +29,8 @@ trait Filterable
 {
     use getColumns;
 
+    private string $defaultFilterResolverClass = Resolve::class;
+
     /**
      * Returns full class name of the filter resolver.
      * Can be overridden in the model.
@@ -37,7 +39,7 @@ trait Filterable
      */
     protected function getFilterResolver(): string
     {
-        return Resolve::class;
+        return $this->defaultFilterResolverClass;
     }
 
     /**
