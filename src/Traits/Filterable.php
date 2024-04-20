@@ -81,7 +81,6 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        app()->when($this->defaultFilterResolverClass)->needs(Model::class)->give(fn () => $this);
         app()->when($this->getFilterResolver())->needs(Model::class)->give(fn () => $this);
     }
 
