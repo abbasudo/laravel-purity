@@ -30,6 +30,17 @@ trait Filterable
     use getColumns;
 
     /**
+     * Returns full class name of the filter resolver.
+     * Can be overridden in the model.
+     *
+     * @return string
+     */
+    protected function getFilterResolver(): string
+    {
+        return Resolve::class;
+    }
+
+    /**
      * Apply filters to the query builder instance.
      *
      * @param Builder    $query
@@ -51,7 +62,7 @@ trait Filterable
         // Apply each filter to the query builder instance
 
         foreach ($params as $field => $value) {
-            app(Resolve::class)->apply($query, $field, $value);
+            app($this->getFilterResolver())->apply($query, $field, $value);
         }
 
         return $query;
@@ -68,7 +79,7 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        app()->when(Resolve::class)->needs(Model::class)->give(fn () => $this);
+        app()->when($this->getFilterResolver())->needs(Model::class)->give(fn () => $this);
     }
 
     /**

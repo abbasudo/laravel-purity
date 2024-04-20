@@ -2,6 +2,7 @@
 
 namespace Abbasudo\Purity\Tests\Models;
 
+use Abbasudo\Purity\Tests\Filters\CustomFilterResolver;
 use Abbasudo\Purity\Traits\Filterable;
 use Abbasudo\Purity\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,11 @@ class Tag extends Model
     use Filterable;
     use Sortable;
 
+    protected function getFilterResolver(): string
+    {
+        return CustomFilterResolver::class;
+    }
+
     protected $fillable = [
         'name',
     ];
@@ -21,5 +27,10 @@ class Tag extends Model
     public function comments(): BelongsToMany
     {
         return $this->belongsToMany(Comment::class);
+    }
+
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class);
     }
 }
