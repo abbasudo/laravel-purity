@@ -97,11 +97,11 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
             ->filter($filters);
         $results = $query->get();
 
-        echo "\n#######################";
-        echo "\nQUERY: ".$query->toSql();
-        echo "\nBINDINGS: \n";
-        var_dump($query->getBindings());
-        echo "#######################\n";
+//        echo "\n#######################";
+//        echo "\nQUERY: ".$query->toSql();
+//        echo "\nBINDINGS: \n";
+//        var_dump($query->getBindings());
+//        echo "#######################\n";
 
         assertEquals(1, $results->count());
     }
