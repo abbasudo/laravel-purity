@@ -27,7 +27,7 @@ class Resolve
     private FilterList $filterList;
 
     private Model $model;
-    
+
     private array $previousModels = [];
 
     /**
@@ -217,7 +217,7 @@ class Resolve
             $this->filter($query, $subField, $subFilter);
         }
         array_pop($this->fields);
-        if(count($this->previousModels)) {
+        if (count($this->previousModels)) {
             $this->model = end($this->previousModels);
             array_pop($this->previousModels);
         }
