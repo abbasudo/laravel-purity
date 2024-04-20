@@ -96,15 +96,9 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
             ],
         ];
 
-        $query = Author::with(['books'])
-            ->filter($filters);
-        $results = $query->get();
-
-//        echo "\n#######################";
-//        echo "\nQUERY: ".$query->toSql();
-//        echo "\nBINDINGS: \n";
-//        var_dump($query->getBindings());
-//        echo "#######################\n";
+        $results = Author::with(['books'])
+            ->filter($filters)
+            ->get();
 
         assertEquals(1, $results->count());
 
