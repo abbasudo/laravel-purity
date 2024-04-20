@@ -5,8 +5,8 @@ use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertTrue;
 use function PHPUnit\Framework\assertStringContainsString;
+use function PHPUnit\Framework\assertTrue;
 
 class RestrictFilterableFieldsTest extends TestCase
 {

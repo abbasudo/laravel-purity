@@ -1,6 +1,5 @@
 <?php
 
-use Abbasudo\Purity\Tests\Filters\CustomFilterResolver;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Tag;
 use Abbasudo\Purity\Tests\TestCase;
