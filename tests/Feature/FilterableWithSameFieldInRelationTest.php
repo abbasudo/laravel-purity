@@ -94,9 +94,15 @@ class FilterableWithSameFieldInRelationTest extends TestCase
             ],
         ];
 
-        $results = Author::with(['books'])
-            ->filter($filters)
-            ->get();
+        $query = Author::with(['books'])
+            ->filter($filters);
+        $results = $query->get();
+
+        print "\n#######################";
+        print "\nQUERY: ".$query->toSql();
+        print "\nBINDINGS: \n";
+        var_dump($query->getBindings());
+        print "#######################\n";
 
         assertEquals(1, $results->count());
     }
