@@ -71,6 +71,9 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
     /** @test */
     public function it_can_filter_by_multiple_fields_in_relation(): void
     {
+        $originalSilentMode = $this->app['config']->get('purity.silent');
+        $this->app['config']->set('purity.silent', false);
+
         $filters = [
             'name'  => [
                 '$contains' => [
@@ -104,5 +107,7 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
 //        echo "#######################\n";
 
         assertEquals(1, $results->count());
+
+        $this->app['config']->set('purity.silent', $originalSilentMode);
     }
 }
