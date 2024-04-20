@@ -20,31 +20,31 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
 
         // books
         $author->books()->create([
-            'name' => 'A Game of Thrones',
+            'name'        => 'A Game of Thrones',
             'description' => 'A Game of Thrones is the first novel in A Song of Ice and Fire, a series of fantasy novels by the American author George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'A Clash of Kings',
+            'name'        => 'A Clash of Kings',
             'description' => 'A Clash of Kings is the second novel in A Song of Ice and Fire, a series of fantasy novels by the American author George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'A Storm of Swords',
+            'name'        => 'A Storm of Swords',
             'description' => 'A Storm of Swords is the third novel in A Song of Ice and Fire, a series of fantasy novels by the American author George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'A Feast for Crows',
+            'name'        => 'A Feast for Crows',
             'description' => 'A Feast for Crows is the fourth novel in A Song of Ice and Fire, a series of fantasy novels by the American author George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'A Dance with Dragons',
+            'name'        => 'A Dance with Dragons',
             'description' => 'A Dance with Dragons is the fifth novel in A Song of Ice and Fire, a series of fantasy novels by the American author George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'The Winds of Winter',
+            'name'        => 'The Winds of Winter',
             'description' => 'The Winds of Winter is the planned sixth novel in the epic fantasy series A Song of Ice and Fire by American writer George R. R. Martin.',
         ]);
         $author->books()->create([
-            'name' => 'A Dream of Spring',
+            'name'        => 'A Dream of Spring',
             'description' => 'A Dream of Spring is the planned seventh novel in the epic fantasy series A Song of Ice and Fire by American writer George R. R. Martin.',
         ]);
 
@@ -56,15 +56,15 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
 
         // books
         $author->books()->create([
-            'name' => 'The Hobbit',
+            'name'        => 'The Hobbit',
             'description' => 'The Hobbit, or There and Back Again is a children\'s fantasy novel by English author J. R. R. Tolkien.',
         ]);
         $author->books()->create([
-            'name' => 'The Lord of the Rings',
+            'name'        => 'The Lord of the Rings',
             'description' => 'The Lord of the Rings is an epic high-fantasy novel by the English author and scholar J. R. R. Tolkien.',
         ]);
         $author->books()->create([
-            'name' => 'The Silmarillion',
+            'name'        => 'The Silmarillion',
             'description' => 'The Silmarillion is a collection of mythopoeic works by English writer J. R. R. Tolkien.',
         ]);
     }
@@ -73,13 +73,13 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
     public function it_can_filter_by_multiple_fields_in_relation(): void
     {
         $filters = [
-            'name' => [
+            'name'  => [
                 '$contains' => [
                     'George'
                 ],
             ],
             'books' => [
-                'name' => [
+                'name'        => [
                     '$contains' => [
                         'Game',
                         'Thrones',
@@ -98,11 +98,11 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
             ->filter($filters);
         $results = $query->get();
 
-        print "\n#######################";
-        print "\nQUERY: ".$query->toSql();
-        print "\nBINDINGS: \n";
+        echo "\n#######################";
+        echo "\nQUERY: " . $query->toSql();
+        echo "\nBINDINGS: \n";
         var_dump($query->getBindings());
-        print "#######################\n";
+        echo "#######################\n";
 
         assertEquals(1, $results->count());
     }
