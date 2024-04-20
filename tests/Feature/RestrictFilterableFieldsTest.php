@@ -145,8 +145,11 @@ class RestrictFilterableFieldsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_avoid_when_invalid_filter_is_applied(): void
+    public function it_can_avoid_when_invalid_filter_is_applied_in_silent_mode(): void
     {
+        $originalSilentMode = $this->app['config']->get('purity.silent');
+        $this->app['config']->set('purity.silent', true);
+
         $post = new Post();
         $post->restrictedFilters = ['title' => ['$ecq']];
 
@@ -163,6 +166,8 @@ class RestrictFilterableFieldsTest extends TestCase
         $response->assertOk();
         // it must return all the post as $eq operator is omitted
         $response->assertJsonCount(1);
+
+        $this->app['config']->set('purity.silent', $originalSilentMode);
     }
 
     /** @test */
