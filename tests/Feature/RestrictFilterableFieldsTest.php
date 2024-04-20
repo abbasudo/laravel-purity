@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertTrue;
+use function PHPUnit\Framework\assertStringContainsString;
 
 class RestrictFilterableFieldsTest extends TestCase
 {
@@ -162,6 +163,35 @@ class RestrictFilterableFieldsTest extends TestCase
         $response->assertOk();
         // it must return all the post as $eq operator is omitted
         $response->assertJsonCount(1);
+    }
+
+    /** @test */
+    public function it_throws_error_when_invalid_filter_is_applied_in_non_silent_mode(): void
+    {
+        $originalSilentMode = $this->app['config']->get('purity.silent');
+        $this->app['config']->set('purity.silent', false);
+
+        $post = new Post();
+        $post->restrictedFilters = ['title' => ['$ecq']];
+
+        $post->create([
+            'title' => 'this is invalid operator',
+        ]);
+
+        Route::get('/posts', function () use ($post) {
+            return $post->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[title][$eq]=no matches');
+        $content = $response->getOriginalContent();
+
+        $response->assertServerError();
+
+        assertStringContainsString('OperatorNotSupported', $content['exception']);
+        assertStringContainsString('$eq', $content['message']);
+        assertStringContainsString('$ecq', $content['message']);
+
+        $this->app['config']->set('purity.silent', $originalSilentMode);
     }
 
     /** @test */

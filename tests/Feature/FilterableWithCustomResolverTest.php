@@ -1,5 +1,6 @@
 <?php
 
+use Abbasudo\Purity\Tests\Filters\CustomFilterResolver;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Tag;
 use Abbasudo\Purity\Tests\TestCase;
@@ -14,7 +15,7 @@ class FilterableWithCustomResolverTest extends TestCase
         parent::setUp();
 
         Route::get('/tags', function () {
-            return Tag::with('posts')->filter()->get();
+            return Tag::with(['posts'])->filter()->get();
         });
 
         Tag::create([
@@ -74,15 +75,20 @@ class FilterableWithCustomResolverTest extends TestCase
     /** @test */
     public function it_can_process_with_grouped_filters()
     {
-        $post = Post::query()->create(['title' => 'title']);
-        $tag = Tag::query()->create(['name' => 'tag']);
-        $tag->posts()->save($post);
+        $originalSilentMode = $this->app['config']->get('purity.silent');
+        $this->app['config']->set('purity.silent', false);
 
-        $response = $this->getJson('/tags?filters[$or][0][name][$eq]=tag&filters[posts][title][$eq]=title');
+        $newPost = Post::query()->create(['title' => 'title']);
+        $newTag = Tag::query()->create(['name' => 'tag']);
+        $newPost->tags()->save($newTag);
+
+        $response = $this->getJson('/tags?filters[$or][0][name][$eq]=tag&filters[$or][1][name][$eq]=tags&filters[posts][title][$eq]=title');
         $response
           ->assertOk()
           ->assertJsonCount(1);
 
         assertEquals('tag', $response->json()[0]['name']);
+
+        $this->app['config']->set('purity.silent', $originalSilentMode);
     }
 }
