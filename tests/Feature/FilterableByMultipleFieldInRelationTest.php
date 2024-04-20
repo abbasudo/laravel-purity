@@ -75,7 +75,7 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
         $filters = [
             'name'  => [
                 '$contains' => [
-                    'George'
+                    'George',
                 ],
             ],
             'books' => [
@@ -99,7 +99,7 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
         $results = $query->get();
 
         echo "\n#######################";
-        echo "\nQUERY: " . $query->toSql();
+        echo "\nQUERY: ".$query->toSql();
         echo "\nBINDINGS: \n";
         var_dump($query->getBindings());
         echo "#######################\n";
