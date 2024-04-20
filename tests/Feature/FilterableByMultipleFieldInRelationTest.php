@@ -7,7 +7,7 @@ use Abbasudo\Purity\Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 
-class FilterableWithSameFieldInRelationTest extends TestCase
+class FilterableByMultipleFieldInRelationTest extends TestCase
 {
     public function setUp(): void
     {
@@ -70,7 +70,7 @@ class FilterableWithSameFieldInRelationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_filter_same_named_field_in_relation(): void
+    public function it_can_filter_by_multiple_fields_in_relation(): void
     {
         $filters = [
             'name' => [
