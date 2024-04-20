@@ -13,7 +13,7 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
     {
         parent::setUp();
 
-        // authors
+        // author
         $author = Author::create([
             'name' => 'George Raymond Richard Martin',
         ]);
@@ -47,7 +47,6 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
             'name'        => 'A Dream of Spring',
             'description' => 'A Dream of Spring is the planned seventh novel in the epic fantasy series A Song of Ice and Fire by American writer George R. R. Martin.',
         ]);
-
 
         // author
         $author = Author::create([
@@ -106,5 +105,4 @@ class FilterableByMultipleFieldInRelationTest extends TestCase
 
         assertEquals(1, $results->count());
     }
-
 }
