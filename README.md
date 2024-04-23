@@ -388,6 +388,7 @@ Queries can accept a filters parameter with the following syntax:
 | `$null`         | Is null                                  |
 | `$notNull`      | Is not null                              |
 | `$between`      | Is between                               |
+| `$notBetween`   | Is not between                           |
 | `$startsWith`   | Starts with                              |
 | `$startsWithc`  | Starts with (case-sensitive)             |
 | `$endsWith`     | Ends with                                |
