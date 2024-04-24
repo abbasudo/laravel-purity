@@ -576,6 +576,7 @@ All the usages of basic sorting is applicable. Use dot(.) notation to apply rela
 *Usage Examples*
 
 The query below sorts posts by their tag name in ascending order (default sort direction).
+Direction is not mandatory when sort by ascending order.
 
 `GET /api/posts?sort=tags.name:asc`
 
