@@ -120,7 +120,7 @@ trait Filterable
      */
     public function availableFields(): array
     {
-        if (!isset($this->filterFields)  && !isset($this->renamedFilterFields)) {
+        if (!isset($this->filterFields) && !isset($this->renamedFilterFields)) {
             return array_merge($this->getTableColumns(), $this->relations());
         }
 
