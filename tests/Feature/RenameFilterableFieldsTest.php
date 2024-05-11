@@ -110,7 +110,6 @@ class RenameFilterableFieldsTest extends TestCase
         $response = $this->getJson('/posts?filters[post_title][$eq]=title_1');
 
         $response->assertOk();
-        
         $response->assertJsonCount(1);
     }
 }
