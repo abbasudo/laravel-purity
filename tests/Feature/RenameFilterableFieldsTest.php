@@ -89,4 +89,27 @@ class RenameFilterableFieldsTest extends TestCase
         // It returns o records as builder level filters take priority
         $response->assertJsonCount(1);
     }
+
+    /** @test */
+    public function rename_filter_fields_works_when_filter_fields_not_set(): void
+    {
+        $post = new Post();
+        $post->renamedFilterFields = ['invalid_column' => 'post_title']; // invalid column name
+
+        $post->create([
+            'title' => 'title_1',
+        ])->create([
+            'title' => 'title_2',
+        ]);
+
+        Route::get('/posts', function () use ($post) {
+            // reset with valid column name
+            return $post->renamedFilterFields(['title' => 'post_title'])->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[post_title][$eq]=title_1');
+
+        $response->assertOk();
+        $response->assertJsonCount(1);
+    }
 }
