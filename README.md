@@ -152,28 +152,6 @@ class PostController extends Controller
 }
 ```
 
-#### Sort by Relationships
-The following relationship types are supported.
-- One to One
-- One to Many
-- Many to Many
-
-Return type of the relationship mandatory as below in order to sort by relationships.
-
-```php
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
-class Post extends Model
-{
-    use Sortable;
-    
-    public function tags(): HasMany // This is mandatory
-    {
-        return $this->hasMany(Tag::class);
-    }
-}
-```
-
 Now sort can be applied as instructed in [apply sort](#apply-sort).
 
 ## Advanced Usage
@@ -212,6 +190,7 @@ To rename filter fields simply add a value to fields defined in `$renamedFilterF
 // App\Models\User
 
 // ?filter[phone][$eq]=0000000000
+
 protected $renamedFilterFields = [
   'mobile' => 'phone', // Actual database column is mobile
   'posts'  => 'writing', // actual relation is posts
@@ -222,6 +201,8 @@ The client should send phone in order to filter by mobile column in database.
 #### Rename Sort Fields
 To rename sort fields simply add a value to defined in `$sortFields`
 ```php
+// App\Models\User
+
 // ?sort=phone
 protected $sortFields = [
   'name',
@@ -315,6 +296,28 @@ Post::restrictedFilters(['title' => ['$eq']])->filter()->get();
 $filters = ['$eq'];
 $restrictedFilters = ['title' => ['$eqc']] // This won't work
 ```
+#### Sort by Relationships
+The following relationship types are supported.
+- One to One
+- One to Many
+- Many to Many
+
+Return type of the relationship mandatory as below in order to sort by relationships.
+
+```php
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Post extends Model
+{
+    use Sortable;
+    
+    public function tags(): HasMany // This is mandatory
+    {
+        return $this->hasMany(Tag::class);
+    }
+}
+```
+
 ### Changing Params Source
 By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
 
@@ -569,16 +572,27 @@ await request(`/api/articles?${query}`);
 ```
 #### Apply Sort by Relationships
 
-All the usages of basic sorting is applicable. Use dot(.) notation to apply relationship in the following format.
+All the usages of basic sorting are applicable. Use dot(.) notation to apply relationship in the following format.
 
 `?sort=[relationship name].[relationship column]:[sort direction]`
 
 *Usage Examples*
 
 The query below sorts posts by their tag name in ascending order (default sort direction).
-Direction is not mandatory when sort by ascending order.
+Direction is not mandatory when sorted by ascending order.
 
 `GET /api/posts?sort=tags.name:asc`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  sort: ['tags.name:asc'],
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/posts?${query}`);
+```
 
 > [!Note]
 > Sorting by nested relationships is not supported by the package as of now.
