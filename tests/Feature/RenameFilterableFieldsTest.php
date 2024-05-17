@@ -97,10 +97,10 @@ class RenameFilterableFieldsTest extends TestCase
         $book = new Book();
 
         $book->create([
-            'name' => 'name_1',
+            'name'        => 'name_1',
             'description' => 'description_1',
         ])->create([
-            'name' => 'name_1',
+            'name'        => 'name_1',
             'description' => 'description_2',
         ]);
 
