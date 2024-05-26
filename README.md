@@ -156,7 +156,17 @@ Now sort can be applied as instructed in [apply sort](#apply-sort).
 
 ## Advanced Usage
 ### Allowed Fields
-By default, purity allows every database column and all model relations to be filtered. you can overwrite the allowed columns as follows:
+By default, purity allows every database column and all model relations (that have a defined return type) to be filtered. 
+```php
+// App\Models\User
+
+public function posts(): Illuminate\Database\Eloquent\Relations\HasMany // This is mandatory
+{
+    return $this->hasMany(Post::class);
+}
+```
+
+you can overwrite the allowed columns as follows:
 
 ```php
 // App\Models\User
