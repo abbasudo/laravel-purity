@@ -40,6 +40,8 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 - [Basic Usage](#basic-usage)
   * [Filters](#filters)
   * [Sort](#sort)
+    + [Sort Basics](#sort-basics)
+    + [Sort by Relationships](#sort-by-relationships)
 - [Advanced Usage](#advanced-usage)
   * [Allowed Fields](#allowed-fields)
     + [Overwrite Allowed Fields](#overwrite-allowed-fields)
@@ -60,7 +62,8 @@ The way this package handles filters is inspired by strapi's [filter](https://do
     + [Complex Filtering](#complex-filtering)
     + [Deep Filtering](#deep-filtering)
   * [Apply Sort](#apply-sort)
-    + [Usage Examples](#usage-examples)
+    + [Apply Basic Usage](#apply-basic-sorting)
+    + [Apply Sort by Relationships](#apply-sort-by-relationships)
 - [Upgrade Guide](#upgrade-guide)
   * [Version 3](#version-3)
   * [Version 2](#version-2)
@@ -118,7 +121,10 @@ class PostController extends Controller
 ```
 
 By default, it gives access to all filters available. here is the list of [available filters](#available-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
+
 ### Sort
+
+#### Sort Basics
 Add `Sortable` trait to your model to get sorts functionalities.
 
 ```php
@@ -146,7 +152,8 @@ class PostController extends Controller
 }
 ```
 
-Now sort can be applied as instructed in [sort usage](#usage-examples).
+Now sort can be applied as instructed in [apply sort](#apply-sort).
+
 ## Advanced Usage
 ### Allowed Fields
 By default, purity allows every database column and all model relations to be filtered. you can overwrite the allowed columns as follows:
@@ -183,6 +190,7 @@ To rename filter fields simply add a value to fields defined in `$renamedFilterF
 // App\Models\User
 
 // ?filter[phone][$eq]=0000000000
+
 protected $renamedFilterFields = [
   'mobile' => 'phone', // Actual database column is mobile
   'posts'  => 'writing', // actual relation is posts
@@ -193,6 +201,8 @@ The client should send phone in order to filter by mobile column in database.
 #### Rename Sort Fields
 To rename sort fields simply add a value to defined in `$sortFields`
 ```php
+// App\Models\User
+
 // ?sort=phone
 protected $sortFields = [
   'name',
@@ -286,6 +296,28 @@ Post::restrictedFilters(['title' => ['$eq']])->filter()->get();
 $filters = ['$eq'];
 $restrictedFilters = ['title' => ['$eqc']] // This won't work
 ```
+#### Sort by Relationships
+The following relationship types are supported.
+- One to One
+- One to Many
+- Many to Many
+
+Return type of the relationship mandatory as below in order to sort by relationships.
+
+```php
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Post extends Model
+{
+    use Sortable;
+    
+    public function tags(): HasMany // This is mandatory
+    {
+        return $this->hasMany(Tag::class);
+    }
+}
+```
+
 ### Changing Params Source
 By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
 
@@ -388,6 +420,7 @@ Queries can accept a filters parameter with the following syntax:
 | `$null`         | Is null                                  |
 | `$notNull`      | Is not null                              |
 | `$between`      | Is between                               |
+| `$notBetween`   | Is not between                           |
 | `$startsWith`   | Starts with                              |
 | `$startsWithc`  | Starts with (case-sensitive)             |
 | `$endsWith`     | Ends with                                |
@@ -492,7 +525,10 @@ const query = qs.stringify({
 
 await request(`/api/restaurants?${query}`);
 ```
+
 ### Apply Sort
+
+#### Apply Basic Sorting
 Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntax's:
 
 `GET /api/:pluralApiId?sort=value` to sort on 1 field
@@ -503,7 +539,7 @@ The sorting order can be defined as:
 - `:asc` for ascending order (default order, can be omitted)
 - `:desc` for descending order.
 
-#### Usage Examples
+*Usage Examples*
 
 Sort using 2 fields
 
@@ -520,8 +556,6 @@ const query = qs.stringify({
 await request(`/api/articles?${query}`);
 ```
 
-
-
 Sort using 2 fields and set the order
 
 `GET /api/articles?sort[0]=title%3Aasc&sort[1]=slug%3Adesc`
@@ -536,6 +570,32 @@ const query = qs.stringify({
 
 await request(`/api/articles?${query}`);
 ```
+#### Apply Sort by Relationships
+
+All the usages of basic sorting are applicable. Use dot(.) notation to apply relationship in the following format.
+
+`?sort=[relationship name].[relationship column]:[sort direction]`
+
+*Usage Examples*
+
+The query below sorts posts by their tag name in ascending order (default sort direction).
+Direction is not mandatory when sorted by ascending order.
+
+`GET /api/posts?sort=tags.name:asc`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  sort: ['tags.name:asc'],
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/posts?${query}`);
+```
+
+> [!Note]
+> Sorting by nested relationships is not supported by the package as of now.
 
 ## Upgrade Guide
 

@@ -76,7 +76,7 @@ class FilterableWithCustomResolverTest extends TestCase
     {
         $post = Post::query()->create(['title' => 'title']);
         $tag = Tag::query()->create(['name' => 'tag']);
-        $tag->posts()->save($post);
+        $post->tags()->save($tag);
 
         $response = $this->getJson('/tags?filters[$or][0][name][$eq]=tag&filters[posts][title][$eq]=title');
         $response

@@ -29,6 +29,8 @@ trait Filterable
 {
     use getColumns;
 
+    private string $defaultFilterResolverClass = Resolve::class;
+
     /**
      * Returns full class name of the filter resolver.
      * Can be overridden in the model.
@@ -37,7 +39,7 @@ trait Filterable
      */
     protected function getFilterResolver(): string
     {
-        return Resolve::class;
+        return $this->defaultFilterResolverClass;
     }
 
     /**
@@ -118,11 +120,16 @@ trait Filterable
      */
     public function availableFields(): array
     {
-        if (!isset($this->filterFields)) {
-            return array_merge($this->getTableColumns(), $this->relations());
+        if (!isset($this->filterFields) && !isset($this->renamedFilterFields)) {
+            return $this->getDefaultFields();
         }
 
         return $this->getUserDefinedFilterFields();
+    }
+
+    private function getDefaultFields(): array
+    {
+        return array_merge($this->getTableColumns(), $this->relations());
     }
 
     /**
@@ -130,12 +137,48 @@ trait Filterable
      *
      * @return array
      */
-    public function getUserDefinedFilterFields(): array
+    private function getUserDefinedFilterFields(): array
     {
         if (isset($this->userDefinedFilterFields)) {
             return $this->userDefinedFilterFields;
         }
 
+        if (isset($this->renamedFilterFields, $this->filterFields)) {
+            $fields = $this->getFilterFields();
+            $filterFields = [];
+
+            foreach ($fields as $filterName) {
+                if ($columnName = array_search($filterName, $this->renamedFilterFields)) {
+                    $filterFields[$columnName] = $filterName;
+                } else {
+                    $filterFields[] = $filterName;
+                }
+            }
+
+            return $this->userDefinedFilterFields = $filterFields;
+        }
+
+        if (isset($this->renamedFilterFields)) {
+            $fields = $this->getDefaultFields();
+
+            $filterFields = [];
+
+            foreach ($fields as $filterName) {
+                if (array_key_exists($filterName, $this->renamedFilterFields)) {
+                    $filterFields[$filterName] = $this->renamedFilterFields[$filterName];
+                } else {
+                    $filterFields[] = $filterName;
+                }
+            }
+
+            return $this->userDefinedFilterFields = $filterFields;
+        }
+
+        return $this->userDefinedFilterFields = $this->getFilterFields();
+    }
+
+    private function getFilterFields(): array
+    {
         $userDefinedFilterFields = [];
 
         foreach ($this->filterFields as $key => $value) {
@@ -150,7 +193,7 @@ trait Filterable
             }
         }
 
-        return $this->userDefinedFilterFields = $userDefinedFilterFields;
+        return $userDefinedFilterFields;
     }
 
     /**

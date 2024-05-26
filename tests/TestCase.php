@@ -3,6 +3,7 @@
 namespace Abbasudo\Purity\Tests;
 
 use Abbasudo\Purity\PurityServiceProvider;
+use Abbasudo\Purity\Tests\Models\Author;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\Models\Tag;
 use Abbasudo\Purity\Tests\Models\User;
@@ -64,6 +65,20 @@ class TestCase extends \Orchestra\Testbench\TestCase
             $table->id();
             $table->foreignIdFor(Post::class)->nullable();
             $table->string('content');
+            $table->timestamps();
+        });
+
+        $schema->create('authors', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        $schema->create('books', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Author::class)->nullable();
+            $table->string('name');
+            $table->string('description');
             $table->timestamps();
         });
     }

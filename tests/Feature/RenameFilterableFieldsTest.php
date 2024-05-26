@@ -1,5 +1,6 @@
 <?php
 
+use Abbasudo\Purity\Tests\Models\Book;
 use Abbasudo\Purity\Tests\Models\Post;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +88,54 @@ class RenameFilterableFieldsTest extends TestCase
 
         $response->assertOk();
         // It returns o records as builder level filters take priority
+        $response->assertJsonCount(1);
+    }
+
+    /** @test */
+    public function available_filter_fields_work_with_renamed_filter_fields(): void
+    {
+        $book = new Book();
+
+        $book->create([
+            'name'        => 'name_1',
+            'description' => 'description_1',
+        ])->create([
+            'name'        => 'name_1',
+            'description' => 'description_2',
+        ]);
+
+        Route::get('/books', function () use ($book) {
+            return $book::filterFields(['book_title', 'description'])
+                ->renamedFilterFields(['name' => 'book_title'])
+                ->filter()
+                ->get();
+        });
+
+        $response = $this->getJson('/books?filters[description][$eq]=description_1');
+
+        $response->assertOk();
+        $response->assertJsonCount(1);
+    }
+
+    /** @test */
+    public function rename_filter_fields_works_when_filter_fields_not_set(): void
+    {
+        $post = new Post();
+
+        $post->create([
+            'title' => 'title_1',
+        ])->create([
+            'title' => 'title_2',
+        ]);
+
+        Route::get('/posts', function () use ($post) {
+            // reset with valid column name
+            return $post->renamedFilterFields(['title' => 'post_title'])->filter()->get();
+        });
+
+        $response = $this->getJson('/posts?filters[post_title][$eq]=title_1');
+
+        $response->assertOk();
         $response->assertJsonCount(1);
     }
 }
