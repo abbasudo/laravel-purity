@@ -75,7 +75,7 @@ trait Filterable
      * Convert numeric values in the given array to boolean and floats recursively.
      *
      * @param mixed $value
-     * 
+     *
      * @return mixed
      */
     private function formatValuesToNumericAndBoolean($value)
