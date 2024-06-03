@@ -85,6 +85,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $schema->create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->decimal('price');           //testing decimal filtering
             $table->float('rate');              //testing float filtering
             $table->boolean('is_available');    //testing boolean filtering

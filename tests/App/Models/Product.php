@@ -23,6 +23,7 @@ class Product extends Model
         'name',
         'price',
         'rate',
+        'description',
         'is_available',
     ];
 }
