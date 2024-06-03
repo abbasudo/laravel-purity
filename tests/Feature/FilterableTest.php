@@ -57,7 +57,8 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_process_with_grouped_filters()
     {
-        $post    = Post::query()->create(['title' => 'title']);
+        $post = Post::query()->create(['title' => 'title']);
+
         $comment = Comment::query()->create(['content' => 'comment']);
 
         $post->comments()->save($comment);
@@ -382,7 +383,7 @@ class FilterableTest extends TestCase
     {
         $post = Product::factory()->create([
             'name'        => 'laravel purity',
-            'description' => 'laravel purity is the best'
+            'description' => 'laravel purity is the best',
         ]);
 
         $response = $this->getJson(

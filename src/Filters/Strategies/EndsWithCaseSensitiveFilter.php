@@ -29,16 +29,16 @@ class EndsWithCaseSensitiveFilter extends Filter
             foreach ($this->values as $value) {
                 switch ($connection) {
                     case 'mysql':
-                        $query->whereRaw("BINARY `{$this->column}` like ?", '%' . $value);
+                        $query->whereRaw("BINARY `{$this->column}` like ?", '%'.$value);
                         break;
                     case 'sqlite':
-                        $query->whereRaw("`{$this->column}` COLLATE BINARY like ?", '%' . $value);
+                        $query->whereRaw("`{$this->column}` COLLATE BINARY like ?", '%'.$value);
                         break;
                     case 'pgsql':
-                        $query->whereRaw("`{$this->column}`::bytea LIKE ?", '%' . $value);
+                        $query->whereRaw("`{$this->column}`::bytea LIKE ?", '%'.$value);
                         break;
                     case 'sqlsrv':
-                        $query->whereRaw("`{$this->column}` COLLATE Latin1_General_BIN LIKE ?", '%' . $value);
+                        $query->whereRaw("`{$this->column}` COLLATE Latin1_General_BIN LIKE ?", '%'.$value);
                         break;
                     default:
                         throw new RuntimeException("Unsupported database driver: {$connection}");
