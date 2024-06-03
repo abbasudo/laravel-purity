@@ -137,6 +137,28 @@ class FilterableTest extends TestCase
     }
 
     /** @test */
+    public function it_can_filter_by_timestamp_values_without_matches()
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->getJson('/products?filters[created_at][$between][0]=2023-06-03&filters[created_at][$between][1]=2023-06-05')
+            ->assertOk()
+            ->assertJsonCount(0);
+    }
+
+    /** @test */
+    public function it_can_filter_by_timestamp_values_with_results()
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->getJson('/products?filters[created_at][$between][0]=2023-06-03&filters[created_at][$between][1]=2050-06-05')
+            ->assertOk()
+            ->assertJsonCount(1);
+
+        assertEquals($product->id, $response->json()[0]['id']);
+    }
+
+    /** @test */
     public function it_can_filter_by_boolean_values_without_matches()
     {
         $product = Product::factory()->create([
