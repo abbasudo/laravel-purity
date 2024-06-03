@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\Purity\Tests\Models;
+namespace Abbasudo\Purity\Tests\App\Models;
 
 use Abbasudo\Purity\Traits\Filterable;
 use Abbasudo\Purity\Traits\Sortable;

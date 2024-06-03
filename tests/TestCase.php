@@ -3,10 +3,10 @@
 namespace Abbasudo\Purity\Tests;
 
 use Abbasudo\Purity\PurityServiceProvider;
-use Abbasudo\Purity\Tests\Models\Author;
-use Abbasudo\Purity\Tests\Models\Post;
-use Abbasudo\Purity\Tests\Models\Tag;
-use Abbasudo\Purity\Tests\Models\User;
+use Abbasudo\Purity\Tests\App\Models\Author;
+use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Tag;
+use Abbasudo\Purity\Tests\App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -79,6 +79,15 @@ class TestCase extends \Orchestra\Testbench\TestCase
             $table->foreignIdFor(Author::class)->nullable();
             $table->string('name');
             $table->string('description');
+            $table->timestamps();
+        });
+
+        $schema->create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->decimal('price');           //testing decimal filtering
+            $table->float('rate');              //testing float filtering
+            $table->boolean('is_available');    //testing boolean filtering
             $table->timestamps();
         });
     }
