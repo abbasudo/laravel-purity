@@ -324,7 +324,7 @@ class FilterableTest extends TestCase
             'price' => 1.50,
         ]);
 
-        $response = $this->getJson('/products?filters[price][$notBetween]=[2,3]')
+        $response = $this->getJson('/products?filters[price][$notBetween][0]=2&filters[price][$notBetween][1]=3')
             ->assertOk()
             ->assertJsonCount(1);
     }
@@ -341,7 +341,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_startsWithc_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$startsWithc]=Laravel');
+        $response = $this->getJson('/posts?filters[title][$startsWithc]=laravel');
 
         $response->assertOk();
         $response->assertJsonCount(1);
