@@ -111,7 +111,7 @@ class Resolve
      *
      * @return void
      */
-    private function filter(Builder $query, string $field, array|string|null $filters): void
+    private function filter(Builder $query, string $field, array|string|int|float|bool|null $filters): void
     {
         // Ensure that the filter is an array
         if (!is_array($filters)) {

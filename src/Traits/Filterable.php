@@ -64,10 +64,43 @@ trait Filterable
         // Apply each filter to the query builder instance
 
         foreach ($params as $field => $value) {
+            $value = $this->formatValuesToNumericAndBoolean($value);
             app($this->getFilterResolver())->apply($query, $field, $value);
         }
 
         return $query;
+    }
+
+    /**
+     * Convert numeric values in the given array to boolean and floats recursively.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function formatValuesToNumericAndBoolean($value)
+    {
+        return array_map(function ($item) {
+            if (is_array($item)) {
+                return $this->formatValuesToNumericAndBoolean($item);
+            }
+
+            if (is_numeric($item)) {
+                return floatval($item);
+            }
+
+            if (is_string($item)) {
+                $lowerItem = strtolower($item);
+                if ($lowerItem === 'true') {
+                    return true;
+                }
+
+                if ($lowerItem === 'false') {
+                    return false;
+                }
+            }
+
+            return $item;
+        }, $value);
     }
 
     /**
