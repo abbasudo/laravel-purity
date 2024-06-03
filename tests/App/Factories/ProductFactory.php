@@ -1,8 +1,8 @@
 <?php
 
-namespace Abbasudo\Purity\Tests\Factories;
+namespace Abbasudo\Purity\Tests\App\Factories;
 
-use Abbasudo\Purity\Tests\Models\Product;
+use Abbasudo\Purity\Tests\App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory

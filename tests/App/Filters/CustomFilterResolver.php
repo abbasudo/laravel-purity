@@ -1,6 +1,6 @@
 <?php
 
-namespace Abbasudo\Purity\Tests\Filters;
+namespace Abbasudo\Purity\Tests\App\Filters;
 
 use Abbasudo\Purity\Filters\FilterList;
 use Abbasudo\Purity\Filters\Resolve;

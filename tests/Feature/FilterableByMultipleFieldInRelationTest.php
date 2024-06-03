@@ -2,7 +2,7 @@
 
 namespace Abbasudo\Purity\Tests\Feature;
 
-use Abbasudo\Purity\Tests\Models\Author;
+use Abbasudo\Purity\Tests\App\Models\Author;
 use Abbasudo\Purity\Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;

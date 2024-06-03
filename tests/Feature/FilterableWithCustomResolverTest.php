@@ -1,7 +1,7 @@
 <?php
 
-use Abbasudo\Purity\Tests\Models\Post;
-use Abbasudo\Purity\Tests\Models\Tag;
+use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Tag;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 

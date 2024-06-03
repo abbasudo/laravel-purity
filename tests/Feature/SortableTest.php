@@ -1,10 +1,10 @@
 <?php
 
-use Abbasudo\Purity\Tests\Models\Comment;
-use Abbasudo\Purity\Tests\Models\Post;
-use Abbasudo\Purity\Tests\Models\Project;
-use Abbasudo\Purity\Tests\Models\Tag;
-use Abbasudo\Purity\Tests\Models\User;
+use Abbasudo\Purity\Tests\App\Models\Comment;
+use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Project;
+use Abbasudo\Purity\Tests\App\Models\Tag;
+use Abbasudo\Purity\Tests\App\Models\User;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 

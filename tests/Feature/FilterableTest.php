@@ -1,8 +1,8 @@
 <?php
 
-use Abbasudo\Purity\Tests\Models\Comment;
-use Abbasudo\Purity\Tests\Models\Post;
-use Abbasudo\Purity\Tests\Models\Product;
+use Abbasudo\Purity\Tests\App\Models\Comment;
+use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Product;
 use Abbasudo\Purity\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
