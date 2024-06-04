@@ -36,16 +36,18 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Install dependencies
+      - name: Configure MySQL
         if: matrix.db == 'mysql'
-        run: sudo systemctl start mysql.service
+        run: |
+          sudo systemctl start mysql.service
+          sudo mysql -e 'CREATE DATABASE test_db;'
 
       - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
-          DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1' )}}
-          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306' )}}
-          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db'}}
-          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' )}}
-          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' )}}
+          DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1') }}
+          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') }}
+          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db' }}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'root') }}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'root') }}
         run: vendor/bin/phpunit
