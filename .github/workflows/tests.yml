@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --prefer-${{ matrix.prefer }}
+        run: composer update --prefer-dist --no-progress --prefer-${{ matrix.prefer }}
 
       - name: Configure MySQL
         if: matrix.db == 'mysql'
