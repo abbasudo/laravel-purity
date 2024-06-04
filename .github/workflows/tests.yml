@@ -40,7 +40,7 @@ jobs:
         if: matrix.db == 'mysql'
         run: |
           sudo systemctl start mysql.service
-          sudo mysql -e 'CREATE DATABASE test_db;'
+          sudo mysql -u root -p root -e "CREATE DATABASE IF NOT EXISTS test_db;"
 
       - name: Run PHPUnit tests
         env:
