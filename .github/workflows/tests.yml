@@ -2,9 +2,9 @@ name: PHPUnit Tests
 
 on:
   push:
-    branches: ["**"]
+    branches: [ "**" ]
   pull_request:
-    branches: ["**"]
+    branches: [ "**" ]
 
 permissions:
   contents: read
@@ -16,7 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        db: [sqlite, mysql]
+        db: [ sqlite, mysql ]
+        prefer: [ lowest, stable ]
 
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +35,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer install --prefer-dist --no-progress --prefer-${{ matrix.prefer }}
 
       - name: Configure MySQL
         if: matrix.db == 'mysql'
