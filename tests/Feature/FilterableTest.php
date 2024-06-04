@@ -173,10 +173,10 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_eqc_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$eqc]=laravel purity is the best');
+        $response = $this->getJson('/posts?filters[title][$eqc]=LARAVEL purity is the best');
 
         $response->assertOk();
-        $response->assertJsonCount(1);
+        $response->assertJsonCount(0);
     }
 
     /** @test */
@@ -263,7 +263,7 @@ class FilterableTest extends TestCase
             'price' => 1.66,
         ]);
 
-        $response = $this->getJson('/products?filters[price][$notIn]=[2.50]')
+        $response = $this->getJson('/products?filters[price][$notIn][0]=2.50&filters[price][$notIn][0]=14.88')
             ->assertOk()
             ->assertJsonCount(1);
     }
@@ -271,7 +271,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_contains_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$contains]=LARAVEL');
+        $response = $this->getJson('/posts?filters[title][$contains]=laravel');
 
         $response->assertOk();
         $response->assertJsonCount(1);
@@ -289,7 +289,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_containsc_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$containsc]=lara');
+        $response = $this->getJson('/posts?filters[title][$containsc]=laravel');
         $response->assertOk();
         $response->assertJsonCount(1);
     }

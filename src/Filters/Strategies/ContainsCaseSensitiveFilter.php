@@ -35,7 +35,7 @@ class ContainsCaseSensitiveFilter extends Filter
                         $query->whereRaw("`{$this->column}` COLLATE BINARY like ?", ["%{$value}%"]);
                         break;
                     case 'pgsql':
-                        $query->whereRaw("`{$this->column}`::bytea LIKE ?", ["%{$value}%"]);
+                        $query->where($this->column, 'LIKE', "%{$value}%");
                         break;
                     case 'sqlsrv':
                         $query->whereRaw("`{$this->column}` COLLATE Latin1_General_BIN LIKE ?", ["%{$value}%"]);
