@@ -271,7 +271,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_contains_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$contains]=LARAVEL');
+        $response = $this->getJson('/posts?filters[title][$contains]=laravel');
 
         $response->assertOk();
         $response->assertJsonCount(1);
@@ -289,7 +289,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_containsc_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$containsc]=lara');
+        $response = $this->getJson('/posts?filters[title][$containsc]=laravel');
         $response->assertOk();
         $response->assertJsonCount(1);
     }

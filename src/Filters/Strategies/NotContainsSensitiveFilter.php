@@ -35,7 +35,7 @@ class NotContainsSensitiveFilter extends Filter
                         $query->whereRaw("`{$this->column}` COLLATE BINARY not like ?", ["%{$value}%"]);
                         break;
                     case 'pgsql':
-                        $query->whereRaw("`{$this->column}` not LIKE ?", ["%{$value}%"]);
+                        $query->whereNot($this->column, 'LIKE', "%{$value}%");
                         break;
                     case 'sqlsrv':
                         $query->whereRaw("`{$this->column}` COLLATE Latin1_General_BIN not LIKE ?", ["%{$value}%"]);
