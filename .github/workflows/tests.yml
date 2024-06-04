@@ -51,10 +51,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Set up environment
-        run: |
-          cp .env.example .env
-          php artisan key:generate
+      - name: Run database migrations
+        run: php artisan migrate
+
+      - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
           DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1' || (matrix.db == 'pgsql' && '127.0.0.1' || (matrix.db == 'sqlsrv' && 'localhost')) )}}
@@ -62,9 +62,4 @@ jobs:
           DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db'}}
           DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'sa')) )}}
           DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'P@ssw0rd!')) )}}
-
-      - name: Run database migrations
-        run: php artisan migrate
-
-      - name: Run PHPUnit tests
         run: vendor/bin/phpunit
