@@ -1,6 +1,5 @@
 <?php
 
-use Abbasudo\Purity\Tests\App\Models\Comment;
 use Abbasudo\Purity\Tests\App\Models\Post;
 use Abbasudo\Purity\Tests\App\Models\Product;
 use Abbasudo\Purity\Tests\TestCase;
@@ -57,11 +56,8 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_process_with_grouped_filters()
     {
-        $post = Post::query()->create(['title' => 'title']);
-
-        $comment = Comment::query()->create(['content' => 'comment']);
-
-        $post->comments()->save($comment);
+        $post = Post::create(['title' => 'title'])
+            ->comments()->create(['content' => 'comment']);
 
         $response = $this->getJson('/posts?filters[$or][0][title][$eq]=title&filters[comments][content][$eq]=comment')
             ->assertOk()
@@ -130,6 +126,32 @@ class FilterableTest extends TestCase
         ]);
 
         $response = $this->getJson('/products?filters[is_available][$eq]=1')
+            ->assertOk()
+            ->assertJsonCount(1);
+
+        assertEquals($product->id, $response->json()[0]['id']);
+    }
+
+    /** @test */
+    public function it_can_filter_by_timestamp_values_without_matches()
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->getJson(
+            '/products?filters[created_at][$between][0]=2023-06-03&filters[created_at][$between][1]=2023-06-05'
+        )
+            ->assertOk()
+            ->assertJsonCount(0);
+    }
+
+    /** @test */
+    public function it_can_filter_by_timestamp_values_with_results()
+    {
+        $product = Product::factory()->create();
+
+        $response = $this->getJson(
+            '/products?filters[created_at][$between][0]=2023-06-03&filters[created_at][$between][1]=2050-06-05'
+        )
             ->assertOk()
             ->assertJsonCount(1);
 
@@ -324,7 +346,7 @@ class FilterableTest extends TestCase
             'price' => 1.50,
         ]);
 
-        $response = $this->getJson('/products?filters[price][$notBetween]=[2,3]')
+        $response = $this->getJson('/products?filters[price][$notBetween][0]=2&filters[price][$notBetween][1]=3')
             ->assertOk()
             ->assertJsonCount(1);
     }
@@ -341,7 +363,7 @@ class FilterableTest extends TestCase
     /** @test */
     public function it_can_filter_with_startsWithc_operator(): void
     {
-        $response = $this->getJson('/posts?filters[title][$startsWithc]=Laravel');
+        $response = $this->getJson('/posts?filters[title][$startsWithc]=laravel');
 
         $response->assertOk();
         $response->assertJsonCount(1);

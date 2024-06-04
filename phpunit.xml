@@ -7,12 +7,7 @@
     </testsuite>
   </testsuites>
   <php>
-    <env name="DB_CONNECTION" value="testing"/>
+    <env name="APP_DEBUG" value="true"/>
     <env name="APP_KEY" value="base64:2fl+Ktvkfl+Fuz4Qp/A75G2RTiWVA/ZoKZvp6fiiM10="/>
   </php>
-  <source>
-    <include>
-      <directory suffix=".php">src/</directory>
-    </include>
-  </source>
 </phpunit>

@@ -2,9 +2,9 @@ name: PHPUnit Tests
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "**" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "**" ]
 
 permissions:
   contents: read
@@ -12,25 +12,51 @@ permissions:
 jobs:
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
+    strategy:
+      matrix:
+        db: [ sqlite, mysql ]
+        prefer: [ lowest, stable ]
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --prefer-${{ matrix.prefer }}
 
-    - name: Run PHPUnit tests
-      run: vendor/bin/phpunit
+      - name: Configure MySQL
+        if: matrix.db == 'mysql'
+        run: |
+          sudo systemctl start mysql.service
+          sudo mysql --password=root --user=root -e "CREATE DATABASE IF NOT EXISTS test_db;"
+
+      - name: Configure PostgreSQL
+        if: matrix.db == 'pgsql'
+        run: |
+          sudo systemctl start postgresql.service
+          sudo -u postgres psql -c "CREATE DATABASE test_db;"
+          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'passw0rd!';"
+          sudo -u postgres psql -c "ALTER DATABASE test_db OWNER TO test_user;"
+
+      - name: Run PHPUnit tests
+        env:
+          DB_CONNECTION: ${{ matrix.db }}
+          DB_HOST: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '127.0.0.1')  || (matrix.db == 'pgsql' && '127.0.0.1') }}
+          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') || (matrix.db == 'pgsql' && '5432') }}
+          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || (matrix.db == 'mysql' && 'test_db')  || (matrix.db == 'pgsql' && 'test_db') }}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'test_user') }}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'passw0rd!') }}
+        run: vendor/bin/phpunit
