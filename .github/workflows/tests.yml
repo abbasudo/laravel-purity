@@ -2,9 +2,9 @@ name: PHPUnit Tests
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
 
 permissions:
   contents: read
@@ -14,23 +14,84 @@ jobs:
 
     runs-on: ubuntu-24.04
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: P@ssw0rd!
+          MSSQL_DB: test_db
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd="/opt/mssql-tools/bin/sqlcmd -Q 'select 1'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    strategy:
+      matrix:
+        db: [sqlite, mysql, pgsql, sqlsrv]
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
-    - name: Run PHPUnit tests
-      run: vendor/bin/phpunit
+      - name: Set up environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+        env:
+          DB_CONNECTION: ${{ matrix.db }}
+          DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1' || (matrix.db == 'pgsql' && '127.0.0.1' || (matrix.db == 'sqlsrv' && 'localhost')) )}}
+          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306' || (matrix.db == 'pgsql' && '5432' || (matrix.db == 'sqlsrv' && '1433')) )}}
+          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db'}}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'sa')) )}}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'P@ssw0rd!')) )}}
+
+      - name: Run database migrations
+        run: php artisan migrate
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit
