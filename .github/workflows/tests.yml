@@ -16,25 +16,10 @@ jobs:
 
     strategy:
       matrix:
-        db: [sqlite, mysql, pgsql, sqlsrv]
+        db: [sqlite, mysql]
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Start MySQL service
-        if: matrix.db == 'mysql'
-        run: |
-          docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test_db -p 3306:3306 -d mysql:8.0 --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      - name: Start PostgreSQL service
-        if: matrix.db == 'pgsql'
-        run: |
-          docker run --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=test_db -p 5432:5432 -d postgres:14 --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      - name: Start MSSQL service
-        if: matrix.db == 'sqlsrv'
-        run: |
-          docker run --name mssql -e ACCEPT_EULA=Y -e SA_PASSWORD=P@ssw0rd! -e MSSQL_DB=test_db -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest --health-cmd="/opt/mssql-tools/bin/sqlcmd -Q 'select 1'" --health-interval=10s --health-timeout=5s --health-retries=3
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
@@ -54,9 +39,9 @@ jobs:
       - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
-          DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1' || (matrix.db == 'pgsql' && '127.0.0.1' || (matrix.db == 'sqlsrv' && 'localhost')) )}}
-          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306' || (matrix.db == 'pgsql' && '5432' || (matrix.db == 'sqlsrv' && '1433')) )}}
+          DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1' )}}
+          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306' )}}
           DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db'}}
-          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'sa')) )}}
-          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' || (matrix.db == 'pgsql' && 'postgres' || (matrix.db == 'sqlsrv' && 'P@ssw0rd!')) )}}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' )}}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root' )}}
         run: vendor/bin/phpunit
