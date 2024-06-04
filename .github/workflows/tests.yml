@@ -51,9 +51,6 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Run database migrations
-        run: php artisan migrate
-
       - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
