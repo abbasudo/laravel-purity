@@ -17,10 +17,16 @@ jobs:
     strategy:
       matrix:
         db: [ sqlite, mysql ,pgsql ]
+        php: [ 8.2, 8.3 ,8.4 ]
         prefer: [ lowest, stable ]
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
