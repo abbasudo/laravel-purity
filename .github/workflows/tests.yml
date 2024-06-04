@@ -48,6 +48,8 @@ jobs:
         run: |
           sudo systemctl start postgresql.service
           sudo -u postgres psql -c "CREATE DATABASE test_db;"
+          sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'passw0rd!';"
+          sudo -u postgres psql -c "ALTER DATABASE test_db OWNER TO test_user;"
 
       - name: Run PHPUnit tests
         env:
@@ -55,6 +57,6 @@ jobs:
           DB_HOST: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '127.0.0.1')  || (matrix.db == 'pgsql' && '127.0.0.1') }}
           DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') || (matrix.db == 'pgsql' && '5432') }}
           DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || (matrix.db == 'mysql' && 'test_db')  || (matrix.db == 'pgsql' && 'test_db') }}
-          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'postgres') }}
-          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && '') }}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'test_user') }}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'passw0rd!') }}
         run: vendor/bin/phpunit
