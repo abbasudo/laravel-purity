@@ -47,7 +47,7 @@ jobs:
           DB_CONNECTION: ${{ matrix.db }}
           DB_HOST: ${{ matrix.db == 'sqlite' && '127.0.0.1' || (matrix.db == 'mysql' && '127.0.0.1') }}
           DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') }}
-          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || 'test_db' }}
-          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'root') }}
-          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'root') }}
+          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || (matrix.db == 'mysql' && 'test_db') }}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') }}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') }}
         run: vendor/bin/phpunit
