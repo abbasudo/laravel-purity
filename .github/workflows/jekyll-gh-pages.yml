@@ -36,10 +36,6 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2
-      - name: Create Jekyll Workspace
-        run: bundle exec jekyll new docs
-        env:
-          JEKYLL_ENV: production
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: bundle exec jekyll build --source docs --baseurl "${{ steps.pages.outputs.base_path }}"
