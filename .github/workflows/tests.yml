@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        db: [ sqlite, mysql ]
+        db: [ sqlite, mysql ,pgsql ]
         prefer: [ lowest, stable ]
 
     steps:
