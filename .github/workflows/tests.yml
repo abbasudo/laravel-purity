@@ -14,57 +14,27 @@ jobs:
 
     runs-on: ubuntu-24.04
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        if: matrix.db == 'mysql'
-
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        if: matrix.db == 'pgsql'
-
-      mssql:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: P@ssw0rd!
-          MSSQL_DB: test_db
-        ports:
-          - 1433:1433
-        options: >-
-          --health-cmd="/opt/mssql-tools/bin/sqlcmd -Q 'select 1'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        if: matrix.db == 'sqlsrv'
-
     strategy:
       matrix:
         db: [sqlite, mysql, pgsql, sqlsrv]
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start MySQL service
+        if: matrix.db == 'mysql'
+        run: |
+          docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test_db -p 3306:3306 -d mysql:8.0 --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      - name: Start PostgreSQL service
+        if: matrix.db == 'pgsql'
+        run: |
+          docker run --name postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=test_db -p 5432:5432 -d postgres:14 --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      - name: Start MSSQL service
+        if: matrix.db == 'sqlsrv'
+        run: |
+          docker run --name mssql -e ACCEPT_EULA=Y -e SA_PASSWORD=P@ssw0rd! -e MSSQL_DB=test_db -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest --health-cmd="/opt/mssql-tools/bin/sqlcmd -Q 'select 1'" --health-interval=10s --health-timeout=5s --health-retries=3
 
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
