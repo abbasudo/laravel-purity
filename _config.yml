@@ -4,6 +4,8 @@ theme: just-the-docs
 
 url: https://abbasudo.github.io
 
+source: /docs
+
 aux_links:
   Github Repository: https://github.com/abbasudo/laravel-purity
 
