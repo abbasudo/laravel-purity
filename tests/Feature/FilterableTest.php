@@ -59,7 +59,6 @@ class FilterableTest extends TestCase
         $post = Post::create(['title' => 'title'])
             ->comments()->create(['content' => 'comment']);
 
-
         $response = $this->getJson('/posts?filters[$or][0][title][$eq]=title&filters[comments][content][$eq]=comment')
             ->assertOk()
             ->assertJsonCount(1);
