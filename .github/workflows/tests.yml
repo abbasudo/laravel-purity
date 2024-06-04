@@ -36,6 +36,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Install dependencies
+        if: matrix.db == 'mysql'
+        run: sudo systemctl start mysql.service
+
       - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
