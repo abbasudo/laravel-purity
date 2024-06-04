@@ -37,7 +37,7 @@ jobs:
         id: pages
         uses: actions/configure-pages@v2
       - name: Create Jekyll Workspace
-        run: jekyll new
+        run: bundle exec jekyll new
         env:
           JEKYLL_ENV: production
       - name: Build with Jekyll
