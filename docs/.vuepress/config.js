@@ -9,7 +9,7 @@ export default defineUserConfig({
 
   theme: defaultTheme({
     logo: '/images/purity-logo.png',
-
+    base: '/laravel-purity/',
     navbar: ['/', '/get-started'],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
