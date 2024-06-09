@@ -4,12 +4,12 @@ import {viteBundler} from '@vuepress/bundler-vite'
 
 export default defineUserConfig({
   lang: 'en-US',
-
-  title: 'Laravel Purity', description: 'Filter and Sort Laravel Queries Elegantly',
+  title: 'Laravel Purity',
+  description: 'Filter and Sort Laravel Queries Elegantly',
+  base: '/laravel-purity/',
 
   theme: defaultTheme({
     logo: '/images/purity-logo.png',
-
     navbar: ['/', '/get-started'],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
