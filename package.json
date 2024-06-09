@@ -1,0 +1,19 @@
+{
+  "name": "laravel-purity",
+  "version": "3.3.2",
+  "description": "An elegant way to filter and sort queries in Laravel",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "docs:build": "vuepress build docs",
+    "docs:clean-dev": "vuepress dev docs --clean-cache",
+    "docs:dev": "vuepress dev docs",
+    "docs:update-package": "yarn dlx vp-update"
+  },
+  "devDependencies": {
+    "@vuepress/bundler-vite": "^2.0.0-rc.7",
+    "@vuepress/theme-default": "^2.0.0-rc.35",
+    "vue": "^3.4.27",
+    "vuepress": "^2.0.0-rc.13"
+  }
+}
