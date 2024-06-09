@@ -1,6 +1,7 @@
 import {defaultTheme} from '@vuepress/theme-default'
 import {defineUserConfig} from 'vuepress/cli'
 import {viteBundler} from '@vuepress/bundler-vite'
+import {searchPlugin} from "@vuepress/plugin-search";
 
 export default defineUserConfig({
   lang: 'en-US',
@@ -16,6 +17,9 @@ export default defineUserConfig({
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
   }),
+  plugins: [
+    searchPlugin({}),
+  ],
 
   head: [['link', { rel: 'icon', href: '/images/favicon.ico' }]], bundler: viteBundler(),
 })
