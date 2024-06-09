@@ -11,7 +11,7 @@ export default defineUserConfig({
   theme: defaultTheme({
     logo: '/images/purity-logo.png',
 
-    navbar: ['/', '/get-started'],
+    navbar: ['/'],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
