@@ -1,8 +1,6 @@
 ---
-title: Home
-layout: home
+title: Docs
 ---
-
 <p align="center">
   <img src="https://github.com/abbasudo/laravel-purity/raw/master/art/purity-logo.png" alt="Social Card of Laravel Purity">
   <h1 align="center">Elegant way to filter and sort queries in Laravel</h1>
@@ -19,7 +17,7 @@ layout: home
 > If you are a front-end developer and want to make queries in an API that uses this package head to the [queries](#queries-and-javascript-examples) section
 
 > **Note**
-> Version 2 changed filter method read more at [upgrade guide](#upgrade-guide) section
+> Version 3 changed `$filterFields` read more at [upgrade guide](#upgrade-guide) section
 
 
 Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
@@ -38,39 +36,7 @@ Laravel Purity is not only developer-friendly but also front-end developer-frien
 The way this package handles filters is inspired by strapi's [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
 
 ## Table of Contents
-- [Tutorials](#tutorials)
-    * [Video](#video)
-    * [Articles](#articles)
-- [Installation](#installation)
-- [Basic Usage](#basic-usage)
-    * [Filters](#filters)
-    * [Sort](#sort)
-- [Advanced Usage](#advanced-usage)
-    * [Allowed Fields](#allowed-fields)
-        + [Overwrite Allowed Fields](#overwrite-allowed-fields)
-    * [Rename Fields](#rename-fields)
-        + [Rename Filter Fields](#rename-filter-fields)
-        + [Rename Sort Fields](#rename-sort-fields)
-        + [Overwrite Renamed Fields](#overwrite-renamed-fields)
-    * [Restrict Filters](#restrict-filters)
-    * [Restrict filters by field](#restrict-filters-by-field)
-    * [Changing Params Source](#changing-params-source)
-    * [Livewire](#livewire)
-    * [Custom Filters](#custom-filters)
-    * [Silent Exceptions](#silent-exceptions)
-    * [Sort null values last](#sort-null-values-last)
-- [Queries and javascript examples](#queries-and-javascript-examples)
-    * [Available Filters](#available-filters)
-        + [Simple Filtering](#simple-filtering)
-        + [Complex Filtering](#complex-filtering)
-        + [Deep Filtering](#deep-filtering)
-    * [Apply Sort](#apply-sort)
-        + [Usage Examples](#usage-examples)
-- [Upgrade Guide](#upgrade-guide)
-    * [Version 3](#version-3)
-    * [Version 2](#version-2)
-- [License](#license)
-- [Security](#security)
+[[toc]]
 
 ## Tutorials
 ### Video
@@ -82,6 +48,7 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 - [The correct way of adding filters to Laravel](https://medium.com/@abbasudo/the-correct-way-of-adding-filters-to-laravel-10-bb9957c2ddc6)
 - [Add filter to your laravel app](https://dev.to/abbasudo/add-filter-to-your-laravel-10-app-4f5f)
 - [Enable filtering queries in your laravel 10 app with ease](https://medium.com/@abbasudo/enable-filtering-in-your-laravel-app-with-ease-a63f79b5e452)
+
 
 ## Installation
 Install the package via composer by this command:
@@ -122,7 +89,10 @@ class PostController extends Controller
 ```
 
 By default, it gives access to all filters available. here is the list of [available filters](#available-filters). if you want to explicitly specify which filters to use in this call head to [restrict filters](#restrict-filters) section.
+
 ### Sort
+
+#### Sort Basics
 Add `Sortable` trait to your model to get sorts functionalities.
 
 ```php
@@ -150,7 +120,8 @@ class PostController extends Controller
 }
 ```
 
-Now sort can be applied as instructed in [sort usage](#usage-examples).
+Now sort can be applied as instructed in [apply sort](#apply-sort).
+
 ## Advanced Usage
 ### Allowed Fields
 By default, purity allows every database column and all model relations (that have a defined return type) to be filtered.
@@ -197,6 +168,7 @@ To rename filter fields simply add a value to fields defined in `$renamedFilterF
 // App\Models\User
 
 // ?filter[phone][$eq]=0000000000
+
 protected $renamedFilterFields = [
   'mobile' => 'phone', // Actual database column is mobile
   'posts'  => 'writing', // actual relation is posts
@@ -207,6 +179,8 @@ The client should send phone in order to filter by mobile column in database.
 #### Rename Sort Fields
 To rename sort fields simply add a value to defined in `$sortFields`
 ```php
+// App\Models\User
+
 // ?sort=phone
 protected $sortFields = [
   'name',
@@ -231,7 +205,7 @@ Post::sortFields([
 
 purity validates allowed filters in the following order of priority:
 - Filters specified in the `filters` configuration in the `configs/purity.php` file.
-
+  
 ```php
 // configs/purity.php
 'filters' => [
@@ -241,7 +215,7 @@ purity validates allowed filters in the following order of priority:
 ```
 
 - Filters declared in the `$filters` variable in the model.
-
+  
 note that, $filters will overwrite configs filters.
 
 ```php
@@ -262,7 +236,7 @@ private array $filters = [
 
 - Filters passed as an array to the `filterBy()` function.
 
-note that, filterBy will overwrite all other defined filters.
+note that, `filterBy` will overwrite all other defined filters.
 
 ```php
 Post::filterBy('$eq', '$in')->filter()->get();
@@ -271,35 +245,57 @@ Post::filterBy(EqualFilter::class, InFilter::class)->filter()->get();
 ```
 ### Restrict filters by field
 There are three available options for your convenience. They take priority respectively.
-- **Option 01 : Define restricted filters inside `$filterFields` property, as shown below**
+- **Option 1 : Define restricted filters inside `$filterFields` property, as shown below**
 ```php
- $filterFields = [
-                     'title' => ['eq'],  // title will be limited to the eq operator
-                     'title' => 'eq',    // works only for one restricted operator
-                     'title,eq' ,        // same as above
-                     'title' ,           // this won't be restricted to any operator
-                 ];
+$filterFields = [
+  'title' => ['$eq'],  // title will be limited to the eq operator
+  'title' => '$eq',    // works only for one restricted operator
+  'title:$eq',         // same as above
+  'title',             // this won't be restricted to any operator
+];
 ```
 The drawback here is that you have to define all the allowed fields, regardless of any restrictions fields.
 - **Option 2 : Define them inside `$restrictedFilters` property**
 ```php
 $restrictedFields = [
-    'title' => ['eq'],  // title will be limited to the eq operator
-    'title,eq'          // same as above
-    'title'             // this won't be restricted to any operator
+  'title' => ['$eq', '$eq'],  // title will be limited to the eq operator
+  'title:$eq,$in'             // same as above
+  'title'                     // this won't be restricted to any operator
 ];
 ```
 - **Option 3 : Finally, you can set it on the Eloquent builder, which takes the highest priority (overwrite all the above options)**
 ```php
-Post::restrictedFilters(['title' => ['eq']])->filter()->get();
+Post::restrictedFilters(['title' => ['$eq']])->filter()->get();
 
 ```
 **Note**
->All field-restricted filter operations are respected to filters defined in $filter [see the Restrict Filters section]. This means you are not allowed to restrict a field operation that is not permitted in restricted fields.
+>All field-restricted filter operations are respected to filters defined in $filter ([here](#restrict-filters)). This means you are not allowed to restrict a field operation that is not permitted in restricted fields.
 ```php
-$filters = [$eq];
+$filters = ['$eq'];
 $restrictedFilters = ['title' => ['$eqc']] // This won't work
 ```
+#### Sort by Relationships
+The following relationship types are supported.
+- One to One
+- One to Many
+- Many to Many
+
+Return type of the relationship mandatory as below in order to sort by relationships.
+
+```php
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Post extends Model
+{
+    use Sortable;
+    
+    public function tags(): HasMany // This is mandatory
+    {
+        return $this->hasMany(Tag::class);
+    }
+}
+```
+
 ### Changing Params Source
 By Default, purity gets params from filters index in query params, overwrite this by passing params directly to filter or sort functions:
 
@@ -329,7 +325,7 @@ public function render()
 {
   $transactions = Transaction::filter($this->filters)->get();
 
-  return view('livewire.transacrion-table',compact('transactions'));
+  return view('livewire.transaction-table',compact('transactions'));
 }
 
 ```
@@ -367,13 +363,12 @@ By default, purity silences its own exceptions. to change that behavior change t
 
 'silent' => false,
 ```
-
 ### Sort null values last
 When sorting a column that contains null values, it's typically preferred to have those values appear last, regardless of the sorting direction. You can enable this feature in the configuration as follows:
 ```php
 // configs/purity.php
 
-null_last => true,
+null_last => true;
 ```
 
 ## Queries and javascript examples
@@ -508,7 +503,10 @@ const query = qs.stringify({
 
 await request(`/api/restaurants?${query}`);
 ```
+
 ### Apply Sort
+
+#### Apply Basic Sorting
 Queries can accept a sort parameter that allows sorting on one or multiple fields with the following syntax's:
 
 `GET /api/:pluralApiId?sort=value` to sort on 1 field
@@ -519,7 +517,7 @@ The sorting order can be defined as:
 - `:asc` for ascending order (default order, can be omitted)
 - `:desc` for descending order.
 
-#### Usage Examples
+*Usage Examples*
 
 Sort using 2 fields
 
@@ -536,8 +534,6 @@ const query = qs.stringify({
 await request(`/api/articles?${query}`);
 ```
 
-
-
 Sort using 2 fields and set the order
 
 `GET /api/articles?sort[0]=title%3Aasc&sort[1]=slug%3Adesc`
@@ -552,22 +548,39 @@ const query = qs.stringify({
 
 await request(`/api/articles?${query}`);
 ```
+#### Apply Sort by Relationships
+
+All the usages of basic sorting are applicable. Use dot(.) notation to apply relationship in the following format.
+
+`?sort=[relationship name].[relationship column]:[sort direction]`
+
+*Usage Examples*
+
+The query below sorts posts by their tag name in ascending order (default sort direction).
+Direction is not mandatory when sorted by ascending order.
+
+`GET /api/posts?sort=tags.name:asc`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  sort: ['tags.name:asc'],
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/posts?${query}`);
+```
+
+> [!Note]
+> Sorting by nested relationships is not supported by the package as of now.
 
 ## Upgrade Guide
 
 ### Version 3
 changed how `$filterFields` array works. it no longer renames fields, instead, it restricts filters that are accepted by the field as mentioned in the [Restrict filters](#restrict-filters) section.
-to rename fields refer to [Rename fields](#rename-fields). `sortFields` However, didnt change.
+to rename fields refer to [Rename fields](#rename-fields). `sortFields` However, didnt change. 
 
 ### Version 2
 changed filter function arguments. filter function no longer accepts filter methods, instead, filter function now accepts filter source as mentioned in [Custom Filters](#custom-filters) section.
 to specify allowed filter methods use filterBy as mentioned in [Restrict Filters](#restrict-filters)
-
-## License
-
-Laravel Purity is Licensed under The MIT License (MIT). Please see [License File](https://github.com/abbasudo/laravel-purity/blob/master/LICENSE) for more information.
-
-## Security
-
-If you've found a bug regarding security please mail [amkhzomi@gmail.com](mailto:amkhzomi@gmail.com) instead of
-using the issue tracker.
