@@ -11,15 +11,12 @@ export default defineUserConfig({
 
   theme: defaultTheme({
     logo: '/images/purity-logo.png',
-
-    navbar: ['/'],
+    navbar: ['/', 'docs'],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
   }),
-  plugins: [
-    searchPlugin({}),
-  ],
-
-  head: [['link', { rel: 'icon', href: '/images/favicon.ico' }]], bundler: viteBundler(),
+  plugins: [searchPlugin({}),],
+  head: [['link', { rel: 'icon', href: '/laravel-purity/images/favicon.ico' }]],
+  bundler: viteBundler(),
 })
