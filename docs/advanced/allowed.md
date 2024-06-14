@@ -1,8 +1,8 @@
 ---
 title: Allowed Fields
 prev:
-  text: 'Rename Fields'
-  link: '/advanced/rename'
+  text: 'Relation Fields'
+  link: '/advanced/relation'
 next:
   text: 'Livewire'
   link: '/advanced/livewire'

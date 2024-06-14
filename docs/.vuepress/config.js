@@ -36,6 +36,7 @@ export default defineUserConfig({
         prefix: 'advanced/',
         children: [
           'rename.md',
+          'relation.md',
           'param.md',
           'allowed.md',
           'livewire.md',
@@ -52,7 +53,6 @@ export default defineUserConfig({
             text: 'Sort',
             prefix: 'sort/',
             children: [
-              'relation.md',
               'null-sort.md',
             ],
           },

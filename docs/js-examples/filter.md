@@ -82,8 +82,8 @@ const query = qs.stringify({
 
 await request(`/api/books?${query}`);
 ```
-#### Deep Filtering
-Deep filtering is filtering on a relation's fields.
+#### Relation Filtering
+Relation filtering is filtering on a relation's fields.
 
 Find restaurants owned by a chef who belongs to a 5-star restaurant
 
