@@ -1,5 +1,11 @@
 ---
 title: Available Filters
+prev:
+  text: 'Basic Usage'
+  link: '/guide/basic-usage'
+next:
+  text: 'JS Example'
+  link: '/js-examples/filter'
 ---
 
 ## Queries and javascript examples

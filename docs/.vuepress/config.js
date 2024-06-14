@@ -35,25 +35,25 @@ export default defineUserConfig({
         text: 'Advanced',
         prefix: 'advanced/',
         children: [
+          'rename.md',
+          'param.md',
           'allowed.md',
           'livewire.md',
           'silent.md',
-          'param.md',
-          'rename.md',
           {
             text: 'Filter',
             prefix: 'filter/',
             children: [
-              'custom.md',
               'restrict.md',
+              'custom.md',
             ],
           },
           {
             text: 'Sort',
             prefix: 'sort/',
             children: [
-              'null-sort.md',
               'relation.md',
+              'null-sort.md',
             ],
           },
           'upgrade.md',

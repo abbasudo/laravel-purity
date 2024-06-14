@@ -1,5 +1,11 @@
 ---
 title: Allowed Fields
+prev:
+  text: 'Rename Fields'
+  link: '/advanced/rename'
+next:
+  text: 'Livewire'
+  link: '/advanced/livewire'
 ---
 
 ### Allowed Fields

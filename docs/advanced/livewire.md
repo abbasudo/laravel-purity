@@ -1,5 +1,11 @@
 ---
 title: Livewire
+prev:
+  text: 'Allowed Fields'
+  link: '/advanced/allowed'
+next:
+  text: 'Silent Exceptions'
+  link: '/advanced/silent'
 ---
 
 ### Livewire

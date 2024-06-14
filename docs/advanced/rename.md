@@ -1,5 +1,11 @@
 ---
 title: Rename Fields
+prev:
+  text: 'Available Methods'
+  link: '/js-examples/available-methods'
+next:
+  text: 'Change Source Param'
+  link: '/advanced/param'
 ---
 #### Rename Filter Fields
 To rename filter fields simply add a value to fields defined in `$renamedFilterFields`.

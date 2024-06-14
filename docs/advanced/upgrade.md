@@ -1,5 +1,8 @@
 ---
 title: Upgrade Guide
+prev:
+  text: 'Null sort'
+  link: '/advanced/sort/null-sort'
 ---
 
 ## Upgrade Guide

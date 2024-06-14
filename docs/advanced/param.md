@@ -1,5 +1,11 @@
 ---
 title: Params Source
+prev:
+  text: 'Rename Fields'
+  link: '/advanced/rename'
+next:
+  text: 'Allowed Fields'
+  link: '/advanced/allowed'
 ---
 
 ### Changing Params Source

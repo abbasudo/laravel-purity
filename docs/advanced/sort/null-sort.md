@@ -1,5 +1,11 @@
 ---
-title: Sort Null
+title: Null Sort
+prev:
+  text: 'Custom Filters'
+  link: '/advanced/filter/custom'
+next:
+  text: 'Upgrade Guide'
+  link: '/advanced/upgrade'
 ---
 
 ### Sort null values last

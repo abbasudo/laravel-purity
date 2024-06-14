@@ -1,5 +1,11 @@
 ---
 title: Filtering
+prev:
+  text: 'Available Methods'
+  link: '/js-examples/available-methods'
+next:
+  text: 'Rename Fields'
+  link: '/advanced/rename'
 ---
 
 #### Simple Filtering

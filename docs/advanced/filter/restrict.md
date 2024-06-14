@@ -1,5 +1,11 @@
 ---
 title: Restrict
+prev:
+  text: 'Silent Exceptions'
+  link: '/advanced/silent'
+next:
+  text: 'Custom Filters'
+  link: '/advanced/filter/custom'
 ---
 
 ### Restrict by Field

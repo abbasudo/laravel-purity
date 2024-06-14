@@ -1,5 +1,8 @@
 ---
 title: Installation
+next:
+  text: 'Basic Usage'
+  link: '/guide/basic-usage'
 ---
 ## Installation
 Install the package via composer by this command:

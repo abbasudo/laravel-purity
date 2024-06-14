@@ -1,5 +1,11 @@
 ---
 title: Basic Usage
+prev:
+  text: 'Installation'
+  link: '/guide/installation'
+next:
+  text: 'Available Methods'
+  link: '/js-examples/available-methods'
 ---
 ## Basic Usage
 ### Filters

@@ -1,5 +1,11 @@
 ---
 title: Custom Filters
+prev:
+  text: 'Restrict Filter'
+  link: '/advanced/filter/restrict'
+next:
+  text: 'Null sort'
+  link: '/advanced/sort/null-sort'
 ---
 ### Custom Filters
 Create a custom filter class by this command:

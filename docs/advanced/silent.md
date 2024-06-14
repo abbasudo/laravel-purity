@@ -1,5 +1,11 @@
 ---
 title: Silent Exceptions
+next:
+  text: 'Restrict Filter'
+  link: '/advanced/filter/restrict'
+prev:
+  text: 'Livewire'
+  link: '/advanced/livewire'
 ---
 
 ### Silent Exceptions
