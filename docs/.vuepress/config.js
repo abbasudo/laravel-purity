@@ -2,6 +2,7 @@ import {defaultTheme} from '@vuepress/theme-default'
 import {defineUserConfig} from 'vuepress/cli'
 import {viteBundler} from '@vuepress/bundler-vite'
 import {searchPlugin} from "@vuepress/plugin-search";
+import {googleAnalyticsPlugin} from "@vuepress/plugin-google-analytics";
 
 export default defineUserConfig({
   lang: 'en-US',
@@ -64,7 +65,12 @@ export default defineUserConfig({
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
   }),
-  plugins: [searchPlugin({}),],
+  plugins: [
+    searchPlugin({}),
+    googleAnalyticsPlugin({
+      id: 'G-C75TGXT64W',
+    }),
+  ],
   head: [['link', { rel: 'icon', href: '/laravel-purity/images/favicon.ico' }]],
   bundler: viteBundler(),
 })

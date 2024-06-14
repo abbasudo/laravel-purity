@@ -12,9 +12,10 @@
   },
   "devDependencies": {
     "@vuepress/bundler-vite": "^2.0.0-rc.7",
+    "@vuepress/plugin-google-analytics": "^2.0.0-rc.34",
     "@vuepress/plugin-search": "^2.0.0-rc.34",
     "@vuepress/theme-default": "^2.0.0-rc.35",
-    "vue": "^3.4.27",
+    "vue": "^3.4.29",
     "vuepress": "^2.0.0-rc.13"
   }
 }
