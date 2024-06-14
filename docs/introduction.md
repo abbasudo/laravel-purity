@@ -32,11 +32,14 @@ The way this package handles filters is inspired by strapi's [filter](https://do
 Here is a basic usage example to clarify Purity's use case.
 
 Add `filter()` to your query.
+
 ```php
 $posts = Post::filter()->get();
 ```
+
 That's it!
 Now you can filter your posts by adding query string parameters to the URL.
+
 ```
 GET /api/posts?filters[title][$contains]=Purity
 ```
