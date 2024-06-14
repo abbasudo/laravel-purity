@@ -9,20 +9,24 @@
 [![PHP Version Require](http://poser.pugx.org/abbasudo/laravel-purity/require/php)](https://packagist.org/packages/abbasudo/laravel-purity)
 [![StyleCI](https://github.styleci.io/repos/603931433/shield)](https://packagist.org/packages/abbasudo/laravel-purity)
 
-Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries. By simply adding `filter()` to your Eloquent query, you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
+Laravel Purity is an elegant and yet simple filtering and sorting package for Laravel,
+designed to simplify complex data filtering and sorting logic for eloquent queries.
+By simply adding `filter()` to your Eloquent query,
+you can add the ability for frontend users to apply filters based on URL query string parameters like a breeze.
 
-## What Does Purity Do?
+## How Does Purity Work?
 Here is a basic usage example to clarify Purity's use case.
 
 Add `filter()` to your query.
 ```php
 $posts = Post::filter()->get();
 ```
-
+That's it!
 Now you can filter your posts by adding query string parameters to the URL.
 ```
-GET /api/posts?filters[title][$contains]=Purtiy
+GET /api/posts?filters[title][$contains]=Purity
 ```
+read more at official [documentations](https://abbasudo.github.io/laravel-purity/)
 
 ## Documentation
 https://abbasudo.github.io/laravel-purity/

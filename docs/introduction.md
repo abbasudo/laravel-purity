@@ -26,3 +26,17 @@ Features :
 Laravel Purity is not only developer-friendly but also front-end developer-friendly. Frontend developers can effortlessly use filtering and sorting of the APIs by using the popular [JavaScript qs](https://www.npmjs.com/package/qs) package.
 
 The way this package handles filters is inspired by strapi's [filter](https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication#filtering) and [sort](https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting) functionality.
+
+## How Does Purity Work?
+
+Here is a basic usage example to clarify Purity's use case.
+
+Add `filter()` to your query.
+```php
+$posts = Post::filter()->get();
+```
+That's it!
+Now you can filter your posts by adding query string parameters to the URL.
+```
+GET /api/posts?filters[title][$contains]=Purity
+```
