@@ -64,6 +64,7 @@ export default defineUserConfig({
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
+    docsBranch: 'master',
   }),
   plugins: [
     searchPlugin({}),
