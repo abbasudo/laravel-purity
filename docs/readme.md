@@ -3,9 +3,12 @@ home: true
 title: Home
 heroImage: /images/purity-logo.png
 actions:
-  - text: Get Started
-    link: ./docs
+  - text: How to Install
+    link: ./guide/installation
     type: primary
+  - text: What is Purity
+    link: ./introduction
+    type: secondary
 
 features:
   - title: Simplicity

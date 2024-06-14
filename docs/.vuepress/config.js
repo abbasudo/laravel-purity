@@ -11,7 +11,55 @@ export default defineUserConfig({
 
   theme: defaultTheme({
     logo: '/images/purity-logo.png',
-    navbar: ['/', 'docs'],
+    navbar: [
+      'introduction',
+      {
+        text: 'Guide',
+        prefix: 'guide/',
+        children: [
+          'basic-usage.md',
+          'installation.md',
+          'tutorials.md'
+        ],
+      },
+      {
+        text: 'JS Examples',
+        prefix: 'js-examples/',
+        children: [
+          'available-methods.md',
+          'filter.md',
+          'sort.md',
+        ],
+      },
+      {
+        text: 'Advanced',
+        prefix: 'advanced/',
+        children: [
+          'allowed.md',
+          'livewire.md',
+          'silent.md',
+          'param.md',
+          'rename.md',
+          {
+            text: 'Filter',
+            prefix: 'filter/',
+            children: [
+              'custom.md',
+              'restrict.md',
+            ],
+          },
+          {
+            text: 'Sort',
+            prefix: 'sort/',
+            children: [
+              'null-sort.md',
+              'relation.md',
+            ],
+          },
+          'upgrade.md',
+        ],
+      },
+    ],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',
     docsDir: 'docs',
