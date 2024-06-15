@@ -1,5 +1,6 @@
 ---
 title: Available Filters
+description: Learn how to use available filters in Laravel Purity.
 prev:
   text: 'Basic Usage'
   link: '/guide/basic-usage'

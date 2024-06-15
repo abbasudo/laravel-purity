@@ -1,5 +1,9 @@
 ---
 title: Introduction
+description: Laravel Purity is an elegant and efficient filtering and sorting package for Laravel, designed to simplify complex data filtering and sorting logic for eloquent queries.
+next:
+    text: 'Installation'
+    link: '/installation'
 ---
 <p align="center">
   <img :src="$withBase('/images/purity-logo.png')" alt="Social Card of Laravel Purity">

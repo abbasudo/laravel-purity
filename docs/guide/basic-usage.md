@@ -1,5 +1,6 @@
 ---
 title: Basic Usage
+description: Learn how to use Purity's basic features.
 prev:
   text: 'Installation'
   link: '/guide/installation'

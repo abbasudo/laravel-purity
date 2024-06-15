@@ -1,5 +1,6 @@
 ---
 title: Sorting
+description: Learn how to apply sorting to your API requests using Laravel Purity.
 prev:
   text: 'Available Methods'
   link: '/js-examples/available-methods'

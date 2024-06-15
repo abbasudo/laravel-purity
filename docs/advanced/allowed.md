@@ -1,5 +1,6 @@
 ---
 title: Allowed Fields
+description: Learn how to filter data in Laravel Purity.
 prev:
   text: 'Relation Fields'
   link: '/advanced/relation'

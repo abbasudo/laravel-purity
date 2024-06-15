@@ -1,5 +1,6 @@
 ---
 title: Installation
+description: Learn how to install Laravel Purity.
 next:
   text: 'Basic Usage'
   link: '/guide/basic-usage'

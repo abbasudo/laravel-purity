@@ -18,8 +18,8 @@ export default defineUserConfig({
         text: 'Guide',
         prefix: 'guide/',
         children: [
-          'basic-usage.md',
           'installation.md',
+          'basic-usage.md',
           'tutorials.md'
         ],
       },

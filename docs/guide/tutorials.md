@@ -1,5 +1,12 @@
 ---
 title: Additional Tutorials
+description: Learn more about Laravel Purity with these tutorials.
+prev:
+    text: 'Basic Usage'
+    link: '/guide/basic-usage'
+next:
+    text: 'Available Methods'
+    link: '/js-examples/available-methods'
 ---
 ## Tutorials
 ### Video
