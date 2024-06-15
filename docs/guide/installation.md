@@ -1,6 +1,9 @@
 ---
 title: Installation
 description: Learn how to install Laravel Purity.
+prev:
+  text: 'Introduction'
+  link: '/introduction'
 next:
   text: 'Basic Usage'
   link: '/guide/basic-usage'
