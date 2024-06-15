@@ -9,7 +9,7 @@ next:
   link: '/advanced/rename'
 ---
 
-#### Simple Filtering
+### Simple Filtering
 
 ::: tip
 In javascript uses [qs](https://www.npmjs.com/package/qs) directly
@@ -17,12 +17,14 @@ to generate complex queries instead of creating them manually.
 Examples in this documentation showcase how you can use `qs`.
 :::
 
-Find users having 'John' as their first name
+#### Eq Filter
+
+Find users with 'John' as their first name
 
 `GET /api/users?filters[name][$eq]=John`
 
-  ```js
-  const qs = require('qs');
+```js
+const qs = require('qs');
 const query = qs.stringify({
   filters: {
     username: {
@@ -34,14 +36,16 @@ const query = qs.stringify({
 });
 
 await request(`/api/users?${query}`);
-  ```
+```
+
+#### In Filter
 
 Find multiple restaurants with ids 3, 6, 8
 
 `GET /api/restaurants?filters[id][$in][0]=3&filters[id][$in][1]=6&filters[id][$in][2]=8`
 
-  ```js
-  const qs = require('qs');
+```js
+const qs = require('qs');
 const query = qs.stringify({
   filters: {
     id: {
@@ -53,9 +57,30 @@ const query = qs.stringify({
 });
 
 await request(`/api/restaurants?${query}`);
-  ```
+```
 
-#### Complex Filtering
+#### Between Filter
+
+Find users with age between 20 and 30
+
+`GET /api/users?filters[age][$between][0]=20&filters[age][$between][1]=30`
+
+```js
+const qs = require('qs');
+const query = qs.stringify({
+  filters: {
+    age: {
+      $between: [20, 30],
+    },
+  },
+}, {
+  encodeValuesOnly: true, // prettify URL
+});
+
+await request(`/api/users?${query}`);
+```
+
+### Complex Filtering
 
 Complex filtering is combining multiple filters using advanced methods such as combining `$and` & `$or`. This allows for
 more flexibility to request exactly the data needed.
@@ -93,7 +118,7 @@ const query = qs.stringify({
 await request(`/api/books?${query}`);
 ```
 
-#### Relation Filtering
+### Relation Filtering
 
 Relation filtering is filtering on a relation's fields.
 
@@ -125,7 +150,7 @@ Relation must be defined in the Laravel model.
 Read more about relation filtering at [relations](../advanced/relation) in the advanced section.
 :::
 
-#### Complex Relation Filtering
+### Complex Relation Filtering
 
 Complex relation filtering is combining multiple relation filters
 using advanced methods such as combining `$and` & `$or`.
@@ -157,7 +182,7 @@ const query = qs.stringify({
 await request(`/api/restaurants?${query}`);
 ```
 
-##### Laravel Example
+#### Laravel Example
 
 Implement the same filter manually by passing an array of filters to the `filter()` method.
 
