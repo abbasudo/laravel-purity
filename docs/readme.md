@@ -9,6 +9,9 @@ actions:
   - text: What is Purity
     link: ./introduction
     type: secondary
+  - text: Community
+    link: https://github.com/abbasudo/laravel-purity/discussions
+    type: secondary
 
 features:
   - title: Simplicity

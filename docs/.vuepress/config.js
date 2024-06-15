@@ -60,6 +60,10 @@ export default defineUserConfig({
           'upgrade.md',
         ],
       },
+      {
+        text: 'Ask a Question',
+        link: 'https://github.com/abbasudo/laravel-purity/discussions',
+      },
     ],
     repo: 'abbasudo/laravel-purity',
     docsRepo: 'abbasudo/laravel-purity',

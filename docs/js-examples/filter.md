@@ -20,6 +20,7 @@ Examples in this documentation showcase how you can use `qs`.
 Find users having 'John' as their first name
 
 `GET /api/users?filters[name][$eq]=John`
+
   ```js
   const qs = require('qs');
 const query = qs.stringify({
@@ -34,9 +35,11 @@ const query = qs.stringify({
 
 await request(`/api/users?${query}`);
   ```
+
 Find multiple restaurants with ids 3, 6, 8
 
 `GET /api/restaurants?filters[id][$in][0]=3&filters[id][$in][1]=6&filters[id][$in][2]=8`
+
   ```js
   const qs = require('qs');
 const query = qs.stringify({
@@ -51,12 +54,16 @@ const query = qs.stringify({
 
 await request(`/api/restaurants?${query}`);
   ```
+
 #### Complex Filtering
-Complex filtering is combining multiple filters using advanced methods such as combining `$and` & `$or`. This allows for more flexibility to request exactly the data needed.
+
+Complex filtering is combining multiple filters using advanced methods such as combining `$and` & `$or`. This allows for
+more flexibility to request exactly the data needed.
 
 Find books with two possible dates and a specific author.
 
 `GET /api/books?filters[$or][0][date][$eq]=2020-01-01&filters[$or][1][date][$eq]=2020-01-02&filters[author][name][$eq]=Kai%20doe`
+
 ```js
 const qs = require('qs');
 const query = qs.stringify({
@@ -85,12 +92,15 @@ const query = qs.stringify({
 
 await request(`/api/books?${query}`);
 ```
+
 #### Relation Filtering
+
 Relation filtering is filtering on a relation's fields.
 
 Find restaurants owned by a chef who belongs to a 5-star restaurant
 
 `GET /api/restaurants?filters[chef][restaurants][stars][$eq]=5`
+
 ```js
 const qs = require('qs');
 const query = qs.stringify({
@@ -110,7 +120,13 @@ const query = qs.stringify({
 await request(`/api/restaurants?${query}`);
 ```
 
+::: warning
+Relation must be defined in the Laravel model.
+Read more about relation filtering at [relations](../advanced/relation) in the advanced section.
+:::
+
 #### Complex Relation Filtering
+
 Complex relation filtering is combining multiple relation filters
 using advanced methods such as combining `$and` & `$or`.
 This allows for more flexibility to request exactly the data needed.
@@ -142,7 +158,9 @@ await request(`/api/restaurants?${query}`);
 ```
 
 ##### Laravel Example
-Add filters to your query manually by passing an array of filters to the `filter()` method.
+
+Implement the same filter manually by passing an array of filters to the `filter()` method.
+
 ```php
 $params = [
     'filters' => [
@@ -161,3 +179,5 @@ $params = [
 
 $restaurants = Restaurant::filter($params)->get();
 ```
+
+Read more about at [params source](../advanced/param) in the advanced section.
