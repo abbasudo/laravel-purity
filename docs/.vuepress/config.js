@@ -72,6 +72,7 @@ export default defineUserConfig({
     docsBranch: 'master',
   }),
   plugins: [
+
     sitemapPlugin({
       hostname: 'https://abbasudo.github.io/laravel-purity',
     }),
