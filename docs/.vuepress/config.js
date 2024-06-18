@@ -3,6 +3,7 @@ import {defineUserConfig} from 'vuepress/cli'
 import {viteBundler} from '@vuepress/bundler-vite'
 import {searchPlugin} from "@vuepress/plugin-search";
 import {googleAnalyticsPlugin} from "@vuepress/plugin-google-analytics";
+import {sitemapPlugin} from "@vuepress/plugin-sitemap";
 
 export default defineUserConfig({
   lang: 'en-US',
@@ -71,6 +72,7 @@ export default defineUserConfig({
     docsBranch: 'master',
   }),
   plugins: [
+    sitemapPlugin({}),
     searchPlugin({}),
     googleAnalyticsPlugin({
       id: 'G-C75TGXT64W',

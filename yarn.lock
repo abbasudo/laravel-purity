@@ -482,7 +482,7 @@
   dependencies:
     "@vuepress/helper" "2.0.0-rc.34"
 
-"@vuepress/plugin-sitemap@2.0.0-rc.34":
+"@vuepress/plugin-sitemap@^2.0.0-rc.34", "@vuepress/plugin-sitemap@2.0.0-rc.34":
   version "2.0.0-rc.34"
   resolved "https://registry.npmjs.org/@vuepress/plugin-sitemap/-/plugin-sitemap-2.0.0-rc.34.tgz"
   integrity sha512-FEx0SRQQS5YD+8+WKVuueyD/sB+RDY6ds4FONB5wWvtHbpdfBNW+dgYQLPDNNKA64uaHgneOhtp4KEb1klS23A==
