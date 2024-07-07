@@ -23,7 +23,7 @@ class BelongsToSort extends SortAbstract
             ->from("{$relatedTable} as {$alias}")
             ->select("{$relatedTable}.{$this->column}")
             ->whereColumn($localKeyAlias, $foreignKeyKey)
-            ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
+            ->orderByRaw("{$alias}.{$this->column} {$this->direction}")
             ->limit(1),
             $this->direction
         );
