@@ -15,11 +15,14 @@ class BelongsToSort extends SortAbstract
         $foreignKeyKey = $this->model->{$this->relationName}()->getQualifiedForeignKeyName();
         $localKey = $this->model->{$this->relationName}()->getQualifiedOwnerKeyName();
         $relatedTable = $relatedModel->getTable();
+        $alias = $relatedTable . '_' . 'virtual_sort';
+        $localKeyAlias = str($localKey)->replace($relatedTable, $alias)->__toString();
 
         return $this->query->orderBy(
             $relatedModel::query()
+            ->from("{$relatedTable} as {$alias}")
             ->select("{$relatedTable}.{$this->column}")
-            ->whereColumn($localKey, $foreignKeyKey)
+            ->whereColumn($localKeyAlias, $foreignKeyKey)
             ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
             ->limit(1),
             $this->direction
