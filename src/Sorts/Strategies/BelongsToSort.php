@@ -21,7 +21,7 @@ class BelongsToSort extends SortAbstract
         return $this->query->orderBy(
             $relatedModel::query()
             ->from("{$relatedTable} as {$alias}")
-            ->select("{$relatedTable}.{$this->column}")
+            ->select("{$alias}.{$this->column}")
             ->whereColumn($localKeyAlias, $foreignKeyKey)
             ->orderByRaw("{$alias}.{$this->column} {$this->direction}")
             ->limit(1),
