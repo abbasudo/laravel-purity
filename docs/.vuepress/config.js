@@ -81,6 +81,9 @@ export default defineUserConfig({
       id: 'G-C75TGXT64W',
     }),
   ],
-  head: [['link', { rel: 'icon', href: '/laravel-purity/images/favicon.ico' }]],
+  head: [
+    ['link', { rel: 'icon', href: '/laravel-purity/images/favicon.ico' }],
+    ['meta', { name: 'google-site-verification', content: 'wKNJm2JHXoFOhYhTop4QN7qDRgx1rnXwJoZd80gCwes' }],
+  ],
   bundler: viteBundler(),
 })
