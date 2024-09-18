@@ -4,6 +4,8 @@ namespace Abbasudo\Purity\Filters\Strategies;
 
 use Abbasudo\Purity\Filters\Filter;
 use Closure;
+use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class ContainsFilter extends Filter
 {
@@ -22,8 +24,25 @@ class ContainsFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
+            $connection = DB::connection()->getDriverName();
+
             foreach ($this->values as $value) {
-                $query->where($this->column, 'like', "%{$value}%");
+                switch ($connection) {
+                    case 'mysql':
+                        $query->whereRaw("`{$this->column}` LIKE ?", ["%{$value}%"]);
+                        break;
+                    case 'sqlite':
+                        $query->whereRaw("`{$this->column}` LIKE ?", ["%{$value}%"]);
+                        break;
+                    case 'pgsql':
+                        $query->where($this->column, 'ILIKE', "%{$value}%");
+                        break;
+                    case 'sqlsrv':
+                        $query->whereRaw("`{$this->column}` COLLATE Latin1_General_CI_AS LIKE ?", ["%{$value}%"]);
+                        break;
+                    default:
+                        throw new RuntimeException("Unsupported database driver: {$connection}");
+                }
             }
         };
     }
