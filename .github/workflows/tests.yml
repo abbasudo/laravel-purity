@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        db: [ sqlite, mysql ,pgsql ]
+        db: [ sqlite, mysql, pgsql ]
         php: [ 8.2, 8.3 ]
         prefer: [ lowest, stable ]
 
@@ -57,12 +57,24 @@ jobs:
           sudo -u postgres psql -c "CREATE USER test_user WITH PASSWORD 'passw0rd!';"
           sudo -u postgres psql -c "ALTER DATABASE test_db OWNER TO test_user;"
 
+#      - name: Configure MariaDB
+#        if: matrix.db == 'mariadb'
+#        uses: getong/mariadb-action@v1.11
+#        with:
+#          host port: 3800
+#          container port: 3307
+#          character set server: 'utf8'
+#          collation server: 'utf8_general_ci'
+#          mariadb version: '10.4.10'
+#          mysql database: 'test_db'
+#          mysql root password: 'root'
+
       - name: Run PHPUnit tests
         env:
           DB_CONNECTION: ${{ matrix.db }}
-          DB_HOST: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '127.0.0.1')  || (matrix.db == 'pgsql' && '127.0.0.1') }}
-          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') || (matrix.db == 'pgsql' && '5432') }}
-          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || (matrix.db == 'mysql' && 'test_db')  || (matrix.db == 'pgsql' && 'test_db') }}
-          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'test_user') }}
-          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'passw0rd!') }}
+          DB_HOST: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '127.0.0.1') || (matrix.db == 'pgsql' && '127.0.0.1') || (matrix.db == 'mariadb' && '127.0.0.1') }}
+          DB_PORT: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && '3306') || (matrix.db == 'pgsql' && '5432') || (matrix.db == 'mariadb' && '3800') }}
+          DB_DATABASE: ${{ matrix.db == 'sqlite' && ':memory:' || (matrix.db == 'mysql' && 'test_db') || (matrix.db == 'pgsql' && 'test_db') || (matrix.db == 'mariadb' && 'test_db') }}
+          DB_USERNAME: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'test_user') || (matrix.db == 'mariadb' && 'root') }}
+          DB_PASSWORD: ${{ matrix.db == 'sqlite' && '' || (matrix.db == 'mysql' && 'root') || (matrix.db == 'pgsql' && 'passw0rd!') || (matrix.db == 'mariadb' && 'root') }}
         run: vendor/bin/phpunit

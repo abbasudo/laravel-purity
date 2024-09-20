@@ -28,6 +28,7 @@ class EndsWithCaseSensitiveFilter extends Filter
 
             foreach ($this->values as $value) {
                 switch ($connection) {
+                    case 'mariadb':
                     case 'mysql':
                         $query->whereRaw("BINARY `{$this->column}` like ?", '%'.$value);
                         break;

@@ -28,10 +28,9 @@ class ContainsFilter extends Filter
 
             foreach ($this->values as $value) {
                 switch ($connection) {
-                    case 'mysql':
-                        $query->whereRaw("`{$this->column}` LIKE ?", ["%{$value}%"]);
-                        break;
                     case 'sqlite':
+                    case 'mariadb':
+                    case 'mysql':
                         $query->whereRaw("`{$this->column}` LIKE ?", ["%{$value}%"]);
                         break;
                     case 'pgsql':
