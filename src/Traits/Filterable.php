@@ -83,6 +83,7 @@ trait Filterable
 
         app()->bind(Resolve::class, function () {
             $resolver = $this->getFilterResolver();
+
             return new $resolver(app(FilterList::class), $this);
         });
     }

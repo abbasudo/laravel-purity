@@ -1,6 +1,5 @@
 <?php
 
-use Abbasudo\Purity\Tests\App\Models\Book;
 use Abbasudo\Purity\Tests\App\Models\Post;
 use Abbasudo\Purity\Tests\App\Models\Product;
 use Abbasudo\Purity\Tests\App\Models\User;
@@ -87,7 +86,7 @@ class RelationFilterTest extends TestCase
 
         $product->book()->create([
             'name'        => 'book',
-            'description' => 'book for product'
+            'description' => 'book for product',
         ]);
 
         $response = $this->getJson('/products?filters[book][name][$eq]=book');
