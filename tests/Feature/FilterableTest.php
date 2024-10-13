@@ -409,7 +409,7 @@ class FilterableTest extends TestCase
         ]);
 
         $response = $this->getJson(
-            '/posts?filters[$and][0][name][$eq]=laravel purity is the best&filters[$and][1][description][$eq]=laravel purity is the best'
+            '/products?filters[$and][0][name][$eq]=laravel purity&filters[$and][1][description][$eq]=laravel purity is the best'
         )
             ->assertOk()
             ->assertJsonCount(1);

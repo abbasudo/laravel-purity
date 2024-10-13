@@ -46,6 +46,7 @@ class Resolve
      * @param array|string $values
      *
      * @throws Exception
+     * @throws Exception
      *
      * @return void
      */
@@ -64,6 +65,7 @@ class Resolve
      * @param Closure $closure
      *
      * @throws Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -76,9 +78,9 @@ class Resolve
         } catch (Exception $exception) {
             if (config('purity.silent')) {
                 return false;
-            } else {
-                throw $exception;
             }
+
+            throw $exception;
         }
     }
 
@@ -89,13 +91,11 @@ class Resolve
      */
     private function validate(array|string $values = [])
     {
-        if (empty($values) or is_string($values)) {
+        if (empty($values) || is_string($values)) {
             throw NoOperatorMatch::create($this->filterList->keys());
         }
 
-        if (in_array(key($values), $this->filterList->keys())) {
-            return;
-        } else {
+        if (!in_array(key($values), $this->filterList->keys())) {
             $this->validate(array_values($values)[0]);
         }
     }
@@ -108,15 +108,14 @@ class Resolve
      * @param array|string|null $filters
      *
      * @throws Exception
+     * @throws Exception
      *
      * @return void
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
         // Ensure that the filter is an array
-        if (!is_array($filters)) {
-            $filters = [$filters];
-        }
+        $filters = is_array($filters) ? $filters : [$filters];
 
         // Resolve the filter using the appropriate strategy
         if ($this->filterList->get($field) !== null) {
@@ -186,11 +185,9 @@ class Resolve
      */
     private function relation(Builder $query, Closure $callback)
     {
-        // remove last field until its empty
+        // remove the last field until its empty
         $field = array_shift($this->fields);
-        $query->whereHas($field, function ($subQuery) use ($callback) {
-            $this->applyRelations($subQuery, $callback);
-        });
+        $query->whereHas($field, fn ($subQuery) => $this->applyRelations($subQuery, $callback));
     }
 
     /**
@@ -205,21 +202,31 @@ class Resolve
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
         foreach ($filters as $subField => $subFilter) {
-            $relation = end($this->fields);
-            if ($relation !== false) {
-                array_push($this->previousModels, $this->model);
-                $this->model = $this->model->$relation()->getRelated();
-            }
+            $this->prepareModelForRelation($field);
             $this->validateField($field);
             $this->validateOperator($field, $subField);
 
             $this->fields[] = $this->model->getField($field);
             $this->filter($query, $subField, $subFilter);
         }
+        $this->restorePreviousModel();
+    }
+
+    private function prepareModelForRelation(string $field): void
+    {
+        $relation = end($this->fields);
+        if ($relation !== false) {
+            $this->previousModels[] = $this->model;
+
+            $this->model = $this->model->$relation()->getRelated();
+        }
+    }
+
+    private function restorePreviousModel(): void
+    {
         array_pop($this->fields);
-        if (count($this->previousModels)) {
-            $this->model = end($this->previousModels);
-            array_pop($this->previousModels);
+        if (!empty($this->previousModels)) {
+            $this->model = array_pop($this->previousModels);
         }
     }
 

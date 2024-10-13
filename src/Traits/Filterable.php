@@ -12,11 +12,11 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
- * List of available filters, can be set on the model otherwise it will be read from config.
+ * The List of available filters can be set on the model otherwise it will be read from config.
  *
  * @property array $filters
  *
- * List of available fields, if not declared will accept every thing.
+ * List of available fields, if not declared, will accept everything.
  * @property array $filterFields
  *
  * Fields will restrict to defined filters.
@@ -64,7 +64,7 @@ trait Filterable
         // Apply each filter to the query builder instance
 
         foreach ($params as $field => $value) {
-            app($this->getFilterResolver())->apply($query, $field, $value);
+            app(Resolve::class)->apply($query, $field, $value);
         }
 
         return $query;
@@ -81,7 +81,11 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        app()->when($this->getFilterResolver())->needs(Model::class)->give(fn () => $this);
+        app()->bind(Resolve::class, function () {
+            $resolver = $this->getFilterResolver();
+
+            return new $resolver(app(FilterList::class), $this);
+        });
     }
 
     /**
@@ -210,8 +214,7 @@ trait Filterable
         foreach ($this->restrictedFilters ?? $this->filterFields ?? [] as $key => $value) {
             if (is_int($key) && Str::contains($value, ':')) {
                 $tKey = str($value)->before(':')->squish()->toString();
-                $tValue = str($value)->after(':')->squish()->explode(',')->all();
-                $restrictedFilters[$tKey] = $tValue;
+                $restrictedFilters[$tKey] = str($value)->after(':')->squish()->explode(',')->all();
             }
             if (is_string($key)) {
                 $restrictedFilters[$key] = Arr::wrap($value);

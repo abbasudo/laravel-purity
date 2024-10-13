@@ -2,6 +2,7 @@
 
 use Abbasudo\Purity\Tests\App\Models\Author;
 use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Product;
 use Abbasudo\Purity\Tests\App\Models\Tag;
 use Abbasudo\Purity\Tests\App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -31,6 +32,7 @@ return new class() extends Migration {
             $table->id();
             $table->foreignIdFor(User::class)->nullable();
             $table->string('title')->nullable();
+            $table->nullableMorphs('postable');
             $table->timestamps();
         });
 
@@ -60,6 +62,7 @@ return new class() extends Migration {
             $table->foreignIdFor(Author::class)->nullable();
             $table->string('name');
             $table->string('description');
+            $table->foreignIdFor(Product::class)->nullable();
             $table->timestamps();
         });
 

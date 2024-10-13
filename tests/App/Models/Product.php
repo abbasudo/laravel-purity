@@ -7,6 +7,8 @@ use Abbasudo\Purity\Traits\Filterable;
 use Abbasudo\Purity\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
 {
@@ -26,4 +28,14 @@ class Product extends Model
         'description',
         'is_available',
     ];
+
+    public function posts(): MorphMany
+    {
+        return $this->morphMany(Post::class, 'postable');
+    }
+
+    public function book(): HasOne
+    {
+        return $this->hasOne(Book::class);
+    }
 }
