@@ -37,7 +37,7 @@ class Resolve
     public function __construct(FilterList $filterList, Model $model)
     {
         $this->filterList = $filterList;
-        $this->model      = $model;
+        $this->model = $model;
     }
 
     /**
@@ -46,10 +46,9 @@ class Resolve
      * @param array|string $values
      *
      * @throws Exception
-     *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     public function apply(Builder $query, string $field, array|string $values): void
     {
@@ -66,10 +65,9 @@ class Resolve
      * @param Closure $closure
      *
      * @throws Exception
-     *
-     * @return bool
      * @throws Exception
      *
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
@@ -110,10 +108,9 @@ class Resolve
      * @param array|string|null $filters
      *
      * @throws Exception
-     *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
@@ -123,17 +120,17 @@ class Resolve
         // Resolve the filter using the appropriate strategy
         if ($this->filterList->get($field) !== null) {
             //call apply method of the appropriate filter class
-            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
+            $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
         } else {
             // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
+            $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
         }
     }
 
     /**
      * @param Builder $query
-     * @param string $operator
-     * @param array $filters
+     * @param string  $operator
+     * @param array   $filters
      *
      * @return void
      */
@@ -190,7 +187,7 @@ class Resolve
     {
         // remove the last field until its empty
         $field = array_shift($this->fields);
-        $query->whereHas($field, fn($subQuery) => $this->applyRelations($subQuery, $callback));
+        $query->whereHas($field, fn ($subQuery) => $this->applyRelations($subQuery, $callback));
     }
 
     /**
