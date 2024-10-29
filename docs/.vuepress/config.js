@@ -62,6 +62,10 @@ export default defineUserConfig({
         ],
       },
       {
+        text: 'Client Package',
+        link: 'https://github.com/hidevs/purity-client-js',
+      },
+      {
         text: 'Ask a Question',
         link: 'https://github.com/abbasudo/laravel-purity/discussions',
       },
