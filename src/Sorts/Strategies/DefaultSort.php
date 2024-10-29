@@ -9,6 +9,6 @@ class DefaultSort extends SortAbstract
 {
     public function apply(): Builder
     {
-        return $this->query->orderByRaw("$this->column $this->direction");
+        return $this->query->orderBy($this->column, $this->direction);
     }
 }
