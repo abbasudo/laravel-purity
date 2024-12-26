@@ -15,11 +15,12 @@ class HasOneSort extends SortAbstract
         $foreignKeyKey = $this->model->{$this->relationName}()->getQualifiedForeignKeyName();
         $localKey = $this->model->{$this->relationName}()->getQualifiedParentKeyName();
         $relatedTable = $relatedModel->getTable();
+        $foreignKeyKeyAlias = str($foreignKeyKey)->replace($relatedTable, $alias);
 
         return $this->query->orderBy(
             $relatedModel::query()
             ->select("{$relatedTable}.{$this->column}")
-            ->whereColumn($localKey, $foreignKeyKey)
+            ->whereColumn($localKeyAlias, $foreignKeyKeyAlias)
             ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
             ->limit(1),
             $this->direction
