@@ -1,38 +1,38 @@
 {
-  "name": "abbasudo/laravel-purity",
-  "description": "elegant way to add filter and sort in laravel",
-  "type": "library",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "abbas mkhzomi",
-      "email": "amkhzomi@gmail.com",
-      "role": "developer"
+    "name": "abbasudo/laravel-purity",
+    "description": "elegant way to add filter and sort in laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "abbas mkhzomi",
+            "email": "amkhzomi@gmail.com",
+            "role": "developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^11.0|^10.0|^9.0|^8.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Abbasudo\\Purity\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Abbasudo\\Purity\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^8.0|^10.0",
+        "phpunit/phpunit": "^10.0|^11.5.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Abbasudo\\Purity\\PurityServiceProvider"
+            ]
+        }
     }
-  ],
-  "require": {
-    "php": "^8.0",
-    "laravel/framework": "^11.0|^10.0|^9.0|^8.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Abbasudo\\Purity\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Abbasudo\\Purity\\Tests\\": "tests"
-    }
-  },
-  "require-dev": {
-    "orchestra/testbench": "^9.0|^8.0",
-    "phpunit/phpunit": "^10.0"
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Abbasudo\\Purity\\PurityServiceProvider"
-      ]
-    }
-  }
 }
