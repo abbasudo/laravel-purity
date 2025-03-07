@@ -24,25 +24,27 @@ class ContainsCaseSensitiveFilter extends Filter
     public function apply(): Closure
     {
         return function ($query) {
-            $connection = DB::connection()->getDriverName();
+            $connection = strtolower(DB::connection()->getDriverName());
+
+            $collateStatements = [
+                'mariadb' => 'BINARY `%s` like ?',
+                'mysql'   => 'BINARY `%s` like ?',
+                'sqlite'  => '`%s` COLLATE BINARY like ?',
+                'pgsql'   => '%s ILIKE ?',
+                'sqlsrv'  => '`%s` COLLATE Latin1_General_BIN LIKE ?',
+            ];
+
+            if (!isset($collateStatements[$connection])) {
+                throw new RuntimeException("Unsupported database driver: {$connection}");
+            }
+
+            $queryPattern = $collateStatements[$connection];
 
             foreach ($this->values as $value) {
-                switch ($connection) {
-                    case 'mariadb':
-                    case 'mysql':
-                        $query->whereRaw("BINARY `{$this->column}` like ?", ["%{$value}%"]);
-                        break;
-                    case 'sqlite':
-                        $query->whereRaw("`{$this->column}` COLLATE BINARY like ?", ["%{$value}%"]);
-                        break;
-                    case 'pgsql':
-                        $query->where($this->column, 'LIKE', "%{$value}%");
-                        break;
-                    case 'sqlsrv':
-                        $query->whereRaw("`{$this->column}` COLLATE Latin1_General_BIN LIKE ?", ["%{$value}%"]);
-                        break;
-                    default:
-                        throw new RuntimeException("Unsupported database driver: {$connection}");
+                if ($connection === 'pgsql') {
+                    $query->where($this->column, 'ILIKE', "%{$value}%");
+                } else {
+                    $query->whereRaw(sprintf($queryPattern, $this->column), ["%{$value}%"]);
                 }
             }
         };
