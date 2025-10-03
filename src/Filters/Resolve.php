@@ -115,6 +115,7 @@ class Resolve
 
         if ($this->filterList->get($field) !== null) {
             $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
+
             return;
         }
 
@@ -208,14 +209,13 @@ class Resolve
      * @param string  $field
      * @param array   $filters
      *
-     * @return void
      * @throws Exception
      *
+     * @return void
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
         $this->validateField($field);
-        
         $this->fields[] = $this->model->getField($field);
         $this->prepareModelForRelation();
 
