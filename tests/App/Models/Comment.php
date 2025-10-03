@@ -15,5 +15,6 @@ class Comment extends Model
 
     protected $fillable = [
         'content',
+        'is_approved',
     ];
 }
