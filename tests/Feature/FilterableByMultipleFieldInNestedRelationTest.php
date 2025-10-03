@@ -2,10 +2,9 @@
 
 namespace Abbasudo\Purity\Tests\Feature;
 
-use Abbasudo\Purity\Tests\App\Models\User;
 use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\User;
 use Abbasudo\Purity\Tests\TestCase;
-
 use function PHPUnit\Framework\assertEquals;
 
 class FilterableByMultipleFieldInNestedRelationTest extends TestCase
@@ -21,7 +20,7 @@ class FilterableByMultipleFieldInNestedRelationTest extends TestCase
         // post
         $post = Post::create([
             'user_id' => $user->id,
-            'title' => 'title'
+            'title' => 'title',
         ])->comments()->create([
             'content' => 'comment',
             'is_approved' => true,
@@ -46,7 +45,7 @@ class FilterableByMultipleFieldInNestedRelationTest extends TestCase
                         '$eq' => true,
                     ],
                 ],
-            ]
+            ],
         ];
 
         $results = User::with(['post.comments'])

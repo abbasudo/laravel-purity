@@ -32,7 +32,7 @@ class Resolve
 
     /**
      * @param FilterList $filterList
-     * @param Model      $model
+     * @param Model $model
      */
     public function __construct(FilterList $filterList, Model $model)
     {
@@ -41,18 +41,18 @@ class Resolve
     }
 
     /**
-     * @param Builder      $query
-     * @param string       $field
+     * @param Builder $query
+     * @param string $field
      * @param array|string $values
      *
-     * @throws Exception
+     * @return void
      * @throws Exception
      *
-     * @return void
+     * @throws Exception
      */
     public function apply(Builder $query, string $field, array|string $values): void
     {
-        if (!$this->safe(fn () => $this->validate([$field => $values]))) {
+        if (!$this->safe(fn() => $this->validate([$field => $values]))) {
             return;
         }
 
@@ -64,10 +64,10 @@ class Resolve
      *
      * @param Closure $closure
      *
-     * @throws Exception
+     * @return bool
      * @throws Exception
      *
-     * @return bool
+     * @throws Exception
      */
     private function safe(Closure $closure): bool
     {
@@ -103,53 +103,53 @@ class Resolve
     /**
      * Apply a single filter to the query builder instance.
      *
-     * @param Builder           $query
-     * @param string            $field
+     * @param Builder $query
+     * @param string $field
      * @param array|string|null $filters
      *
-     * @throws Exception
+     * @return void
      * @throws Exception
      *
-     * @return void
+     * @throws Exception
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
         $filters = is_array($filters) ? $filters : [$filters];
 
         if ($this->filterList->get($field) !== null) {
-            $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
+            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
             return;
         }
 
         $firstKey = array_key_first($filters);
-		if ($firstKey !== null && $this->filterList->get($firstKey) !== null) {
-			$path = $this->fields;
+        if ($firstKey !== null && $this->filterList->get($firstKey) !== null) {
+            $path = $this->fields;
 
-			foreach ($filters as $operator => $opFilters) {
-				if (!$this->safe(fn () => $this->validateOperator($field, $operator))) {
-					continue;
-				}
+            foreach ($filters as $operator => $opFilters) {
+                if (!$this->safe(fn() => $this->validateOperator($field, $operator))) {
+                    continue;
+                }
 
-				$this->fields = array_merge($path, [$this->model->getField($field)]);
+                $this->fields = array_merge($path, [$this->model->getField($field)]);
 
-				$this->safe(fn () => $this->applyFilterStrategy(
-					$query,
-					$operator,
-					is_array($opFilters) ? $opFilters : [$opFilters]
-				));
-			}
+                $this->safe(fn() => $this->applyFilterStrategy(
+                    $query,
+                    $operator,
+                    is_array($opFilters) ? $opFilters : [$opFilters]
+                ));
+            }
 
-			$this->fields = $path;
-			return;
-		}
+            $this->fields = $path;
+            return;
+        }
 
-        $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
+        $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
     }
 
     /**
      * @param Builder $query
-     * @param string  $operator
-     * @param array   $filters
+     * @param string $operator
+     * @param array $filters
      *
      * @return void
      */
@@ -203,17 +203,17 @@ class Resolve
     private function relation(Builder $query, Closure $callback)
     {
         $field = array_shift($this->fields);
-        $query->whereHas($field, fn ($subQuery) => $this->applyRelations($subQuery, $callback));
+        $query->whereHas($field, fn($subQuery) => $this->applyRelations($subQuery, $callback));
     }
 
     /**
      * @param Builder $query
-     * @param string  $field
-     * @param array   $filters
-     *
-     * @throws Exception
+     * @param string $field
+     * @param array $filters
      *
      * @return void
+     * @throws Exception
+     *
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
