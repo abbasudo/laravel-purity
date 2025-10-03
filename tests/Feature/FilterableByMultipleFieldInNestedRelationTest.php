@@ -13,16 +13,15 @@ class FilterableByMultipleFieldInNestedRelationTest extends TestCase
     {
         parent::setUp();
 
-        // user
         $user = User::create([
             'name' => 'Alice',
         ]);
-        // post
-        $post = Post::create([
+
+        Post::create([
             'user_id' => $user->id,
-            'title' => 'title',
+            'title'   => 'title',
         ])->comments()->create([
-            'content' => 'comment',
+            'content'     => 'comment',
             'is_approved' => true,
         ]);
     }

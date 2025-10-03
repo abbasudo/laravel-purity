@@ -32,7 +32,7 @@ class Resolve
 
     /**
      * @param FilterList $filterList
-     * @param Model $model
+     * @param Model      $model
      */
     public function __construct(FilterList $filterList, Model $model)
     {
@@ -41,18 +41,17 @@ class Resolve
     }
 
     /**
-     * @param Builder $query
-     * @param string $field
+     * @param Builder      $query
+     * @param string       $field
      * @param array|string $values
      *
-     * @return void
      * @throws Exception
      *
-     * @throws Exception
+     * @return void
      */
     public function apply(Builder $query, string $field, array|string $values): void
     {
-        if (!$this->safe(fn() => $this->validate([$field => $values]))) {
+        if (!$this->safe(fn () => $this->validate([$field => $values]))) {
             return;
         }
 
@@ -64,10 +63,9 @@ class Resolve
      *
      * @param Closure $closure
      *
-     * @return bool
      * @throws Exception
      *
-     * @throws Exception
+     * @return bool
      */
     private function safe(Closure $closure): bool
     {
@@ -103,21 +101,20 @@ class Resolve
     /**
      * Apply a single filter to the query builder instance.
      *
-     * @param Builder $query
-     * @param string $field
+     * @param Builder           $query
+     * @param string            $field
      * @param array|string|null $filters
      *
-     * @return void
      * @throws Exception
      *
-     * @throws Exception
+     * @return void
      */
     private function filter(Builder $query, string $field, array|string|null $filters): void
     {
         $filters = is_array($filters) ? $filters : [$filters];
 
         if ($this->filterList->get($field) !== null) {
-            $this->safe(fn() => $this->applyFilterStrategy($query, $field, $filters));
+            $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
             return;
         }
 
@@ -126,13 +123,13 @@ class Resolve
             $path = $this->fields;
 
             foreach ($filters as $operator => $opFilters) {
-                if (!$this->safe(fn() => $this->validateOperator($field, $operator))) {
+                if (!$this->safe(fn () => $this->validateOperator($field, $operator))) {
                     continue;
                 }
 
                 $this->fields = array_merge($path, [$this->model->getField($field)]);
 
-                $this->safe(fn() => $this->applyFilterStrategy(
+                $this->safe(fn () => $this->applyFilterStrategy(
                     $query,
                     $operator,
                     is_array($opFilters) ? $opFilters : [$opFilters]
@@ -143,13 +140,13 @@ class Resolve
             return;
         }
 
-        $this->safe(fn() => $this->applyRelationFilter($query, $field, $filters));
+        $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
     }
 
     /**
      * @param Builder $query
-     * @param string $operator
-     * @param array $filters
+     * @param string  $operator
+     * @param array   $filters
      *
      * @return void
      */
@@ -203,13 +200,13 @@ class Resolve
     private function relation(Builder $query, Closure $callback)
     {
         $field = array_shift($this->fields);
-        $query->whereHas($field, fn($subQuery) => $this->applyRelations($subQuery, $callback));
+        $query->whereHas($field, fn ($subQuery) => $this->applyRelations($subQuery, $callback));
     }
 
     /**
      * @param Builder $query
-     * @param string $field
-     * @param array $filters
+     * @param string  $field
+     * @param array   $filters
      *
      * @return void
      * @throws Exception
@@ -218,8 +215,7 @@ class Resolve
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
         $this->validateField($field);
-
-
+        
         $this->fields[] = $this->model->getField($field);
         $this->prepareModelForRelation();
 
