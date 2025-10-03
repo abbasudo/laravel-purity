@@ -5,6 +5,7 @@ namespace Abbasudo\Purity\Tests\Feature;
 use Abbasudo\Purity\Tests\App\Models\Post;
 use Abbasudo\Purity\Tests\App\Models\User;
 use Abbasudo\Purity\Tests\TestCase;
+
 use function PHPUnit\Framework\assertEquals;
 
 class FilterableByMultipleFieldInNestedRelationTest extends TestCase

@@ -138,6 +138,7 @@ class Resolve
             }
 
             $this->fields = $path;
+            
             return;
         }
 
