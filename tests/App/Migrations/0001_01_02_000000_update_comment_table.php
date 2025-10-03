@@ -1,0 +1,32 @@
+<?php
+
+use Abbasudo\Purity\Tests\App\Models\Author;
+use Abbasudo\Purity\Tests\App\Models\Post;
+use Abbasudo\Purity\Tests\App\Models\Product;
+use Abbasudo\Purity\Tests\App\Models\Tag;
+use Abbasudo\Purity\Tests\App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class() extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('comments', function (Blueprint $table) {
+            $table->boolean('is_approved')->default(false)->after('content');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('is_approved');
+        });
+    }
+};

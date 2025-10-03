@@ -117,14 +117,36 @@ class Resolve
         // Ensure that the filter is an array
         $filters = is_array($filters) ? $filters : [$filters];
 
-        // Resolve the filter using the appropriate strategy
+        // If $field is an operator name
         if ($this->filterList->get($field) !== null) {
-            //call apply method of the appropriate filter class
             $this->safe(fn () => $this->applyFilterStrategy($query, $field, $filters));
-        } else {
-            // If the field is not recognized as a filter strategy, it is treated as a relation
-            $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
+            return;
         }
+
+        // If the value array is operator-first, treat $field as a column
+        $firstKey = array_key_first($filters);
+        if ($firstKey !== null && $this->filterList->get($firstKey) !== null) {
+            // preserve current relation path for each operator application
+            $path = $this->fields;
+
+            foreach ($filters as $operator => $opFilters) {
+                // rebuild the full path (relations + column) so whereHas gets applied correctly
+                $this->fields = array_merge($path, [$this->model->getField($field)]);
+
+                $this->safe(fn () => $this->applyFilterStrategy(
+                    $query,
+                    $operator,
+                    is_array($opFilters) ? $opFilters : [$opFilters]
+                ));
+            }
+
+            // restore path for subsequent processing
+            $this->fields = $path;
+            return;
+        }
+
+        // Otherwise treat as relation
+        $this->safe(fn () => $this->applyRelationFilter($query, $field, $filters));
     }
 
     /**
@@ -201,23 +223,27 @@ class Resolve
      */
     private function applyRelationFilter(Builder $query, string $field, array $filters): void
     {
-        foreach ($filters as $subField => $subFilter) {
-            $this->prepareModelForRelation($field);
-            $this->validateField($field);
-            $this->validateOperator($field, $subField);
+        // validate relation on the current model
+        $this->validateField($field);
 
-            $this->fields[] = $this->model->getField($field);
+        // push relation into the path, then advance the model to that relation
+        $this->fields[] = $this->model->getField($field);
+        $this->prepareModelForRelation();
+
+        // handle all subfields under this relation
+        foreach ($filters as $subField => $subFilter) {
             $this->filter($query, $subField, $subFilter);
         }
+
+        // restore back to the parent model and pop the relation from the path
         $this->restorePreviousModel();
     }
 
-    private function prepareModelForRelation(string $field): void
+    private function prepareModelForRelation(): void
     {
         $relation = end($this->fields);
         if ($relation !== false) {
             $this->previousModels[] = $this->model;
-
             $this->model = $this->model->$relation()->getRelated();
         }
     }
