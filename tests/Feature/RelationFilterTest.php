@@ -86,7 +86,7 @@ class RelationFilterTest extends TestCase
             'name' => 'Health',
         ]);
 
-        $response = $this->getJson('/posts?filters[tags][id][$eq]=' . $tag->id);
+        $response = $this->getJson('/posts?filters[tags][id][$eq]='.$tag->id);
 
         $response->assertOk();
         $response->assertJsonCount(1);

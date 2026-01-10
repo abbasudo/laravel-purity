@@ -265,7 +265,8 @@ class Resolve
 
     /**
      * @param Builder $query
-     * @param string $field
+     * @param string  $field
+     *
      * @return string
      */
     private function prepareRelationalField(Builder $query, string $field): string
@@ -280,7 +281,8 @@ class Resolve
 
         if ($relation instanceof BelongsToMany) {
             $table = $relation->getRelated()->getTable();
-            return $table . '.' . $field;
+
+            return $table.'.'.$field;
         }
 
         return $field;
