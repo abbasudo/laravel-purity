@@ -78,6 +78,21 @@ class RelationFilterTest extends TestCase
     }
 
     /** @test */
+    public function it_can_filter_by_belongs_to_many_relation_using_id(): void
+    {
+        $post = Post::first();
+
+        $tag = $post->tags()->create([
+            'name' => 'Health',
+        ]);
+
+        $response = $this->getJson('/posts?filters[tags][id][$eq]='.$tag->id);
+
+        $response->assertOk();
+        $response->assertJsonCount(1);
+    }
+
+    /** @test */
     public function it_can_filter_by_has_one_relation(): void
     {
         $product = Product::factory([

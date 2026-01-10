@@ -9,6 +9,7 @@ use Closure;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Resolve
 {
@@ -139,6 +140,7 @@ class Resolve
         $filter = $this->filterList->get($operator);
 
         $field = end($this->fields);
+        $field = $this->prepareRelationalField($query, $field);
 
         $callback = (new $filter($query, $field, $filters))->apply();
 
@@ -259,5 +261,30 @@ class Resolve
         }
 
         throw OperatorNotSupported::create($field, $operator, $availableFilters);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string  $field
+     *
+     * @return string
+     */
+    private function prepareRelationalField(Builder $query, string $field): string
+    {
+        $fieldsCount = count($this->fields);
+        if ($fieldsCount <= 1) {
+            return $field;
+        }
+
+        $prevField = $this->fields[$fieldsCount - 2];
+        $relation = $query->getRelation($prevField);
+
+        if ($relation instanceof BelongsToMany) {
+            $table = $relation->getRelated()->getTable();
+
+            return $table.'.'.$field;
+        }
+
+        return $field;
     }
 }
