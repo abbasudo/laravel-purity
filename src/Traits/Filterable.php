@@ -12,11 +12,11 @@ use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
- * The List of available filters can be set on the model otherwise it will be read from config.
+ * List of available filters, can be set on the model otherwise it will be read from config.
  *
  * @property array $filters
  *
- * List of available fields, if not declared, will accept everything.
+ * List of available fields, if not declared will accept every thing.
  * @property array $filterFields
  *
  * Fields will restrict to defined filters.
@@ -34,8 +34,6 @@ trait Filterable
     /**
      * Returns full class name of the filter resolver.
      * Can be overridden in the model.
-     *
-     * @return string
      */
     protected function getFilterResolver(): string
     {
@@ -45,18 +43,14 @@ trait Filterable
     /**
      * Apply filters to the query builder instance.
      *
-     * @param Builder    $query
-     * @param array|null $params
      *
      * @throws Exception
-     *
-     * @return Builder
      */
-    public function scopeFilter(Builder $query, array|null $params = null): Builder
+    public function scopeFilter(Builder $query, ?array $params = null): Builder
     {
         $this->bootFilter();
 
-        if (!isset($params)) {
+        if (! isset($params)) {
             // Retrieve the filters from the request query
             $params = request()->query('filters', []);
         }
@@ -64,7 +58,7 @@ trait Filterable
         // Apply each filter to the query builder instance
 
         foreach ($params as $field => $value) {
-            app(Resolve::class)->apply($query, $field, $value);
+            app($this->getFilterResolver())->apply($query, $field, $value);
         }
 
         return $query;
@@ -72,8 +66,6 @@ trait Filterable
 
     /**
      * boots filter bindings.
-     *
-     * @return void
      */
     private function bootFilter(): void
     {
@@ -81,27 +73,14 @@ trait Filterable
             return (new FilterList())->only($this->getFilters());
         });
 
-        app()->bind(Resolve::class, function () {
-            $resolver = $this->getFilterResolver();
-
-            return new $resolver(app(FilterList::class), $this);
-        });
+        app()->when($this->getFilterResolver())->needs(Model::class)->give(fn () => $this);
     }
 
-    /**
-     * @return array
-     */
     private function getFilters(): array
     {
         return $this->filters ?? config('purity.filters');
     }
 
-    /**
-     * @param Builder      $query
-     * @param array|string $filters
-     *
-     * @return Builder
-     */
     public function scopeFilterBy(Builder $query, array|string $filters): Builder
     {
         $this->filters = is_array($filters) ? $filters : array_slice(func_get_args(), 1);
@@ -109,80 +88,33 @@ trait Filterable
         return $query;
     }
 
-    /**
-     * @param string $field
-     *
-     * @return string
-     */
     public function getField(string $field): string
     {
         return $this->realName(($this->renamedFilterFields ?? []) + $this->availableFields(), $field);
     }
 
-    /**
-     * @return array
-     */
     public function availableFields(): array
     {
-        if (!isset($this->filterFields) && !isset($this->renamedFilterFields)) {
-            return $this->getDefaultFields();
+        if (! isset($this->filterFields) && ! isset($this->renamedFilterFields)) {
+            return array_merge($this->getTableColumns(), $this->relations());
         }
 
         return $this->getUserDefinedFilterFields();
     }
 
-    private function getDefaultFields(): array
-    {
-        return array_merge($this->getTableColumns(), $this->relations());
-    }
-
     /**
      * Get formatted fields from filterFields.
-     *
-     * @return array
      */
-    private function getUserDefinedFilterFields(): array
+    public function getUserDefinedFilterFields(): array
     {
         if (isset($this->userDefinedFilterFields)) {
             return $this->userDefinedFilterFields;
         }
 
-        if (isset($this->renamedFilterFields, $this->filterFields)) {
-            $fields = $this->getFilterFields();
-            $filterFields = [];
-
-            foreach ($fields as $filterName) {
-                if ($columnName = array_search($filterName, $this->renamedFilterFields)) {
-                    $filterFields[$columnName] = $filterName;
-                } else {
-                    $filterFields[] = $filterName;
-                }
-            }
-
-            return $this->userDefinedFilterFields = $filterFields;
-        }
-
         if (isset($this->renamedFilterFields)) {
-            $fields = $this->getDefaultFields();
-
-            $filterFields = [];
-
-            foreach ($fields as $filterName) {
-                if (array_key_exists($filterName, $this->renamedFilterFields)) {
-                    $filterFields[$filterName] = $this->renamedFilterFields[$filterName];
-                } else {
-                    $filterFields[] = $filterName;
-                }
-            }
-
-            return $this->userDefinedFilterFields = $filterFields;
+            return $this->userDefinedFilterFields = $this->renamedFilterFields;
         }
 
-        return $this->userDefinedFilterFields = $this->getFilterFields();
-    }
-
-    private function getFilterFields(): array
-    {
         $userDefinedFilterFields = [];
 
         foreach ($this->filterFields as $key => $value) {
@@ -197,7 +129,7 @@ trait Filterable
             }
         }
 
-        return $userDefinedFilterFields;
+        return $this->userDefinedFilterFields = $userDefinedFilterFields;
     }
 
     /**
@@ -214,7 +146,8 @@ trait Filterable
         foreach ($this->restrictedFilters ?? $this->filterFields ?? [] as $key => $value) {
             if (is_int($key) && Str::contains($value, ':')) {
                 $tKey = str($value)->before(':')->squish()->toString();
-                $restrictedFilters[$tKey] = str($value)->after(':')->squish()->explode(',')->all();
+                $tValue = str($value)->after(':')->squish()->explode(',')->all();
+                $restrictedFilters[$tKey] = $tValue;
             }
             if (is_string($key)) {
                 $restrictedFilters[$key] = Arr::wrap($value);
@@ -225,11 +158,9 @@ trait Filterable
     }
 
     /**
-     * @param string $field
-     *
      * @return array<int, string>|null
      */
-    public function getAvailableFiltersFor(string $field): array|null
+    public function getAvailableFiltersFor(string $field): ?array
     {
         $this->getRestrictedFilters();
 
@@ -238,8 +169,6 @@ trait Filterable
 
     /**
      *  list models relations.
-     *
-     * @return array
      */
     private function relations(): array
     {
@@ -247,7 +176,7 @@ trait Filterable
 
         return collect($methods)
             ->filter(
-                fn ($method) => !empty($method->getReturnType()) &&
+                fn ($method) => ! empty($method->getReturnType()) &&
                     str_contains(
                         $method->getReturnType(),
                         'Illuminate\Database\Eloquent\Relations'
@@ -257,12 +186,6 @@ trait Filterable
             ->values()->all();
     }
 
-    /**
-     * @param Builder      $query
-     * @param array|string $fields
-     *
-     * @return Builder
-     */
     public function scopeFilterFields(Builder $query, array|string $fields): Builder
     {
         $this->filterFields = is_array($fields) ? $fields : array_slice(func_get_args(), 1);
@@ -270,12 +193,6 @@ trait Filterable
         return $query;
     }
 
-    /**
-     * @param Builder      $query
-     * @param array|string $restrictedFilters
-     *
-     * @return Builder
-     */
     public function scopeRestrictedFilters(Builder $query, array|string $restrictedFilters): Builder
     {
         $this->restrictedFilters = Arr::wrap($restrictedFilters);
@@ -283,12 +200,6 @@ trait Filterable
         return $query;
     }
 
-    /**
-     * @param Builder $query
-     * @param array   $renamedFilterFields
-     *
-     * @return Builder
-     */
     public function scopeRenamedFilterFields(Builder $query, array $renamedFilterFields): Builder
     {
         $this->renamedFilterFields = $renamedFilterFields;
