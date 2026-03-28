@@ -62,6 +62,7 @@ return new class() extends Migration {
             $table->foreignIdFor(Author::class)->nullable();
             $table->string('name');
             $table->string('description');
+            $table->string('page_count');
             $table->foreignIdFor(Product::class)->nullable();
             $table->timestamps();
         });

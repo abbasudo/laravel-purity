@@ -16,11 +16,13 @@ class Book extends Model
     protected $filterFields = [
         'name', // field
         'description', // field
+        'page_count', // field
     ];
 
     protected $fillable = [
         'name',
         'description',
+        'page_count',
     ];
 
     public function author(): BelongsTo

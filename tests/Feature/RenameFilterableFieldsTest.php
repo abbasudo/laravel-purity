@@ -100,9 +100,11 @@ class RenameFilterableFieldsTest extends TestCase
         $book->create([
             'name'        => 'name_1',
             'description' => 'description_1',
+            'page_count'  => 100,
         ])->create([
             'name'        => 'name_1',
             'description' => 'description_2',
+            'page_count'  => 200,
         ]);
 
         Route::get('/books', function () use ($book) {
