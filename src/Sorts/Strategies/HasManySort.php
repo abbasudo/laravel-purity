@@ -13,14 +13,17 @@ class HasManySort extends SortAbstract
         /** @var Model $relatedModel */
         $relatedModel = $this->model->{$this->relationName}()->getRelated();
         $foreignKeyKey = $this->model->{$this->relationName}()->getQualifiedForeignKeyName();
-        $localKey = $this->model->{$this->relationName}()->getQualifiedParentKeyName();
+        $localKey = $this->model->{$this->relationName}()->getQualifiedOwnerKeyName();
         $relatedTable = $relatedModel->getTable();
+        $alias = $relatedTable . '_' . 'virtual_sort';
+        $localKeyAlias = str($localKey)->replace($relatedTable, $alias)->__toString();
 
         return $this->query->orderBy(
             $relatedModel::query()
-            ->select("{$relatedTable}.{$this->column}")
-            ->whereColumn($localKey, $foreignKeyKey)
-            ->orderByRaw("{$relatedTable}.{$this->column} {$this->direction}")
+            ->from("{$relatedTable} as {$alias}")
+            ->select("{$alias}.{$this->column}")
+            ->whereColumn($localKeyAlias, $foreignKeyKey)
+            ->orderByRaw("{$alias}.{$this->column} {$this->direction}")
             ->limit(1),
             $this->direction
         );
